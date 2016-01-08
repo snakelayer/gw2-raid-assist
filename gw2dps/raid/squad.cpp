@@ -141,7 +141,7 @@ void Squad::writeStatsToFile() {
 			float remainingHealth = raidBoss->getCurrentHealth();
 			file << format("// remaining health: %d\n") % (int)remainingHealth;
 
-			int encounterSeconds = raidBoss->getEncounterTime();
+			int encounterSeconds = raidBoss->getEncounterDuration();
 			file << format("// encounter time: %d\n") % encounterSeconds;
 		}
 

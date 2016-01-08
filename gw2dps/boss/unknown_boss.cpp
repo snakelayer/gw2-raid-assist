@@ -5,12 +5,8 @@
 
 #include "unknown_boss.h"
 
-UnknownBoss::UnknownBoss(Agent &agent) : agent(&agent) {
+UnknownBoss::UnknownBoss(Agent &agent) : RaidBoss(agent) {
 
-}
-
-bool UnknownBoss::matchesTarget(Agent &agent) {
-	return false;
 }
 
 void UnknownBoss::updateState(boost::circular_buffer<float> &damageBuffer) {

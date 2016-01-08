@@ -45,9 +45,6 @@ class ValeGuardian : public RaidBoss
 		const float SECOND_PHASE_TRANSITION_HP = MAX_HP / 3; //TODO: verify
 		const float MAGIC_STORM_COOLDOWN = 30.0f;
 
-		GW2LIB::Agent *agent;
-		float dps[3];
-		float secondsToDeath;
 		boost::timer::cpu_timer cooldownTimer;
 		VG::MagicStorm magicStorm;
 		VG::Phase phase;
@@ -55,10 +52,7 @@ class ValeGuardian : public RaidBoss
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
 
-		void updateDps(boost::circular_buffer<float> &damageBuffer);
 		double getSecondsUntilMagicStormReady();
-
-		bool hasTakenDamage() { return agent->GetCharacter().GetCurrentHealth() != agent->GetCharacter().GetMaxHealth(); }
 		bool refreshAgent();
 
 	public:
@@ -66,14 +60,10 @@ class ValeGuardian : public RaidBoss
 		~ValeGuardian();
 
 		string getName() { return "Vale Guardian"; }
-		float getCurrentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
-		int getAgentId() { return agent->GetAgentId(); }
 		bool matchesTarget(Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void outputDps(stringstream &ss);
 		void outputAssistInfo(stringstream &ss);
-		int getEncounterTime();
 
 		void outputDebug(stringstream &ss);
 

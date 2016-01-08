@@ -14,15 +14,12 @@ using namespace GW2LIB;
 class UnknownBoss : public RaidBoss
 {
 	private:
-		GW2LIB::Agent *agent;
 
 	public:
 		UnknownBoss(GW2LIB::Agent &agent);
 
 		string getName() { return "Unknown"; }
-		float getCurrentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
-		int getAgentId() { return agent->GetAgentId(); }
-		bool matchesTarget(GW2LIB::Agent &agent);
+		bool matchesTarget(GW2LIB::Agent &agent) { return false; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void outputDps(stringstream &ss);

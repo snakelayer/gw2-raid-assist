@@ -3,11 +3,8 @@
 
 #include "vale_guardian.h"
 
-ValeGuardian::ValeGuardian(Agent &agent) : agent(&agent), secondsToDeath(0.0f), phase(VG::Phase::FIRST)
+ValeGuardian::ValeGuardian(Agent &agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
-	encounterTimer = boost::timer::cpu_timer();
-	encounterTimer.stop();
-	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 	cooldownTimer = boost::timer::cpu_timer();
 	cooldownTimer.stop();
 	magicStorm = {
@@ -29,14 +26,8 @@ bool ValeGuardian::matchesTarget(Agent &agent) {
 }
 
 void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
+	RaidBoss::updateState();
 	updateDps(damageBuffer);
-
-	if (encounterTimer.is_stopped() && hasTakenDamage()) {
-		encounterTimer.start();
-	}
-	else if (!encounterTimer.is_stopped() && !hasTakenDamage()) {
-		encounterTimer.stop();
-	}
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SPLIT;
@@ -56,28 +47,16 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 }
 
-void ValeGuardian::outputDps(stringstream &ss) {
-	ss << format("Est. Seconds To Death: %d\n") % (int)secondsToDeath;
-	ss << format("DPS(10s): %0.0f\n") % dps[0];
-	ss << format("DPS(30s): %0.0f\n") % dps[1];
-	ss << format("DPS(60s): %0.0f\n") % dps[2];
-}
-
 void ValeGuardian::outputAssistInfo(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
 	addEstTimeToSplit(ss);
 	addMagicStormStatus(ss);
 }
 
-int ValeGuardian::getEncounterTime() {
-	double encounterTime = encounterTimer.elapsed().wall / 1e9;
-	return (int)encounterTime;
-}
-
 void ValeGuardian::outputDebug(stringstream &ss) {
 	ss << format("boss agentId: %d\n") % agent->GetAgentId();
 	ss << format("boss phase: %d\n") % phase;
-	ss << format("boss encounter time: %d\n") % getEncounterTime();
+	ss << format("boss encounter time: %d\n") % getEncounterDuration();
 	ss << format("boss phase: %d\n") % phase;
 }
 
@@ -134,24 +113,6 @@ void ValeGuardian::addMagicStormStatus(stringstream &ss) {
 	else {
 		ss << "Magic Storm: ?\n";
 	}
-}
-
-void ValeGuardian::updateDps(boost::circular_buffer<float> &damageBuffer) {
-	for (size_t i = 0; i < 3; ++i) {
-		int seconds = DPS_DURATIONS[i];
-		size_t samples = seconds * 4;
-
-		if (samples > damageBuffer.size())
-			samples = damageBuffer.size();
-
-		float sum = 0.0;
-		for (size_t j = 0; j < samples; j++)
-			sum += damageBuffer[j];
-
-		dps[i] = sum / seconds;
-	}
-
-	secondsToDeath = (dps[1] == 0.0f ? 0 : getCurrentHealth() / dps[1]);
 }
 
 double ValeGuardian::getSecondsUntilMagicStormReady() {
