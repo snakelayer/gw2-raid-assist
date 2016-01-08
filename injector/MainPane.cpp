@@ -58,7 +58,7 @@ MainPane::MainPane(wxWindow* parent)
 		cur_hotkey_description = strtok(NULL, "\n");
 	}
 	
-	delete hotkey_descriptions;
+	delete[] hotkey_descriptions;
 	
 	updateLabels();
 	
@@ -101,7 +101,7 @@ void MainPane::updateLabels()
 		cur_hotkey_description = strtok(NULL, "\n");
 		it++;
 	}
-	delete hotkey_descriptions;
+	delete[] hotkey_descriptions;
 	FitInside();
 }
 
@@ -128,7 +128,7 @@ string MainPane::getDescriptionTextBlock()
 	ss << format("Show Attack Rate History (%s)\n") % get_key_description("Hotkeys.LOG_ATTACK_RATE_DETAILS");
 	ss << format("Record Attack Rate to File (%s)\n") % get_key_description("Hotkeys.LOG_ATTACK_RATE_TO_FILE");
 	ss << format("Adjust Attack Rate Threshold +(%s) and -(%s)\n") % get_key_description("Hotkeys.ATTACKRATE_CHAIN_HITS_MORE") % get_key_description("Hotkeys.ATTACKRATE_CHAIN_HITS_LESS");
-	ss << format("Nearby Ally Players List (%s)\n") % get_key_description("Hotkeys.ALLIES_LIST");
+	ss << format("Toggle Squad Display (%s)\n") % get_key_description("Hotkeys.ALLIES_LIST");
 	ss << format("Adjust WvW HP Bonus +(%s) and -(%s)\n") % get_key_description("Hotkeys.WVW_BONUS_MORE") % get_key_description("Hotkeys.WVW_BONUS_LESS");
 	ss << format("Count Ally NPCs (%s)\n") % get_key_description("Hotkeys.FLOAT_ALLY_NPC");
 	ss << format("Count Enemy NPCs (%s)\n") % get_key_description("Hotkeys.FLOAT_ENEMY_NPC");
@@ -141,6 +141,8 @@ string MainPane::getDescriptionTextBlock()
 	ss << format("Speedometer for Self/Enemy (%s)\n") % get_key_description("Hotkeys.LOG_SPEEDOMETER_ENEMY");
 	ss << format("Measure Distance (%s)\n") % get_key_description("Hotkeys.LOG_DISPLACEMENT");
 	ss << format("Distance for Self/Enemy (%s)\n") % get_key_description("Hotkeys.LOG_DISPLACEMENT_ENEMY");
+	ss << format("Toggle Raid Boss Assist (%s)\n") % get_key_description("Hotkeys.RAID_BOSS_ASSIST");
+	ss << format("Mark Raid Unit (%s)\n") % get_key_description("Hotkeys.MARK_RAID_UNIT");
 	return ss.str();
 }
 

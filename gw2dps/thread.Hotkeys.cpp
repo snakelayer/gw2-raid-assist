@@ -58,6 +58,11 @@
 #define LOG_DISPLACEMENT 92
 #define LOG_DISPLACEMENT_ENEMY 93
 
+#define RAID_DEBUG 100
+#define RAID_BOSS_ASSIST 101
+#define MARK_RAID_UNIT 102
+#define RECORD_RAIDS 103
+
 void registerHotKeyWrapper(int id, string key);
 void registerHotKeyWrapper(int id, string key, bool repeat);
 void unregisterHotkeys();
@@ -118,6 +123,11 @@ void threadHotKeys()
 	registerHotKeyWrapper(LOG_SPEEDOMETER_ENEMY, read_config_value("Hotkeys.LOG_SPEEDOMETER_ENEMY")); // logSpeedometerEnemy
 	registerHotKeyWrapper(LOG_DISPLACEMENT, read_config_value("Hotkeys.LOG_DISPLACEMENT")); // logDisplacement
 	registerHotKeyWrapper(LOG_DISPLACEMENT_ENEMY, read_config_value("Hotkeys.LOG_DISPLACEMENT_ENEMY")); // logDisplacementEnemy
+
+	registerHotKeyWrapper(RAID_DEBUG, read_config_value("Hotkeys.RAID_DEBUG"));
+	registerHotKeyWrapper(RAID_BOSS_ASSIST, read_config_value("Hotkeys.RAID_BOSS_ASSIST"));
+	registerHotKeyWrapper(MARK_RAID_UNIT, read_config_value("Hotkeys.MARK_RAID_UNIT"));
+	registerHotKeyWrapper(RECORD_RAIDS, read_config_value("Hotkeys.RECORD_RAIDS"));
 
 	// special
 	registerHotKeyWrapper(TARGET_INFO_ALT, read_config_value("Hotkeys.TARGET_INFO_ALT")); // targetInfoAlt
@@ -189,6 +199,10 @@ void threadHotKeys()
 			if (msg.wParam == LOG_SPEEDOMETER_ENEMY) logSpeedometerEnemy = !logSpeedometerEnemy;
 			if (msg.wParam == LOG_DISPLACEMENT) logDisplacement = !logDisplacement;
 			if (msg.wParam == LOG_DISPLACEMENT_ENEMY) logDisplacementEnemy = !logDisplacementEnemy;
+			if (msg.wParam == RAID_DEBUG) raid_debug = !raid_debug;
+			if (msg.wParam == RAID_BOSS_ASSIST) raid_boss_assist = !raid_boss_assist;
+			if (msg.wParam == MARK_RAID_UNIT) mark_raid_unit = true;
+			if (msg.wParam == RECORD_RAIDS) logRaidAssistToFile = !logRaidAssistToFile;
 		}
 	}
 }

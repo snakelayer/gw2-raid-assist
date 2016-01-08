@@ -30,6 +30,16 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/keymap.cpp
 	gw2dps/hotkey.h
 	gw2dps/hotkey.cpp
+	gw2dps/raid/squad_member.h
+	gw2dps/raid/squad_member.cpp
+	gw2dps/raid/squad.h
+	gw2dps/raid/squad.cpp
+	gw2dps/boss/raid_boss.h
+	gw2dps/boss/raid_boss.cpp
+	gw2dps/boss/unknown_boss.h
+	gw2dps/boss/unknown_boss.cpp
+	gw2dps/boss/vale_guardian.h
+	gw2dps/boss/vale_guardian.cpp
 	gw2dps/gw2dps.h
 	gw2dps/gw2dps.cpp)
 

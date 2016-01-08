@@ -32,7 +32,7 @@ bool MainApp::OnInit()
 	init_config();
 	init_keymap();
 	
-    MainFrame *frame = new MainFrame("GW2DPS");
+    MainFrame *frame = new MainFrame("GW2DPS Raid Assist");
 	frame->Show(true);
     return true;
 }

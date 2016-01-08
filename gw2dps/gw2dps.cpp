@@ -3,6 +3,9 @@
 #include "config.h"
 #include "keymap.h"
 #include "hotkey.h"
+#include "raid/squad.h"
+#include "boss/vale_guardian.h"
+#include "boss/unknown_boss.h"
 
 // Settings //
 bool killApp = false;
@@ -25,6 +28,11 @@ bool dpsAllowNegative = false;
 bool logDps = true;
 bool logDpsDetails = false;
 string logDpsFile = "gw2dpsLog-Dps.txt";
+
+float averageDps[3] = { 0.0f, 0.0f, 0.0f };
+float secondsToDeath = 0.0f;
+bool logRaidAssistToFile = true;
+string logRaidAssistFile = "gw2dpsLog-RaidAssist.txt";
 
 bool logKillTimer = false;
 bool logKillTimerDetails = false;
@@ -73,6 +81,13 @@ bool logDisplacement = false;
 bool logDisplacementEnemy = false;
 Vector3 logDisplacementStart = Vector3(0, 0, 0);
 
+bool raid_debug = false;
+bool raid_boss_assist = false;
+bool mark_raid_unit = false;
+
+Squad *squad;
+RaidBoss *boss;
+
 #ifdef ARCH_64BIT
 uintptr_t hp_shift1 = 0x58;
 uintptr_t hp_shift2 = 0x1c0;
@@ -99,6 +114,8 @@ DWORD thread_id_hotkey = 0;
 #include "thread.AttackRate.cpp"
 #include "thread.Crits.cpp"
 #include "thread.Speedometer.cpp"
+#include "thread.RaidAssist.cpp"
+#include "thread.BossDps.cpp"
 
 // Self
 Character me;
@@ -108,12 +125,20 @@ void ESP()
 {
 	// Element Anchors
 	Anchor aLeft, aTopLeft, aTop, aTopRight, aRight, aCenter, aBottom;
+	Anchor aBelowHealthBar, bossDpsAnchor;
 
-	aLeft.x = 100;
+	bossDpsAnchor.x = round(GetWindowWidth() * 5 / 7);
+	bossDpsAnchor.y = 8;
+
+	aBelowHealthBar.x = round(GetWindowWidth() / 2);
+	aBelowHealthBar.y = 160;
+
+	aLeft.x = round(GetWindowWidth() / 10);
 	aLeft.y = 75;
 
-	aTopLeft.x = round((GetWindowWidth() / 2 - 316 - 179) / 2 + 316);
-	aTopLeft.y = 8;
+	//aTopLeft.x = round((GetWindowWidth() / 2 - 316 + 280) / 2 + 316);
+	aTopLeft.x = round(GetWindowWidth() / 2);
+	aTopLeft.y = 40;
 
 	aTop.x = round(GetWindowWidth() / 2);
 	aTop.y = 1;
@@ -509,76 +534,6 @@ void ESP()
 			}
 		}
 
-		// Allies list
-		if (alliesList) {
-			Character ch = ag.GetCharacter();
-
-			// collect only valid allies (and yourself)
-			bool chValid = true;
-
-			if (!ch.IsValid())
-				chValid = false;
-
-			//if (ch.IsControlled())
-			//chValid = false;
-
-			if (!ch.IsPlayer() || ch.GetAttitude() != GW2::ATTITUDE_FRIENDLY)
-				chValid = false;
-
-			// gather char data
-			if (chValid){
-				Ally ally;
-				ally.id = ag.GetAgentId();
-
-				ally.profession = ch.GetProfession();
-				ally.mHealth = int(round(ch.GetMaxHealth() / (100 + wvwBonus) * 100));
-				//ally.cHealth = int(ch.GetCurrentHealth());
-				//if (ally.mHealth > 0)
-				//ally.pHealth = 100.f * (ally.cHealth / ally.mHealth);
-				//else
-				//ally.pHealth = 0;
-				ally.lvl = ch.GetScaledLevel();
-				ally.lvlActual = ch.GetLevel();
-				ally.name = ch.GetName();
-
-				baseHpReturn base = baseHp(ally.lvl, ally.profession);
-				ally.vitality = int(round((ally.mHealth - base.health) / 10));
-
-				switch (ally.profession)
-				{
-				case GW2::PROFESSION_WARRIOR:
-					allies.war.push_back(ally);
-					break;
-				case GW2::PROFESSION_NECROMANCER:
-					allies.necro.push_back(ally);
-					break;
-
-				case GW2::PROFESSION_ENGINEER:
-					allies.engi.push_back(ally);
-					break;
-				case GW2::PROFESSION_RANGER:
-					allies.ranger.push_back(ally);
-					break;
-				case GW2::PROFESSION_MESMER:
-					allies.mes.push_back(ally);
-					break;
-
-				case GW2::PROFESSION_GUARDIAN:
-					allies.guard.push_back(ally);
-					break;
-				case GW2::PROFESSION_THIEF:
-					allies.thief.push_back(ally);
-					break;
-				case GW2::PROFESSION_ELEMENTALIST:
-					allies.ele.push_back(ally);
-					break;
-				case GW2::PROFESSION_REVENANT:
-					allies.rev.push_back(ally);
-					break;
-				}
-			}
-		}
-
 		// Displacement
 		if (logDisplacement)
 		{
@@ -622,6 +577,16 @@ void ESP()
 		}
 	}
 
+	// Left element
+	{
+		if (alliesList && (squad != nullptr)) {
+			stringstream ss;
+			squad->outputPlayerStats(ss);
+			drawElementAt(ss, aLeft);
+		}
+
+	}
+
 	// Bottom Element //
 	{
 		stringstream ss;
@@ -641,220 +606,31 @@ void ESP()
 		}
 	}
 
-	// Left Element //
-	{
-		if (alliesList)
-		{
-			stringstream ss;
-			stringstream sp;
-			stringstream sn;
-			stringstream sh;
-			stringstream sv;
-
-			ss << format("Nearby Ally Players (WvW HP Bonus: %i%s)") % wvwBonus % "%%";
-			sp << format("Class");
-			sn << format("Name");
-			sh << format("Health");
-			sv << format("Vitality");
-
-			bool listEmpty = true;
-			if (!allies.war.empty())
-			{
-				for (auto & ally : allies.war) {
-					sp << format("\nWar:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.guard.empty())
-			{
-				for (auto & ally : allies.guard) {
-					sp << format("\nGuard:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-
-			if (!allies.ele.empty())
-			{
-				for (auto & ally : allies.ele) {
-					sp << format("\nEle:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.mes.empty())
-			{
-				for (auto & ally : allies.mes) {
-					sp << format("\nMes:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-
-			if (!allies.thief.empty())
-			{
-				for (auto & ally : allies.thief) {
-					sp << format("\nThief:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.ranger.empty())
-			{
-				for (auto & ally : allies.ranger) {
-					sp << format("\nRanger:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.engi.empty())
-			{
-				for (auto & ally : allies.engi) {
-					sp << format("\nEngi:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.necro.empty())
-			{
-				for (auto & ally : allies.necro) {
-					sp << format("\nNecro:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (!allies.rev.empty())
-			{
-				for (auto & ally : allies.rev) {
-					sp << format("\nRev:");
-					sn << format("\n%s") % ally.name;
-					sh << format("\n%i hp") % ally.mHealth;
-					sv << format("\n%+i") % ally.vitality;
-				}
-				listEmpty = false;
-			}
-			if (listEmpty)
-			{
-				sp << format("\n...");
-				sn << format("\n...");
-				sh << format("\n...");
-				sv << format("\n...");
-			}
-
-
-			// CharName max width
-			stringstream sx;
-			sx << "WWWWWWWWWWWWWWWWWWW";
-			StrInfo strInfo;
-			strInfo = StringInfo(sx.str());
-
-			float spOffset = 0;
-			float snOffset = spOffset + 65;
-			float shOffset = snOffset + strInfo.x;
-			float svOffset = shOffset + 85;
-			float sxOffset = svOffset + 60;
-
-			float x = round(aLeft.x);
-			float y = round(aLeft.y);
-
-			strInfo = StringInfo(sp.str());
-			int lineCount = int(strInfo.lineCount) + 2;
-
-			// render the list
-			DrawRectFilled(x - padX, y - padY, sxOffset + padX * 2, float(lineCount * lineHeight) + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, sxOffset + padX * 2, float(lineCount * lineHeight) + padY * 2, borderColor);
-
-			int lineShiftY = 2;
-			for (int i = 3; i < lineCount; i++) {
-				DrawLine(x - padX, y - padY + i * lineHeight + lineShiftY, x + sxOffset + padX, y - padY + i * lineHeight + lineShiftY, borderColor);
-			}
-			font.Draw(x + spOffset, y, fontColor, ss.str()); y += 2 * lineHeight;
-			font.Draw(x + spOffset, y, fontColor, sp.str());
-			font.Draw(x + snOffset, y, fontColor, sn.str());
-			font.Draw(x + shOffset, y, fontColor, sh.str());
-			font.Draw(x + svOffset, y, fontColor, sv.str());
-		}
-	}
-
 	// TopLeft Element //
 	{
 		if (targetSelected)
 		{
-			if (targetLock && selected.valid && locked.valid && selected.id == locked.id)
+			//if (targetLock && selected.valid && locked.valid && selected.id == locked.id)
+			if (targetLock && locked.valid)
 			{
 
 				stringstream ss;
-				StrInfo strInfo;
-
-				ss << format("Selected & Locked: %i / %i [%i%s]") % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
-
-				strInfo = StringInfo(ss.str());
-				float x = round(aTopLeft.x - strInfo.x / 2);
-				float y = round(aTopLeft.y);
-
-				DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-				DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-				font.Draw(x, y, fontColor, ss.str());
+				string formatString("Selected & Locked: %i / %i [%i%s]");
+				ss << format(formatString) % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
+				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += strInfo.lineCount * lineHeight + padY * 2;
+				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
 			}
-			else
+			else if (selected.valid)
 			{
-				if (selected.valid)
-				{
-					stringstream ss;
-					StrInfo strInfo;
+				stringstream ss;
+				string formatString("Selected: %i / %i [%i%s]");
+				ss << format(formatString) % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
+				drawElementAt(ss, aTopLeft);
 
-					ss << format("Selected: %i / %i [%i%s]") % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
-
-					strInfo = StringInfo(ss.str());
-					float x = round(aTopLeft.x - strInfo.x / 2);
-					float y = round(aTopLeft.y);
-
-					DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-					DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-					font.Draw(x, y, fontColor, ss.str());
-
-					// Prepare for Next Element
-					aTopLeft.y += strInfo.lineCount * lineHeight + padY * 2;
-				}
-
-				if (targetLock && locked.valid)
-				{
-					stringstream ss;
-					StrInfo strInfo;
-
-					ss << format("Selected & Locked: %i / %i [%i%s]") % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
-
-					strInfo = StringInfo(ss.str());
-					float x = round(aTopLeft.x - strInfo.x / 2);
-					float y = round(aTopLeft.y);
-
-					DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-					DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-					font.Draw(x, y, fontColor, ss.str());
-
-					// Prepare for Next Element
-					aTopLeft.y += strInfo.lineCount * lineHeight + padY * 2;
-				}
+				// Prepare for Next Element
+				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
 			}
 
 			if (targetInfo && selected.valid)
@@ -889,17 +665,12 @@ void ESP()
 						ss << format("BB: %3.05f%s") % selected.breakbar % "%%";
 				}
 
-				strInfo = StringInfo(ss.str());
-				float x = round(aTopLeft.x - strInfo.x / 2);
-				float y = round(aTopLeft.y);
-
-				DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-				DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-				font.Draw(x, y, fontColor, ss.str());
+				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
+				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
+
 				ss.str("");
-				aTopLeft.y += strInfo.lineCount * lineHeight + padY * 2;
 			}
 		}
 	}
@@ -1202,30 +973,16 @@ void ESP()
 
 			if (!bufferDps.empty())
 			{
-				double average[6] {}; // for 1s & 5s
-				size_t samples = 0;
+				averageDps[0] = computeAverage(10, bufferDps);
+				averageDps[1] = computeAverage(30, bufferDps);
+				averageDps[2] = computeAverage(60, bufferDps);
 
-				// DP1s
-				samples = 4; // 1s/250ms=4
-				if (samples > bufferDps.size())
-					samples = bufferDps.size();
-				average[1] = 0;
-				for (size_t i = 0; i < samples; i++)
-					average[1] += bufferDps[i];
-				average[1] = average[1] / samples * (1000 / 250);
+				if (boss == nullptr) {
+					ss << format("DPS(10s): %0.0f\n") % averageDps[0];
+					ss << format("DPS(30s): %0.0f\n") % averageDps[1];
+					ss << format("DPS(60s): %0.0f\n") % averageDps[2];
+				}
 
-				// DP5s
-				samples = 20; // 5s/250ms=20
-				if (samples > bufferDps.size())
-					samples = bufferDps.size();
-				average[5] = 0;
-				for (size_t i = 0; i < samples; i++)
-					average[5] += bufferDps[i];
-				average[5] = average[5] / samples * (1000 / 250);
-
-				// Prepare String
-				ss << format("DP1s: %0.0f\n") % average[1];
-				ss << format("DP5s: %0.0f\n") % average[5];
 				if (logDpsDetails)
 				{
 					for (size_t i = 0; i < bufferDps.size(); i++)
@@ -1234,13 +991,11 @@ void ESP()
 			}
 			else
 			{
-				ss << format("DP1s: ...\n");
-				ss << format("DP5s: ...");
+				ss << format("(no target)\n");
 			}
 
 			strInfo = StringInfo(ss.str());
-			if (logDpsDetails && !bufferDps.empty() && strInfo.x < aAdjustX)
-				strInfo.x = aAdjustX; // box min-width with history stream
+			strInfo.x = aAdjustX; // box min-width with history stream
 			float x = round(aTopRight.x - aAdjustX / 2); // perma anchor offset
 			float y = round(aTopRight.y);
 
@@ -1490,9 +1245,97 @@ void ESP()
 			//aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
 			aRight.x = x - padX * 2 - 5;
 		}
+
+		if (raid_debug) {
+			displayDebug();
+		}
+
+		if (raid_boss_assist) {
+			stringstream ssMain;
+
+			if (boss == nullptr && squad == nullptr) {
+				ssMain << "Target a unit and mark it (default: Alt-M)\n";
+			}
+
+			if (boss != nullptr) {
+				boss->outputAssistInfo(ssMain);
+
+				if (logDps) {					
+					stringstream ssDps;
+					boss->outputDps(ssDps);
+					drawElementAt(ssDps, bossDpsAnchor);
+				}
+			}
+			drawElementAt(ssMain, aBelowHealthBar);
+		}
+	}
+}
+
+void displayDebug() {
+	Anchor raidDebugAnchor;
+	raidDebugAnchor.x = round(GetWindowWidth() * 3 / 4);
+	raidDebugAnchor.y = 100;
+
+	stringstream ss;
+	ss << "Debug: \n";
+	ss << format("mapId: %d\n") % GetCurrentMapId();
+
+	displayAgent("target", GetLockedSelection(), ss);
+	//displayAgent("self", GetOwnAgent(), ss);
+
+	if (squad != nullptr) {
+		//displayAgent("first squad", squad->getFirstPlayerAgent(), ss);
+		ss << format("raid state: %d\n") % squad->getRaidState();
+		ss << format("raid reset: %s\n") % (squad->isResetAtSpawn() ? "yes" :  "no");
+		ss << format("raid log file: %s\n") % squad->getLogFileName();
+		ss << format("debugStr %s\n") % squad->getDebugStr();
 	}
 
+	if (boss != nullptr) {
+		boss->outputDebug(ss);
+	}
 
+	drawElementAt(ss, raidDebugAnchor);
+}
+
+void displayAgent(string prefix, Agent &agent, stringstream &ss) {
+	GW2LIB::Character character = agent.GetCharacter();
+	ss << format(prefix + " agentId: %d\n") % character.GetAgent().GetAgentId();
+	ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
+	ss << format(prefix + " name: %s\n") % character.GetName();
+	ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
+	ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
+	ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
+	ss << format(prefix + " player: " + string(character.IsPlayer() ? "yes" : "no") + "\n");
+	ss << format(prefix + " breakbar state: %d\n") % character.GetBreakbarState();
+	ss << format(prefix + " breakbar percent: %f\n") % character.GetBreakbarPercent();
+	ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();
+	ss << format(prefix + " endurance: %f/%f\n") % character.GetCurrentEndurance() % character.GetMaxEndurance();
+	ss << format(prefix + " glide: %d\n") % character.GetGliderPercent();
+	GW2LIB::GW2::CharacterStats stats = character.GetStats();
+	ss << format(prefix + " pow:%d, prec:%d, fero:%d, cond:%d, tough:%d, vit:%d, heal:%d\n") % stats.power % stats.precision % stats.ferocity % stats.condition % stats.toughness % stats.vitality % stats.healing;
+}
+
+float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
+	size_t samples = seconds * 4;
+	if (samples > bufferDps.size())
+		samples = bufferDps.size();
+
+	float sum = 0.0;
+	for (size_t i = 0; i < samples; i++)
+		sum += bufferDps[i];
+
+	return sum / seconds;
+}
+
+void drawElementAt(stringstream &ss, Anchor &location) {
+	StrInfo strInfo = StringInfo(ss.str());
+	float x = round(location.x - strInfo.x / 2);
+	float y = round(location.y);
+
+	DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000); //black background
+	DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor); // white border
+	font.Draw(x, y, fontColor, ss.str());
 }
 
 void GW2LIB::gw2lib_main()
@@ -1510,6 +1353,8 @@ void GW2LIB::gw2lib_main()
 	thread t5(&threadAttackRate);
 	thread t6(&threadCrits);
 	thread t7(&threadSpeedometer);
+	thread t8(&threadRaidAssist);
+	thread t9(&threadBossDps);
 
 	if (!font.Init(lineHeight, "Verdana"))
 	{
@@ -1534,6 +1379,8 @@ void GW2LIB::gw2lib_main()
 	t5.interrupt(); //t5.join();
 	t6.interrupt(); //t6.join();
 	t7.interrupt(); //t7.join();
+	t8.interrupt();
+	t9.interrupt();
 
 	Sleep(1000);
 	return;

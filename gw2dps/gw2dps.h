@@ -125,7 +125,8 @@ struct Displacement {
 	int dist;
 };
 Displacement bufferDisplacement;
-boost::circular_buffer<float> bufferDps(20); // 5s of 250ms samples
+boost::circular_buffer<float> bufferDps(240); // 1 minute for 250ms sampling rate
+boost::circular_buffer<float> bufferBossDps(240); // 1 minute for 250ms sampling rate
 boost::circular_buffer<int> bufferHits(50);
 boost::circular_buffer<double> bufferAttackRate(50); // seconds
 boost::circular_buffer<int> bufferSpeedometer(30); // inches/sec, 100ms sampleRate,3s worth
@@ -263,6 +264,7 @@ struct baseHpReturn {
 	float health;
 	float vitality;
 };
+
 baseHpReturn baseHp(int lvl, int profession)
 {
 	// base stats
@@ -357,5 +359,12 @@ baseHpReturn baseHp(int lvl, int profession)
 	out.vitality = vit;
 	return out;
 }
+
+void displayDebug();
+void displayAgent(string prefix, Agent &agent, stringstream &ss);
+
+float computeAverage(size_t samples, boost::circular_buffer<float> bufferDps);
+
+void drawElementAt(stringstream &ss, Anchor &aTopLeft);
 
 #endif
