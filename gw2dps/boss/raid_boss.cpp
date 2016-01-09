@@ -1,5 +1,4 @@
-#ifndef RAID_BOSS_CPP
-#define RAID_BOSS_CPP
+#pragma once
 
 #include "raid_boss.h"
 
@@ -49,5 +48,3 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 
 	secondsToDeath = (dps[1] == 0.0f ? 0 : getCurrentHealth() / dps[1]);
 }
-
-#endif

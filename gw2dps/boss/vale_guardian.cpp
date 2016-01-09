@@ -1,5 +1,4 @@
-#ifndef VALE_GUARDIAN_CPP
-#define VALE_GUARDIAN_CPP
+#pragma once
 
 #include "vale_guardian.h"
 
@@ -135,7 +134,3 @@ bool ValeGuardian::refreshAgent() {
 
 	return false;
 }
-
-//vector<matcherFunction> RaidBoss::matcherFunctions.push_back(&ValeGuardian::matchesTarget);
-
-#endif

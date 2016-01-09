@@ -1,5 +1,4 @@
-#ifndef RAID_BOSS_FACTORY_H
-#define RAID_BOSS_FACTORY_H
+#pragma once
 
 #include <map>
 
@@ -32,5 +31,3 @@ class RaidBossFactory
 		RaidBoss* getBossForAgent(GW2LIB::Agent &agent);
 
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef UNKNOWN_BOSS_CPP
-#define UNKNOWN_BOSS_CPP
+#pragma once
 
 #include "gw2lib.h"
 
@@ -24,5 +23,3 @@ void UnknownBoss::outputAssistInfo(stringstream &ss) {
 int UnknownBoss::getEncounterTime() {
 	return 0;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SQUAD_CPP
-#define SQUAD_CPP
+#pragma once
 
 #include "../hacklib/include/hacklib/Logging.h"
 
@@ -230,5 +229,3 @@ bool Squad::hasPlayerWithName(string name) {
 
 	return false;
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SQUAD_H
-#define SQUAD_H
+#pragma once
 
 #include <fstream>
 #include <map>
@@ -68,5 +67,3 @@ class Squad
 		bool isResetAtSpawn() { return resetStateAtNextRespawn; }
 		string getLogFileName() { return logFile; }
 };
-
-#endif

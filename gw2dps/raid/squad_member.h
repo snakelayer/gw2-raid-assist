@@ -1,5 +1,4 @@
-#ifndef SQUADMEMBER_H
-#define SQUADMEMBER_H
+#pragma once
 
 #include "GameData.h"
 
@@ -26,5 +25,3 @@ class SquadMember {
 		int getDodgeCount() { return dodgeCount; }
 		float getTotalDamageTaken() { return totalDamageTaken; }
 };
-
-#endif

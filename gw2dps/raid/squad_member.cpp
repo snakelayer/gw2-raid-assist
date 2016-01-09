@@ -1,5 +1,4 @@
-#ifndef SQUAD_MEMBER_CPP
-#define SQUAD_MEMBER_CPP
+#pragma once
 
 #include "squad_member.h"
 
@@ -43,5 +42,3 @@ void SquadMember::updateDodgeCount(GW2LIB::Character &character) {
 
 	lastEndurance = endurance;
 }
-
-#endif

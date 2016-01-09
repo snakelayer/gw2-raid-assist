@@ -1,5 +1,4 @@
-#ifndef VALE_GUARDIAN_H
-#define VALE_GUARDIAN_H
+#pragma once
 
 #include <sstream>
 
@@ -74,5 +73,3 @@ class ValeGuardian : public RaidBoss
 		float breakbar() { return agent->GetCharacter().GetBreakbarPercent(); }
 		GW2::BreakbarState breakbarState() { return agent->GetCharacter().GetBreakbarState(); }
 };
-
-#endif

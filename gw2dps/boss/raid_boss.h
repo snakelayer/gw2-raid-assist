@@ -1,5 +1,4 @@
-#ifndef RAID_BOSS_H
-#define RAID_BOSS_H
+#pragma once
 
 #include <sstream>
 #include <string>
@@ -43,5 +42,3 @@ class RaidBoss {
 	private:
 		float secondsToDeath;
 };
-
-#endif

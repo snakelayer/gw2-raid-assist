@@ -1,5 +1,4 @@
-#ifndef UNKNOWN_BOSS_H
-#define UNKNOWN_BOSS_H
+#pragma once
 
 #include <sstream>
 
@@ -28,5 +27,3 @@ class UnknownBoss : public RaidBoss
 
 		void outputDebug(stringstream &ss) {}
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RAID_BOSS_FACTORY_CPP
-#define RAID_BOSS_FACTORY_CPP
+#pragma once
 
 #include "raid_boss_factory.h"
 #include "vale_guardian.h"
@@ -22,5 +21,3 @@ RaidBoss* RaidBossFactory::getBossForAgent(GW2LIB::Agent &agent) {
 
 	return new UnknownBoss(agent);
 }
-
-#endif
