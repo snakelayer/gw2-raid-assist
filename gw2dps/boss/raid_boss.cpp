@@ -16,11 +16,19 @@ int RaidBoss::getEncounterDuration() {
 }
 
 void RaidBoss::updateState() {
+	string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 	if (encounterTimer.is_stopped() && hasTakenDamage()) {
 		encounterTimer.start();
+		outputHeader += str(format("// start time: %s\n") % now);
 	}
 	else if (!encounterTimer.is_stopped() && !hasTakenDamage()) {
 		encounterTimer.stop();
+	}
+
+	if (!agent->GetCharacter().IsAlive()) {
+		encounterTimer.stop();
+		totalEncounterDuration = getEncounterDuration();
+		outputHeader += str(format("// encounter duration: %s\n") % totalEncounterDuration);
 	}
 }
 

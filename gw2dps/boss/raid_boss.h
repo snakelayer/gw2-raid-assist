@@ -4,6 +4,7 @@
 #include <string>
 
 #include <boost/circular_buffer.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include <boost/timer/timer.hpp>
 
@@ -20,6 +21,7 @@ class RaidBoss {
 		int getAgentId() { return agent->GetAgentId(); }
 		void updateState();
 		void outputDps(stringstream &ss);
+		string getOutputHeader() { return outputHeader; }
 		int getEncounterDuration();
 
 		virtual string getName() = 0;
@@ -35,6 +37,9 @@ class RaidBoss {
 		float dps[3];
 
 		boost::timer::cpu_timer encounterTimer;
+		int totalEncounterDuration;
+
+		string outputHeader;
 
 		bool hasTakenDamage() { return agent->GetCharacter().GetCurrentHealth() != agent->GetCharacter().GetMaxHealth(); }
 		void updateDps(boost::circular_buffer<float> &damageBuffer);

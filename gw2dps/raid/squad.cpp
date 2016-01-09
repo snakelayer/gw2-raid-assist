@@ -133,8 +133,10 @@ void Squad::writeStatsToFile() {
 		string raidBossName = (raidBoss == nullptr ? "BOSS" : raidBoss->getName());
 		file << format("\n// %s\n") % raidBossName;
 
-		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::local_time());
-		file << format("// wipe time: %s\n") % now;
+		file << raidBoss->getOutputHeader();
+
+		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+		file << format("// end time: %s\n") % now;
 
 		if (raidBoss != nullptr) {
 			float remainingHealth = raidBoss->getCurrentHealth();

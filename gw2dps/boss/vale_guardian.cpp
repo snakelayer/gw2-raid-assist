@@ -32,9 +32,13 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SPLIT;
+		outputHeader += str(format("// phase 1: %d\n") % getEncounterDuration());
+		encounterTimer.start();
 	}
 	else if (phase == VG::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SPLIT;
+		outputHeader += str(format("// phase 2: %d\n") % getEncounterDuration());
+		encounterTimer.start();
 	}
 	else if (phase == VG::Phase::SPLIT) {
 		if (refreshAgent()) {
@@ -44,6 +48,8 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 			else {
 				phase = VG::Phase::SECOND;
 			}
+			outputHeader += str(format("// split phase: %d\n") % getEncounterDuration());
+			encounterTimer.start();
 		}
 	}
 }
