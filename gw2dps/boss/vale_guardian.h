@@ -67,9 +67,4 @@ class ValeGuardian : public RaidBoss
 		void outputAssistInfo(stringstream &ss);
 
 		void outputDebug(stringstream &ss);
-
-		float currentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
-		float maxHealth() { return agent->GetCharacter().GetMaxHealth(); }
-		float breakbar() { return agent->GetCharacter().GetBreakbarPercent(); }
-		GW2::BreakbarState breakbarState() { return agent->GetCharacter().GetBreakbarState(); }
 };

@@ -12,13 +12,12 @@
 
 using namespace boost;
 using namespace std;
+using namespace GW2LIB;
 
 class RaidBoss {
 	public:
-		RaidBoss(GW2LIB::Agent &agent);
+		RaidBoss(Agent &agent);
 
-		float getCurrentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
-		int getAgentId() { return agent->GetAgentId(); }
 		void updateState();
 		void outputDps(stringstream &ss);
 		string getOutputHeader() { return outputHeader; }
@@ -30,8 +29,13 @@ class RaidBoss {
 
 		virtual void outputDebug(stringstream &ss) = 0;
 
+		int getAgentId() { return agent->GetAgentId(); }
+		float getCurrentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
+		float getBreakbar() { return agent->GetCharacter().GetBreakbarPercent(); }
+		GW2::BreakbarState breakbarState() { return agent->GetCharacter().GetBreakbarState(); }
+
 	protected:
-		GW2LIB::Agent *agent;
+		Agent *agent;
 
 		static int DPS_DURATIONS[3];
 		float dps[3];

@@ -19,6 +19,9 @@ Squad::Squad(string logFile)
 	}
 }
 
+Squad::~Squad() {
+}
+
 void Squad::setBoss(RaidBoss *raidBoss) {
 	this->raidBoss = raidBoss;
 }

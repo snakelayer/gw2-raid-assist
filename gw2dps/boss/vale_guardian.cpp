@@ -70,11 +70,11 @@ void ValeGuardian::outputDebug(stringstream &ss) {
 void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 	float remainingHealth = 0.0f;
 
-	if (currentHealth() >= FIRST_PHASE_TRANSITION_HP) {
-		remainingHealth = currentHealth() - FIRST_PHASE_TRANSITION_HP;
+	if (getCurrentHealth() >= FIRST_PHASE_TRANSITION_HP) {
+		remainingHealth = getCurrentHealth() - FIRST_PHASE_TRANSITION_HP;
 	}
-	else if (currentHealth() >= SECOND_PHASE_TRANSITION_HP) {
-		remainingHealth = currentHealth() - SECOND_PHASE_TRANSITION_HP;
+	else if (getCurrentHealth() >= SECOND_PHASE_TRANSITION_HP) {
+		remainingHealth = getCurrentHealth() - SECOND_PHASE_TRANSITION_HP;
 	}
 
 	float secondsLeft = (dps[1] == 0) ? 0 : (remainingHealth / dps[1]) - 1;
@@ -84,10 +84,10 @@ void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 }
 
 void ValeGuardian::addMagicStormStatus(stringstream &ss) {
-	if ((magicStorm.state == VG::PENDING) && (currentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
+	if ((magicStorm.state == VG::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
 		magicStorm.state = VG::READY;
 	}
-	else if ((magicStorm.state == VG::READY) && (breakbarState() == GW2::BREAKBAR_STATE_READY) && (breakbar() > 0.9f)) { // transition to active
+	else if ((magicStorm.state == VG::READY) && (breakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() > 0.9f)) { // transition to active
 		magicStorm.state = VG::ACTIVE;
 	}
 	else if ((magicStorm.state == VG::ACTIVE) && (breakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {// && breakbar() == 0) { // transition from active to recharging

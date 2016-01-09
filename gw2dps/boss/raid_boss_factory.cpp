@@ -2,10 +2,12 @@
 
 #include "raid_boss_factory.h"
 #include "vale_guardian.h"
+#include "gorseval.h"
 #include "unknown_boss.h"
 
 RaidBossFactory::RaidBossFactory() {
 	addBossEntry(&ValeGuardian::matchesTarget, &ValeGuardian::instance);
+	addBossEntry(&Gorseval::matchesTarget, &Gorseval::instance);
 }
 
 void RaidBossFactory::addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier) {

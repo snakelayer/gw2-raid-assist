@@ -55,6 +55,7 @@ class Squad
 	public:
 		string getDebugStr() { return debugStr; }
 		Squad(string logFile = "");
+		~Squad();
 		
 		void setBoss(RaidBoss *raidBoss);
 		void addPlayer(GW2LIB::Character character);
