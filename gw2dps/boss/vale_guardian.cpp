@@ -3,6 +3,8 @@
 
 #include "vale_guardian.h"
 
+const float ValeGuardian::MAX_HP = 22021440;
+
 ValeGuardian::ValeGuardian(Agent &agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
 	cooldownTimer = boost::timer::cpu_timer();

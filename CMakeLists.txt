@@ -40,6 +40,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/boss/unknown_boss.cpp
 	gw2dps/boss/vale_guardian.h
 	gw2dps/boss/vale_guardian.cpp
+	gw2dps/boss/raid_boss_factory.h
+	gw2dps/boss/raid_boss_factory.cpp
 	gw2dps/gw2dps.h
 	gw2dps/gw2dps.cpp)
 

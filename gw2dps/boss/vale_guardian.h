@@ -40,7 +40,7 @@ namespace VG {
 class ValeGuardian : public RaidBoss
 {
 	private:
-		const float MAX_HP = 22021440;
+		static const float MAX_HP;
 		const float FIRST_PHASE_TRANSITION_HP = 14384054;
 		const float SECOND_PHASE_TRANSITION_HP = MAX_HP / 3; //TODO: verify
 		const float MAGIC_STORM_COOLDOWN = 30.0f;
@@ -49,6 +49,8 @@ class ValeGuardian : public RaidBoss
 		VG::MagicStorm magicStorm;
 		VG::Phase phase;
 
+		ValeGuardian(Agent &agent);
+
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
 
@@ -56,11 +58,11 @@ class ValeGuardian : public RaidBoss
 		bool refreshAgent();
 
 	public:
-		ValeGuardian(Agent &agent);
 		~ValeGuardian();
+		static RaidBoss* instance(Agent &agent) { return new ValeGuardian(agent); }
 
 		string getName() { return "Vale Guardian"; }
-		bool matchesTarget(Agent &agent);
+		static bool matchesTarget(Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void outputAssistInfo(stringstream &ss);

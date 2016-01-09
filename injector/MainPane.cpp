@@ -142,7 +142,6 @@ string MainPane::getDescriptionTextBlock()
 	ss << format("Measure Distance (%s)\n") % get_key_description("Hotkeys.LOG_DISPLACEMENT");
 	ss << format("Distance for Self/Enemy (%s)\n") % get_key_description("Hotkeys.LOG_DISPLACEMENT_ENEMY");
 	ss << format("Toggle Raid Boss Assist (%s)\n") % get_key_description("Hotkeys.RAID_BOSS_ASSIST");
-	ss << format("Mark Raid Unit (%s)\n") % get_key_description("Hotkeys.MARK_RAID_UNIT");
 	return ss.str();
 }
 

@@ -24,7 +24,6 @@ class RaidBoss {
 		int getEncounterDuration();
 
 		virtual string getName() = 0;
-		virtual bool matchesTarget(GW2LIB::Agent &agent) = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
 		virtual void outputAssistInfo(stringstream &ss) = 0;
 

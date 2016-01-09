@@ -19,7 +19,7 @@ class UnknownBoss : public RaidBoss
 		UnknownBoss(GW2LIB::Agent &agent);
 
 		string getName() { return "Unknown"; }
-		bool matchesTarget(GW2LIB::Agent &agent) { return false; }
+		static bool matchesTarget(GW2LIB::Agent &agent) { return false; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void outputDps(stringstream &ss);

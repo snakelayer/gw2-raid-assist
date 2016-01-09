@@ -16,11 +16,27 @@ void threadRaidAssist() {
 			if (elapsedMs > pollingRate) {
 				timer.start();
 
-				if (squad != nullptr) {
+				if (squad == nullptr) {
+					if (logRaidAssistToFile) {
+						squad = new Squad(logRaidAssistFile);
+					}
+					else {
+						squad = new Squad();
+					}
+				}
+				else {
 					squad->updateState();
 				}
 
-				if (boss != nullptr) {
+				if (boss == nullptr) {
+					GW2LIB::Agent agent = GetLockedSelection();
+
+					if (agent.IsValid()) {
+						boss = RaidBossFactory::get()->getBossForAgent(agent);
+						squad->setBoss(boss);
+					}
+				}
+				else {
 					boss->updateState(bufferBossDps);
 				}
 			}
@@ -36,40 +52,6 @@ void threadRaidAssist() {
 			if (squad != nullptr) {
 				delete squad;
 				squad = NULL;
-			}
-		}
-
-		if (mark_raid_unit) {
-			mark_raid_unit = false;
-
-			if (squad == nullptr) {
-				if (logRaidAssistToFile) {
-					squad = new Squad(logRaidAssistFile);
-				}
-				else {
-					squad = new Squad();
-				}
-			}
-
-			GW2LIB::Agent agent = GetLockedSelection();
-
-			if (agent.IsValid()) {
-				//TODO: use boss matching functions
-				if (agent.GetCharacter().GetMaxHealth() == 22021440) {
-					boss = new ValeGuardian(agent);
-					squad->setBoss(boss);
-				}
-				else {
-					boss = new UnknownBoss(agent);
-					squad->setBoss(boss);
-				}
-				//else if (!agent.GetCharacter().IsPlayer() && raid_debug) {
-				//	boss = new ValeGuardian(agent);
-				//	squad->setBoss(boss);
-				//}
-				//else if (agent.GetCharacter().IsPlayer()) {
-				//	squad->addPlayer(agent);
-				//}
 			}
 		}
 

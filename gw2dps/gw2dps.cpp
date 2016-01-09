@@ -4,8 +4,9 @@
 #include "keymap.h"
 #include "hotkey.h"
 #include "raid/squad.h"
-#include "boss/vale_guardian.h"
 #include "boss/unknown_boss.h"
+#include "boss/vale_guardian.h"
+#include "boss/raid_boss_factory.h"
 
 // Settings //
 bool killApp = false;
@@ -83,7 +84,6 @@ Vector3 logDisplacementStart = Vector3(0, 0, 0);
 
 bool raid_debug = false;
 bool raid_boss_assist = false;
-bool mark_raid_unit = false;
 
 Squad *squad;
 RaidBoss *boss;
