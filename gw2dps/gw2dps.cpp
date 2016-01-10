@@ -1251,14 +1251,11 @@ void ESP()
 		}
 
 		if (raid_boss_assist) {
-			stringstream ssMain;
-
-			if (boss == nullptr && squad == nullptr) {
-				ssMain << "Target a unit and mark it (default: Alt-M)\n";
-			}
-
 			if (boss != nullptr) {
+				stringstream ssMain;
+
 				boss->outputAssistInfo(ssMain);
+				drawElementAt(ssMain, aBelowHealthBar);
 
 				if (logDps) {					
 					stringstream ssDps;
@@ -1266,7 +1263,6 @@ void ESP()
 					drawElementAt(ssDps, bossDpsAnchor);
 				}
 			}
-			drawElementAt(ssMain, aBelowHealthBar);
 		}
 	}
 }
