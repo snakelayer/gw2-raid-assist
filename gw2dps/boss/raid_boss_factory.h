@@ -28,6 +28,6 @@ class RaidBossFactory
 		}
 
 		void addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier);
-		RaidBoss* getBossForAgent(GW2LIB::Agent &agent);
+		RaidBoss* getNextBoss();
 
 };

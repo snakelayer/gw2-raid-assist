@@ -14,12 +14,21 @@ void RaidBossFactory::addBossEntry(raidBossMatcher matcher, raidBossSupplier sup
 	matcherMap[matcher] = supplier;
 }
 
-RaidBoss* RaidBossFactory::getBossForAgent(GW2LIB::Agent &agent) {
-	for (raidBossMatcherMap::iterator it = matcherMap.begin(); it != matcherMap.end(); ++it) {
-		if (it->first(agent)) {
-			return it->second(agent);
+RaidBoss* RaidBossFactory::getNextBoss() {
+	GW2LIB::Agent agent;
+
+	while (agent.BeNext()) {
+		for (raidBossMatcherMap::iterator it = matcherMap.begin(); it != matcherMap.end(); ++it) {
+			if (it->first(agent)) {
+				return it->second(agent);
+			}
 		}
 	}
 
-	return new UnknownBoss(agent);
+	agent = GetLockedSelection();
+	if (agent.IsValid()) {
+		return new UnknownBoss(agent);
+	}
+
+	return nullptr;
 }

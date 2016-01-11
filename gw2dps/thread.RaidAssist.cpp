@@ -29,12 +29,10 @@ void threadRaidAssist() {
 				}
 
 				if (boss == nullptr) {
-					GW2LIB::Agent agent = GetLockedSelection();
-
-					if (agent.IsValid()) {
-						boss = RaidBossFactory::get()->getBossForAgent(agent);
-						squad->setBoss(boss);
-					}
+						boss = RaidBossFactory::get()->getNextBoss();
+						if (boss != nullptr) {
+							squad->setBoss(boss);
+						}
 				}
 				else {
 					boss->updateState(bufferBossDps);
@@ -47,11 +45,11 @@ void threadRaidAssist() {
 			}
 			if (boss != nullptr) {
 				delete boss;
-				boss = NULL;
+				boss = nullptr;
 			}
 			if (squad != nullptr) {
 				delete squad;
-				squad = NULL;
+				squad = nullptr;
 			}
 		}
 
