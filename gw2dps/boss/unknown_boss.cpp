@@ -12,6 +12,10 @@ void UnknownBoss::updateState(boost::circular_buffer<float> &damageBuffer) {
 
 }
 
+void UnknownBoss::updateSquadState(Squad *squad) {
+
+}
+
 void UnknownBoss::outputDps(stringstream &ss) {
 
 }

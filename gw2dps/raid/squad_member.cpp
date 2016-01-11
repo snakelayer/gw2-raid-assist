@@ -5,13 +5,18 @@
 SquadMember::SquadMember(GW2LIB::Character character) :
 	name(character.GetName()),
 	dodgeCount(0),
+	hitsTaken(0),
 	totalDamageTaken(0.0f),
 	lastEndurance(character.GetCurrentEndurance()),
-	lastHealth(character.GetCurrentHealth()) {
+	lastHealth(character.GetCurrentHealth()),
+	lastHealthDelta(0.0f) {
 }
 
 void SquadMember::updateStats(GW2LIB::Character &character) {
-	updateTotalDamageTaken(character);
+	updateLastHealthDelta(character);
+	if (character.IsAlive()) {
+		updateDamageTaken();
+	}
 	updateDodgeCount(character);
 }
 
@@ -22,16 +27,16 @@ void SquadMember::reset() {
 	lastHealth = 0.0f;
 }
 
-void SquadMember::updateTotalDamageTaken(GW2LIB::Character &character) {
-	if (!character.IsAlive()) {
-		return;
-	}
+void SquadMember::updateLastHealthDelta(GW2LIB::Character &character) {
 	float health = character.GetCurrentHealth();
-	if (health < lastHealth) {
-		totalDamageTaken += lastHealth - health;
-	}
-
+	lastHealthDelta = health - lastHealth;
 	lastHealth = health;
+}
+
+void SquadMember::updateDamageTaken() {
+	if (lastHealthDelta < 0.0) {
+		totalDamageTaken -= lastHealthDelta;
+	}
 }
 
 void SquadMember::updateDodgeCount(GW2LIB::Character &character) {

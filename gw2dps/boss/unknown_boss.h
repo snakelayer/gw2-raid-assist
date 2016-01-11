@@ -21,6 +21,7 @@ class UnknownBoss : public RaidBoss
 		static bool matchesTarget(GW2LIB::Agent &agent) { return false; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
+		void updateSquadState(Squad *squad);
 		void outputDps(stringstream &ss);
 		void outputAssistInfo(stringstream &ss);
 		int getEncounterTime();

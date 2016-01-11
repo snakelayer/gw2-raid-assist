@@ -10,6 +10,10 @@
 
 #include "gw2lib.h"
 
+#include "../raid/squad.h"
+
+class Squad;
+
 using namespace boost;
 using namespace std;
 using namespace GW2LIB;
@@ -25,6 +29,7 @@ class RaidBoss {
 
 		virtual string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
+		virtual void updateSquadState(Squad *squad) = 0;
 		virtual void outputAssistInfo(stringstream &ss) = 0;
 
 		virtual void outputDebug(stringstream &ss) = 0;

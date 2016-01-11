@@ -17,6 +17,8 @@
 using namespace boost;
 using namespace std;
 
+class RaidBoss;
+
 namespace RAID {
 	enum RaidState {
 		ACTIVE = 0, // at least one player is alive
@@ -60,6 +62,8 @@ class Squad
 		void setBoss(RaidBoss *raidBoss);
 		void addPlayer(GW2LIB::Character character);
 		void updateState();
+
+		SquadMemberMap getSquadMembers() { return members; }
 
 		void incrementDisplayMask();
 		void outputPlayerStats(ostream &stream);

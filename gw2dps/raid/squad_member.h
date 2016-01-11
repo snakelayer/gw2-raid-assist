@@ -8,12 +8,15 @@ class SquadMember {
 	private:
 		string name;
 		int dodgeCount;
+		int hitsTaken;
 		float totalDamageTaken;
 
 		float lastEndurance;
 		float lastHealth;
+		float lastHealthDelta;
 
-		void updateTotalDamageTaken(GW2LIB::Character &character);
+		void updateLastHealthDelta(GW2LIB::Character &character);
+		void updateDamageTaken();
 		void updateDodgeCount(GW2LIB::Character &character);
 
 	public:
@@ -23,5 +26,9 @@ class SquadMember {
 
 		string getName() { return name; }
 		int getDodgeCount() { return dodgeCount; }
+		float getLastHealthDelta() { return lastHealthDelta; }
+		int getHitsTaken() { return hitsTaken; }
 		float getTotalDamageTaken() { return totalDamageTaken; }
+
+		void incrementHitsTaken() { ++hitsTaken; }
 };

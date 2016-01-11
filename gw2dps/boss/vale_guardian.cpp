@@ -54,6 +54,10 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 }
 
+void ValeGuardian::updateSquadState(Squad *squad) {
+
+}
+
 void ValeGuardian::outputAssistInfo(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
 	addEstTimeToSplit(ss);
