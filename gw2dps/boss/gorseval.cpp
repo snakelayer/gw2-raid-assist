@@ -4,7 +4,7 @@
 
 const float Gorseval::MAX_HP = 21628200;
 
-Gorseval::Gorseval(Agent &agent) : RaidBoss(agent)
+Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
 	// TODO
 }

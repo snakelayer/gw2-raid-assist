@@ -20,7 +20,7 @@ using namespace GW2LIB;
 
 class RaidBoss {
 	public:
-		RaidBoss(Agent &agent);
+		RaidBoss(Agent agent);
 
 		void updateState();
 		void outputDps(stringstream &ss);
@@ -34,13 +34,13 @@ class RaidBoss {
 
 		virtual void outputDebug(stringstream &ss) = 0;
 
-		int getAgentId() { return agent->GetAgentId(); }
-		float getCurrentHealth() { return agent->GetCharacter().GetCurrentHealth(); }
-		float getBreakbar() { return agent->GetCharacter().GetBreakbarPercent(); }
-		GW2::BreakbarState breakbarState() { return agent->GetCharacter().GetBreakbarState(); }
+		int getAgentId() { return agent.GetAgentId(); }
+		float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
+		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
+		GW2::BreakbarState breakbarState() { return agent.GetCharacter().GetBreakbarState(); }
 
 	protected:
-		Agent *agent;
+		Agent agent;
 
 		static int DPS_DURATIONS[3];
 		float dps[3];
@@ -50,7 +50,7 @@ class RaidBoss {
 
 		string outputHeader;
 
-		bool hasTakenDamage() { return agent->GetCharacter().GetCurrentHealth() != agent->GetCharacter().GetMaxHealth(); }
+		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
 		void updateDps(boost::circular_buffer<float> &damageBuffer);
 
 	private:

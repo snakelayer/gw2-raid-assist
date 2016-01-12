@@ -4,7 +4,7 @@
 
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
-RaidBoss::RaidBoss(GW2LIB::Agent &agent) : agent(&agent), secondsToDeath(0.0f) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 	encounterTimer = boost::timer::cpu_timer();
 	encounterTimer.stop();
@@ -25,7 +25,7 @@ void RaidBoss::updateState() {
 		encounterTimer.stop();
 	}
 
-	if (!agent->GetCharacter().IsAlive()) {
+	if (!agent.GetCharacter().IsAlive()) {
 		encounterTimer.stop();
 		totalEncounterDuration = getEncounterDuration();
 		outputHeader += str(format("// encounter duration: %s\n") % totalEncounterDuration);

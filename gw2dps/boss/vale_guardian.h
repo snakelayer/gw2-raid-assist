@@ -48,7 +48,7 @@ class ValeGuardian : public RaidBoss
 		VG::MagicStorm magicStorm;
 		VG::Phase phase;
 
-		ValeGuardian(Agent &agent);
+		ValeGuardian(Agent agent);
 
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
@@ -58,7 +58,7 @@ class ValeGuardian : public RaidBoss
 
 	public:
 		~ValeGuardian();
-		static RaidBoss* instance(Agent &agent) { return new ValeGuardian(agent); }
+		static RaidBoss* instance(Agent agent) { return new ValeGuardian(agent); }
 
 		string getName() { return "Vale Guardian"; }
 		static bool matchesTarget(Agent &agent);

@@ -15,7 +15,7 @@ void threadRaidAssist() {
 			double elapsedMs = elapsed.wall / 1e6;
 			if (elapsedMs > pollingRate) {
 				timer.start();
-
+				
 				if (squad == nullptr) {
 					if (logRaidAssistToFile) {
 						squad = new Squad(logRaidAssistFile);
@@ -27,12 +27,12 @@ void threadRaidAssist() {
 				else {
 					squad->updateState();
 				}
-
+				
 				if (boss == nullptr) {
-						boss = RaidBossFactory::get()->getNextBoss();
-						if (boss != nullptr) {
-							squad->setBoss(boss);
-						}
+					boss = RaidBossFactory::get().getNextBoss();
+					if (boss != nullptr) {
+						squad->setBoss(boss);
+					}
 				}
 				else {
 					boss->updateState(bufferBossDps);

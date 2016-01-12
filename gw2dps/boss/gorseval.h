@@ -24,10 +24,10 @@ class Gorseval : public RaidBoss
 		// anything below this is considered a dodgeable hit the player took
 		static const int PLAYER_HIT_DAMAGE_THRESHOLD = -1500;
 
-		Gorseval(Agent &agent);
+		Gorseval(Agent agent);
 
 	public:
-		static RaidBoss* instance(Agent &agent) { return new Gorseval(agent); }
+		static RaidBoss* instance(Agent agent) { return new Gorseval(agent); }
 
 		string getName() { return "Gorseval"; }
 		static bool matchesTarget(Agent &agent);

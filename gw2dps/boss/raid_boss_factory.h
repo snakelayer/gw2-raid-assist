@@ -9,25 +9,23 @@ class RaidBossFactory
 {
 	private:
 		RaidBossFactory();
-		RaidBossFactory(const RaidBossFactory&) {};
-		RaidBossFactory& operator=(const RaidBossFactory&) { return *this; }
+		RaidBossFactory(RaidBossFactory const&) = delete;
+		void operator=(RaidBossFactory const&) = delete;
 
 		typedef bool (*raidBossMatcher)(GW2LIB::Agent&);
-		typedef RaidBoss* (*raidBossSupplier)(GW2LIB::Agent&);
+		typedef RaidBoss* (*raidBossSupplier)(GW2LIB::Agent);
 		typedef std::map<raidBossMatcher, raidBossSupplier> raidBossMatcherMap;
 
 		raidBossMatcherMap matcherMap;
 
-	public:
-		~RaidBossFactory() { matcherMap.clear(); }
+		void addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier);
 
-		static RaidBossFactory* get()
+	public:
+		static RaidBossFactory& get()
 		{
 			static RaidBossFactory instance;
-			return &instance;
+			return instance;
 		}
 
-		void addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier);
 		RaidBoss* getNextBoss();
-
 };

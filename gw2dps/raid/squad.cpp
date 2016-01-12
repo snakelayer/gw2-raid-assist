@@ -49,7 +49,9 @@ void Squad::updateState() {
 		}
 	}
 
-	raidBoss->updateSquadState(this);
+	if (raidBoss != nullptr) {
+		raidBoss->updateSquadState(this);
+	}
 	tryReset(characterMap);
 }
 

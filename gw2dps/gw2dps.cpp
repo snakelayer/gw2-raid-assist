@@ -1284,7 +1284,7 @@ void displayDebug() {
 		ss << format("raid state: %d\n") % squad->getRaidState();
 		ss << format("raid reset: %s\n") % (squad->isResetAtSpawn() ? "yes" :  "no");
 		ss << format("raid log file: %s\n") % squad->getLogFileName();
-		ss << format("debugStr %s\n") % squad->getDebugStr();
+		ss << format("squad debugStr %s\n") % squad->getDebugStr();
 	}
 
 	if (boss != nullptr) {
@@ -1300,6 +1300,8 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
 	ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
 	ss << format(prefix + " name: %s\n") % character.GetName();
 	ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
+	ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
+	ss << format(prefix + " valid: " + string(character.IsValid() ? "yes" : "no") + "\n");
 	ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
 	ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
 	ss << format(prefix + " player: " + string(character.IsPlayer() ? "yes" : "no") + "\n");

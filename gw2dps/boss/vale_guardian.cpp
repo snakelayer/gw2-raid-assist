@@ -4,7 +4,7 @@
 
 const float ValeGuardian::MAX_HP = 22021440;
 
-ValeGuardian::ValeGuardian(Agent &agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
+ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
 	cooldownTimer = boost::timer::cpu_timer();
 	cooldownTimer.stop();
@@ -65,7 +65,7 @@ void ValeGuardian::outputAssistInfo(stringstream &ss) {
 }
 
 void ValeGuardian::outputDebug(stringstream &ss) {
-	ss << format("boss agentId: %d\n") % agent->GetAgentId();
+	ss << format("boss agentId: %d\n") % agent.GetAgentId();
 	ss << format("boss phase: %d\n") % phase;
 	ss << format("boss encounter time: %d\n") % getEncounterDuration();
 	ss << format("boss phase: %d\n") % phase;
@@ -132,12 +132,12 @@ double ValeGuardian::getSecondsUntilMagicStormReady() {
 }
 
 bool ValeGuardian::refreshAgent() {
-	int currentAgentId = agent->GetAgentId();
+	int currentAgentId = agent.GetAgentId();
 	Agent nextAgent;
 
 	while (nextAgent.BeNext()) {
 		if (nextAgent.GetCharacter().GetMaxHealth() == MAX_HP && nextAgent.GetAgentId() != currentAgentId) {
-			agent->m_ptr = nextAgent.m_ptr;
+			agent.m_ptr = nextAgent.m_ptr;
 			return true;
 		}
 	}

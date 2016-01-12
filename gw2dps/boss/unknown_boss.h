@@ -13,9 +13,10 @@ using namespace GW2LIB;
 class UnknownBoss : public RaidBoss
 {
 	private:
+		string debugStr;
 
 	public:
-		UnknownBoss(GW2LIB::Agent &agent);
+		UnknownBoss(GW2LIB::Agent agent);
 
 		string getName() { return "Unknown"; }
 		static bool matchesTarget(GW2LIB::Agent &agent) { return false; }
@@ -26,5 +27,5 @@ class UnknownBoss : public RaidBoss
 		void outputAssistInfo(stringstream &ss);
 		int getEncounterTime();
 
-		void outputDebug(stringstream &ss) {}
+		void outputDebug(stringstream &ss);
 };

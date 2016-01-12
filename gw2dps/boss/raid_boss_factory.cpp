@@ -24,9 +24,9 @@ RaidBoss* RaidBossFactory::getNextBoss() {
 			}
 		}
 	}
-
+	
 	agent = GetLockedSelection();
-	if (agent.IsValid()) {
+	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
 		return new UnknownBoss(agent);
 	}
 
