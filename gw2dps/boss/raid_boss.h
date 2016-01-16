@@ -56,4 +56,6 @@ class RaidBoss {
 
 	private:
 		float secondsToDeath;
+
+		float dist(Vector3 p1, Vector3 p2);
 };

@@ -41,6 +41,7 @@ void RaidBoss::outputDps(stringstream &ss) {
 
 void RaidBoss::outputAssistHeader(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
+	ss << format("Dist: %.0f\n") % dist(agent.GetPos(), GetOwnAgent().GetPos());
 }
 
 void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
@@ -59,4 +60,9 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 	}
 
 	secondsToDeath = (dps[1] == 0.0f ? 0 : getCurrentHealth() / dps[1]);
+}
+
+float RaidBoss::dist (Vector3 p1, Vector3 p2)
+{
+	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
 }
