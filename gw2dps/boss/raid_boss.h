@@ -35,6 +35,7 @@ class RaidBoss {
 
 		virtual void outputDebug(stringstream &ss) = 0;
 
+		bool isDead() { return !agent.GetCharacter().IsAlive(); }
 		int getAgentId() { return agent.GetAgentId(); }
 		float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
 		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }

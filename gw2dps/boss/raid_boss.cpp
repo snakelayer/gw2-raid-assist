@@ -18,8 +18,10 @@ int RaidBoss::getEncounterDuration() {
 void RaidBoss::updateState() {
 	if (encounterTimer.is_stopped() && hasTakenDamage()) {
 		encounterTimer.start();
+		outputHeader += str(format("\n// Boss: %s\n") % getName());
+
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
-		outputHeader += str(format("\n// start time: %s\n") % now);
+		outputHeader += str(format("// start time: %s\n") % now);
 	}
 	else if ((!encounterTimer.is_stopped() && !hasTakenDamage()) ||
 	          !agent.GetCharacter().IsAlive()) {

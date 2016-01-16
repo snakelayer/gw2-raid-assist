@@ -39,6 +39,16 @@ void threadRaidAssist() {
 				}
 				else {
 					boss->updateState(bufferBossDps);
+
+					if (boss->isDead()) {
+						delete boss;
+						boss = nullptr;
+						if (squad != nullptr) {
+							delete squad;
+							squad = nullptr;
+						}
+						raid_boss_assist = !raid_boss_assist;
+					}
 				}
 			}
 		}

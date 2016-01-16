@@ -136,8 +136,8 @@ void Squad::writeStatsToFile() {
 	file.open(logFile, std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
-		string raidBossName = (raidBoss == nullptr ? "BOSS" : raidBoss->getName());
-		file << format("\n// %s\n") % raidBossName;
+		string raidBossName = (raidBoss == nullptr ? "?" : raidBoss->getName());
+		file << format("\n// Boss: %s\n") % raidBossName;
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		file << format("// end time: %s\n") % now;
