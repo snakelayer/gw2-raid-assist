@@ -9,6 +9,7 @@ UnknownBoss::UnknownBoss(Agent agent) : RaidBoss(agent) {
 }
 
 void UnknownBoss::updateState(boost::circular_buffer<float> &damageBuffer) {
+	RaidBoss::updateState();
 }
 
 void UnknownBoss::updateSquadState(Squad *squad) {
@@ -20,7 +21,7 @@ void UnknownBoss::outputDps(stringstream &ss) {
 }
 
 void UnknownBoss::outputAssistInfo(stringstream &ss) {
-	outputAssistHeader(ss);
+	RaidBoss::outputAssistHeader(ss);
 }
 
 int UnknownBoss::getEncounterTime() {
@@ -28,6 +29,5 @@ int UnknownBoss::getEncounterTime() {
 }
 
 void UnknownBoss::outputDebug(stringstream &ss) {
-	debugStr = str(format("current hp: %f\n") % agent.GetCharacter().GetCurrentHealth());
-	ss << debugStr;
+	//ss << outputHeader;
 }

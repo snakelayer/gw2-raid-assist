@@ -4,7 +4,7 @@
 
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
-RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), logFile(""), secondsToDeath(0.0f) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 	encounterTimer = boost::timer::cpu_timer();
 	encounterTimer.stop();
@@ -16,19 +16,22 @@ int RaidBoss::getEncounterDuration() {
 }
 
 void RaidBoss::updateState() {
-	string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 	if (encounterTimer.is_stopped() && hasTakenDamage()) {
 		encounterTimer.start();
-		outputHeader += str(format("// start time: %s\n") % now);
+		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+		outputHeader += str(format("\n// start time: %s\n") % now);
 	}
-	else if (!encounterTimer.is_stopped() && !hasTakenDamage()) {
+	else if ((!encounterTimer.is_stopped() && !hasTakenDamage()) ||
+	          !agent.GetCharacter().IsAlive()) {
 		encounterTimer.stop();
+
+		writeDataToFile();
+		outputHeader.clear();
+		remainingHealth.clear();
 	}
 
-	if (!agent.GetCharacter().IsAlive()) {
-		encounterTimer.stop();
-		totalEncounterDuration = getEncounterDuration();
-		outputHeader += str(format("// encounter duration: %s\n") % totalEncounterDuration);
+	if (!encounterTimer.is_stopped() && agent.GetCharacter().IsAlive()) {
+		remainingHealth.push_back(getCurrentHealth());
 	}
 }
 
@@ -65,4 +68,31 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 float RaidBoss::dist (Vector3 p1, Vector3 p2)
 {
 	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
+}
+
+void RaidBoss::writeDataToFile() {
+	std::ofstream file;
+	file.open(logFile, std::ofstream::out | std::ofstream::app);
+
+	if (file.is_open()) {
+		file << getOutputHeader();
+
+		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+		file << format("// end time: %s\n") % now;
+		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
+		file << format("// encounter duration: %d\n") % getEncounterDuration();
+		writeHealthData(file);
+
+		file.close();
+	}
+	else {
+		logFile = strerror(errno);
+	}
+}
+
+void RaidBoss::writeHealthData(ostream &stream) {
+	stream << "\n// Boss health over time:\n";
+	for (auto hp : remainingHealth) {
+		stream << format("%.0f\n") % hp;
+	}
 }

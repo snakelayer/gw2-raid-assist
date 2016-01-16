@@ -43,12 +43,13 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	else if (phase == VG::Phase::SPLIT) {
 		if (refreshAgent()) {
 			if (getCurrentHealth() < SECOND_PHASE_TRANSITION_HP) {
+				outputHeader += str(format("// second split phase: %d\n") % getEncounterDuration());
 				phase = VG::Phase::THIRD;
 			}
 			else {
+				outputHeader += str(format("// first split phase: %d\n") % getEncounterDuration());
 				phase = VG::Phase::SECOND;
 			}
-			outputHeader += str(format("// split phase: %d\n") % getEncounterDuration());
 			encounterTimer.start();
 		}
 	}
@@ -59,7 +60,7 @@ void ValeGuardian::updateSquadState(Squad *squad) {
 }
 
 void ValeGuardian::outputAssistInfo(stringstream &ss) {
-	outputAssistHeader(ss);
+	RaidBoss::outputAssistHeader(ss);
 	addEstTimeToSplit(ss);
 	addMagicStormStatus(ss);
 }

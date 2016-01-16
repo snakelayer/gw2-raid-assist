@@ -32,6 +32,9 @@ void threadRaidAssist() {
 					boss = RaidBossFactory::get().getNextBoss();
 					if (boss != nullptr) {
 						squad->setBoss(boss);
+						if (logRaidAssistToFile) {
+							boss->setLogFile(logRaidAssistFile);
+						}
 					}
 				}
 				else {
