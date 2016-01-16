@@ -20,7 +20,7 @@ void UnknownBoss::outputDps(stringstream &ss) {
 }
 
 void UnknownBoss::outputAssistInfo(stringstream &ss) {
-	ss << format("Boss: %s\n") % getName();
+	outputAssistHeader(ss);
 }
 
 int UnknownBoss::getEncounterTime() {
@@ -28,5 +28,6 @@ int UnknownBoss::getEncounterTime() {
 }
 
 void UnknownBoss::outputDebug(stringstream &ss) {
+	debugStr = str(format("current hp: %f\n") % agent.GetCharacter().GetCurrentHealth());
 	ss << debugStr;
 }

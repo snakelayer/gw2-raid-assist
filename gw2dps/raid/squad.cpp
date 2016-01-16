@@ -84,7 +84,7 @@ bool Squad::shouldOutputTotalDamageTaken() {
 void Squad::outputPlayerStats(ostream &stream) {
 	stream << "Player\tDodges\tHitsTaken\tTotalDamageTaken\n";
 	for (auto &member : members) {
-		stream << format("%-7s\t%d\t%d\t%d\n") % member.second.getName().substr(0, 6) % member.second.getDodgeCount() % member.second.getHitsTaken() % member.second.getTotalDamageTaken();
+		stream << format("%-20s\t%d\t%d\t%d\n") % member.second.getName() % member.second.getDodgeCount() % member.second.getHitsTaken() % member.second.getTotalDamageTaken();
 	}
 }
 

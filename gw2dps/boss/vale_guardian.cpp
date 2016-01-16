@@ -59,7 +59,7 @@ void ValeGuardian::updateSquadState(Squad *squad) {
 }
 
 void ValeGuardian::outputAssistInfo(stringstream &ss) {
-	ss << format("Name: %s\n") % getName();
+	outputAssistHeader(ss);
 	addEstTimeToSplit(ss);
 	addMagicStormStatus(ss);
 }
@@ -68,7 +68,7 @@ void ValeGuardian::outputDebug(stringstream &ss) {
 	ss << format("boss agentId: %d\n") % agent.GetAgentId();
 	ss << format("boss phase: %d\n") % phase;
 	ss << format("boss encounter time: %d\n") % getEncounterDuration();
-	ss << format("boss phase: %d\n") % phase;
+	ss << format("boss current hp: %f\n") % getCurrentHealth();
 }
 
 void ValeGuardian::addEstTimeToSplit(stringstream &ss) {

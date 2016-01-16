@@ -39,6 +39,10 @@ void RaidBoss::outputDps(stringstream &ss) {
 	ss << format("DPS(60s): %0.0f\n") % dps[2];
 }
 
+void RaidBoss::outputAssistHeader(stringstream &ss) {
+	ss << format("Name: %s\n") % getName();
+}
+
 void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 	for (size_t i = 0; i < 3; ++i) {
 		int seconds = DPS_DURATIONS[i];

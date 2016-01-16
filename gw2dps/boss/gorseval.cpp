@@ -35,6 +35,6 @@ void Gorseval::updateSquadState(Squad *squad) {
 }
 
 void Gorseval::outputAssistInfo(stringstream &ss) {
-	ss << format("Name: %s\n") % getName();
+	outputAssistHeader(ss);
 	// TODO
 }
