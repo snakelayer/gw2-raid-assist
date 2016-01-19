@@ -6,9 +6,9 @@
 #include <boost/circular_buffer.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
-#include <boost/timer/timer.hpp>
 
 #include "gw2lib.h"
+#include "../raid/encounter_timer.h"
 
 #include "../raid/squad.h"
 
@@ -26,7 +26,6 @@ class RaidBoss {
 		void updateState();
 		void outputDps(stringstream &ss);
 		string getOutputHeader() { return outputHeader; }
-		int getEncounterDuration();
 
 		virtual string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
@@ -47,7 +46,7 @@ class RaidBoss {
 		static int DPS_DURATIONS[3];
 		float dps[3];
 
-		boost::timer::cpu_timer encounterTimer;
+		EncounterTimer encounterTimer;
 		int totalEncounterDuration;
 
 		string outputHeader;

@@ -6,24 +6,17 @@ int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
 RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), logFile(""), secondsToDeath(0.0f) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
-	encounterTimer = boost::timer::cpu_timer();
-	encounterTimer.stop();
-}
-
-int RaidBoss::getEncounterDuration() {
-	double encounterTime = encounterTimer.elapsed().wall / 1e9;
-	return (int)encounterTime;
 }
 
 void RaidBoss::updateState() {
-	if (encounterTimer.is_stopped() && hasTakenDamage()) {
+	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		encounterTimer.start();
 		outputHeader += str(format("\n// Boss: %s\n") % getName());
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		outputHeader += str(format("// start time: %s\n") % now);
 	}
-	else if ((!encounterTimer.is_stopped() && !hasTakenDamage()) ||
+	else if ((!encounterTimer.isStopped() && !hasTakenDamage()) ||
 	          !agent.GetCharacter().IsAlive()) {
 		encounterTimer.stop();
 
@@ -32,7 +25,7 @@ void RaidBoss::updateState() {
 		remainingHealth.clear();
 	}
 
-	if (!encounterTimer.is_stopped() && agent.GetCharacter().IsAlive()) {
+	if (!encounterTimer.isStopped() && agent.GetCharacter().IsAlive()) {
 		remainingHealth.push_back(getCurrentHealth());
 	}
 }
@@ -82,7 +75,7 @@ void RaidBoss::writeDataToFile() {
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		file << format("// end time: %s\n") % now;
 		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
-		file << format("// encounter duration: %d\n") % getEncounterDuration();
+		file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
 		writeHealthData(file);
 
 		file.close();

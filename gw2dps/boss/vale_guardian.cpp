@@ -35,41 +35,35 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::FIRST_TRANSITION;
 		agent.m_ptr = nullptr;
-		outputHeader += str(format("// first phase: %d\n") % getEncounterDuration());
-		encounterTimer.start();
+		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
 	else if (phase == VG::Phase::FIRST_TRANSITION) {
 		if (findRedGuardian()) {
 			phase = VG::Phase::FIRST_SPLIT;
-			outputHeader += str(format("// first transition phase: %d\n") % getEncounterDuration());
-			encounterTimer.start();
+			outputHeader += str(format("// first transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
 	}
 	else if (phase == VG::Phase::FIRST_SPLIT) {
 		if (reacquireValeGuardian()) {
 			phase = VG::Phase::SECOND;
-			outputHeader += str(format("// first split phase: %d\n") % getEncounterDuration());
-			encounterTimer.start();
+			outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
 	}
 	else if (phase == VG::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SECOND_TRANSITION;
 		agent.m_ptr = nullptr;
-		outputHeader += str(format("// second phase: %d\n") % getEncounterDuration());
-		encounterTimer.start();
+		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
 	else if (phase == VG::Phase::SECOND_TRANSITION) {
 		if (findRedGuardian()) {
 			phase = VG::Phase::SECOND_SPLIT;
-			outputHeader += str(format("// second transition phase: %d\n") % getEncounterDuration());
-			encounterTimer.start();
+			outputHeader += str(format("// second transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
 	}
 	else if (phase == VG::Phase::SECOND_SPLIT) {
 		if (reacquireValeGuardian()) {
 			phase = VG::Phase::THIRD;
-			outputHeader += str(format("// second split phase: %d\n") % getEncounterDuration());
-			encounterTimer.start();
+			outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
 	}
 }
@@ -87,7 +81,7 @@ void ValeGuardian::outputAssistInfo(stringstream &ss) {
 void ValeGuardian::outputDebug(stringstream &ss) {
 	ss << format("boss agentId: %d\n") % agent.GetAgentId();
 	ss << format("boss phase: %d\n") % phase;
-	ss << format("boss encounter time: %d\n") % getEncounterDuration();
+	ss << format("boss encounter time: %d\n") % encounterTimer.getElapsedSeconds();
 	ss << format("boss current hp: %f\n") % getCurrentHealth();
 }
 
