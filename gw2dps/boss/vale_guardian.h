@@ -18,9 +18,12 @@ namespace VG {
 
 	enum Phase {
 		FIRST = 0,
+		FIRST_TRANSITION,
+		FIRST_SPLIT,
 		SECOND,
-		THIRD,
-		SPLIT
+		SECOND_TRANSITION,
+		SECOND_SPLIT,
+		THIRD
 	};
 
 	enum MagicStormState {
@@ -40,9 +43,17 @@ class ValeGuardian : public RaidBoss
 {
 	private:
 		static const float MAX_HP;
-		const float FIRST_PHASE_TRANSITION_HP = 14384054;
+		const float FIRST_PHASE_TRANSITION_HP = 14384054; // also possible 14,408,081 14,390,254
 		const float SECOND_PHASE_TRANSITION_HP = MAX_HP / 3; //TODO: verify
 		const float MAGIC_STORM_COOLDOWN = 30.0f;
+
+		// for reference, HP of each guardian at the entrance:
+		// red:   2457750
+		// green: 3440850
+		// blue:  3539160
+		const float RED_GUARDIAN_MAX_HP = 540705;
+		const float GREEN_GUARDIAN_MAX_HP = 722579;
+		const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
 		boost::timer::cpu_timer cooldownTimer;
 		VG::MagicStorm magicStorm;
@@ -54,7 +65,8 @@ class ValeGuardian : public RaidBoss
 		void addMagicStormStatus(stringstream &ss);
 
 		double getSecondsUntilMagicStormReady();
-		bool refreshAgent();
+		bool reacquireValeGuardian();
+		bool findRedGuardian();
 
 	public:
 		~ValeGuardian();
