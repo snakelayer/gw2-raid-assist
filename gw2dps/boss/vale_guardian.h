@@ -9,6 +9,7 @@
 #include "gw2lib.h"
 
 #include "raid_boss.h"
+#include "skills/magic_storm.h"
 
 using namespace boost;
 using namespace std;
@@ -24,18 +25,6 @@ namespace VG {
 		SECOND_TRANSITION,
 		SECOND_SPLIT,
 		THIRD
-	};
-
-	enum MagicStormState {
-		PENDING = 0,
-		READY,
-		ACTIVE,
-		RECHARGING
-	};
-
-	struct MagicStorm {
-		MagicStormState state;
-		double cooldown;
 	};
 }
 
@@ -55,8 +44,8 @@ class ValeGuardian : public RaidBoss
 		const float GREEN_GUARDIAN_MAX_HP = 722579;
 		const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
-		boost::timer::cpu_timer cooldownTimer;
-		VG::MagicStorm magicStorm;
+
+		MagicStorm magicStorm;
 		VG::Phase phase;
 
 		ValeGuardian(Agent agent);
@@ -64,7 +53,6 @@ class ValeGuardian : public RaidBoss
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
 
-		double getSecondsUntilMagicStormReady();
 		bool reacquireValeGuardian();
 		bool findRedGuardian();
 

@@ -1,17 +1,12 @@
 #pragma once
 
 #include "vale_guardian.h"
+#include "skills/magic_storm.h"
 
 const float ValeGuardian::MAX_HP = 22021440;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
-	cooldownTimer = boost::timer::cpu_timer();
-	cooldownTimer.stop();
-	magicStorm = {
-		VG::PENDING,
-		30.0f,
-	};
 }
 
 ValeGuardian::~ValeGuardian() {
@@ -102,47 +97,31 @@ void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 }
 
 void ValeGuardian::addMagicStormStatus(stringstream &ss) {
-	if ((magicStorm.state == VG::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
-		magicStorm.state = VG::READY;
+	if ((magicStorm.getState() == MS::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
+		magicStorm.setState(MS::READY);
 	}
-	else if ((magicStorm.state == VG::READY) && (breakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() > 0.9f)) { // transition to active
-		magicStorm.state = VG::ACTIVE;
+	else if ((magicStorm.getState() == MS::READY) && (breakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() > 0.9f)) { // transition to active
+		magicStorm.setState(MS::ACTIVE);
 	}
-	else if ((magicStorm.state == VG::ACTIVE) && (breakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {// && breakbar() == 0) { // transition from active to recharging
-		magicStorm.state = VG::RECHARGING;
-		cooldownTimer.start();
-	}
-	else if ((magicStorm.state == VG::RECHARGING) && (magicStorm.cooldown <= 0.0f)) { //transition from recharging to ready
-		magicStorm.state = VG::READY;
-		magicStorm.cooldown = 30.0f;
-		cooldownTimer.stop();
+	else if ((magicStorm.getState() == MS::ACTIVE) && (breakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {// && breakbar() == 0) { // transition from active to recharging
+		magicStorm.setState(MS::RECHARGING);
 	}
 
-
-	if (!cooldownTimer.is_stopped()) {
-		magicStorm.cooldown = getSecondsUntilMagicStormReady();
-	}
-
-	if (magicStorm.state == VG::PENDING) {
+	if (magicStorm.getState() == MS::PENDING) {
 		ss << ("Magic Storm: PENDING");
 	}
-	else if (magicStorm.state == VG::READY) {
+	else if (magicStorm.getState() == MS::READY) {
 		ss << ("Magic Storm: READY\n");
 	}
-	else if (magicStorm.state == VG::ACTIVE) {
+	else if (magicStorm.getState() == MS::ACTIVE) {
 		ss << ("Magic Storm: ACTIVE\n");
 	}
-	else if (magicStorm.state == VG::RECHARGING) {
-		ss << format("Magic Storm: %d\n") % (int)magicStorm.cooldown;
+	else if (magicStorm.getState() == MS::RECHARGING) {
+		ss << format("Magic Storm: %d\n") % magicStorm.getCooldown();
 	}
 	else {
 		ss << "Magic Storm: ?\n";
 	}
-}
-
-double ValeGuardian::getSecondsUntilMagicStormReady() {
-	double secondsElapsed = cooldownTimer.elapsed().wall / 1e9;
-	return MAGIC_STORM_COOLDOWN - secondsElapsed;
 }
 
 bool ValeGuardian::reacquireValeGuardian() {
