@@ -10,6 +10,7 @@
 
 #include "raid_boss.h"
 #include "skills/magic_storm.h"
+#include "skills/seeker.h"
 
 using namespace boost;
 using namespace std;
@@ -44,7 +45,7 @@ class ValeGuardian : public RaidBoss
 		const float GREEN_GUARDIAN_MAX_HP = 722579;
 		const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
-
+		Seeker seeker;
 		MagicStorm magicStorm;
 		VG::Phase phase;
 
@@ -52,6 +53,7 @@ class ValeGuardian : public RaidBoss
 
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
+		void addSeekerStatus(stringstream &ss);
 
 		bool reacquireValeGuardian();
 		bool findRedGuardian();

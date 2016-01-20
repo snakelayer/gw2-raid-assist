@@ -36,6 +36,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/raid/squad_member.cpp
 	gw2dps/raid/squad.h
 	gw2dps/raid/squad.cpp
+	gw2dps/boss/skills/seeker.h
+	gw2dps/boss/skills/seeker.cpp
 	gw2dps/boss/skills/magic_storm.h
 	gw2dps/boss/skills/magic_storm.cpp
 	gw2dps/boss/raid_boss.h

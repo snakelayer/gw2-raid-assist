@@ -70,6 +70,7 @@ void ValeGuardian::updateSquadState(Squad *squad) {
 void ValeGuardian::outputAssistInfo(stringstream &ss) {
 	RaidBoss::outputAssistHeader(ss);
 	addEstTimeToSplit(ss);
+	addSeekerStatus(ss);
 	addMagicStormStatus(ss);
 }
 
@@ -108,19 +109,28 @@ void ValeGuardian::addMagicStormStatus(stringstream &ss) {
 	}
 
 	if (magicStorm.getState() == MS::PENDING) {
-		ss << ("Magic Storm: PENDING");
+		ss << "Magic Storm: PENDING";
 	}
 	else if (magicStorm.getState() == MS::READY) {
-		ss << ("Magic Storm: READY\n");
+		ss << "Magic Storm: READY\n";
 	}
 	else if (magicStorm.getState() == MS::ACTIVE) {
-		ss << ("Magic Storm: ACTIVE\n");
+		ss << "Magic Storm: ACTIVE\n";
 	}
 	else if (magicStorm.getState() == MS::RECHARGING) {
 		ss << format("Magic Storm: %d\n") % magicStorm.getCooldown();
 	}
 	else {
 		ss << "Magic Storm: ?\n";
+	}
+}
+
+void ValeGuardian::addSeekerStatus(stringstream &ss) {
+	if (seeker.getState() == SEEKER::INACTIVE) {
+		ss << "Seeker: INACTIVE\n";
+	}
+	else if (seeker.getState() == SEEKER::ACTIVE) {
+		ss << format("Seeker respawn: %d\n") % seeker.getRespawnTime();
 	}
 }
 
