@@ -1,5 +1,6 @@
 #include "config.h"
 #include "hotkey.h"
+#include "preferences.h"
 
 #define KILL_APP 999
 
@@ -201,6 +202,8 @@ void threadHotKeys()
 			if (msg.wParam == RAID_BOSS_ASSIST) raid_boss_assist = !raid_boss_assist;
 			if (msg.wParam == RECORD_RAIDS) logRaidAssistToFile = !logRaidAssistToFile;
 		}
+
+		save_preferences();
 	}
 }
 
