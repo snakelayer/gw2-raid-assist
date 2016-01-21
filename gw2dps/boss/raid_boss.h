@@ -40,6 +40,8 @@ class RaidBoss {
 		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
 		GW2::BreakbarState breakbarState() { return agent.GetCharacter().GetBreakbarState(); }
 
+		bool getScreenLocation(float *x, float *y);
+
 	protected:
 		Agent agent;
 
@@ -60,6 +62,11 @@ class RaidBoss {
 
 		vector<float> remainingHealth;
 		float secondsToDeath;
+
+		const float X_BUFFER = 100.0f;
+		const float Y_BUFFER = 50.0f;
+		float lastX;
+		float lastY;
 
 		float dist(Vector3 p1, Vector3 p2);
 		void writeDataToFile();

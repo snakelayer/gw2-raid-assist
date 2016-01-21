@@ -4,7 +4,7 @@
 
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
-RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), logFile(""), secondsToDeath(0.0f) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), logFile(""), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 }
 
@@ -35,6 +35,25 @@ void RaidBoss::outputDps(stringstream &ss) {
 	ss << format("DPS(10s): %0.0f\n") % dps[0];
 	ss << format("DPS(30s): %0.0f\n") % dps[1];
 	ss << format("DPS(60s): %0.0f\n") % dps[2];
+}
+
+bool RaidBoss::getScreenLocation(float *x, float *y) {
+	bool onScreen = WorldToScreen(agent.GetPos(), x, y);
+	if (onScreen) {
+		if (lastX > 0.0 && lastY > 0.0) {
+			if ((*x < X_BUFFER) || (*x + X_BUFFER > GetWindowWidth())) {
+				*x = lastX;
+			}
+			if ((*y < Y_BUFFER) || (*y + Y_BUFFER > GetWindowHeight())) {
+				*y = lastY;
+			}
+		}
+		lastX = *x;
+		lastY = *y;
+		return onScreen;
+	}
+
+	return false;
 }
 
 void RaidBoss::outputAssistHeader(stringstream &ss) {

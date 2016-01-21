@@ -1255,7 +1255,14 @@ void ESP()
 				stringstream ssMain;
 
 				boss->outputAssistInfo(ssMain);
-				drawElementAt(ssMain, aBelowHealthBar);
+				Anchor bossLocation;
+				if (boss->getScreenLocation(&bossLocation.x, &bossLocation.y)) {
+					bossLocation.y += 20; // keep targeting circle visible
+					drawElementAt(ssMain, bossLocation);
+				}
+				else {
+					drawElementAt(ssMain, aBelowHealthBar);
+				}
 
 				if (logDps) {					
 					stringstream ssDps;
