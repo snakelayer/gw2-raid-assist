@@ -10,6 +10,8 @@ class Gorseval : public RaidBoss
 {
 	private:
 		static const float MAX_HP;
+		const float FIRST_TRANSITION_HP = 14190625;
+		const float SECOND_TRANSITION_HP = 7020792;
 
 		/*
 		  Haunting Aura is generally around 1.2k
