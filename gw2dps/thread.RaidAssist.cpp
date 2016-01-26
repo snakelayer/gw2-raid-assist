@@ -1,3 +1,15 @@
+void deleteBossAndSquad() {
+	if (boss != nullptr) {
+		delete boss;
+	}
+	boss = nullptr;
+
+	if (squad != nullptr) {
+		delete squad;
+	}
+	squad = nullptr;
+}
+
 void threadRaidAssist() {
 	double pollingRate = 250; // ms
 
@@ -36,17 +48,16 @@ void threadRaidAssist() {
 							boss->setLogFile(logRaidAssistFile);
 						}
 					}
+					else {
+						deleteBossAndSquad();
+						raid_boss_assist = !raid_boss_assist;
+					}
 				}
 				else {
 					boss->updateState(bufferBossDps);
 
 					if (boss->isDead()) {
-						delete boss;
-						boss = nullptr;
-						if (squad != nullptr) {
-							delete squad;
-							squad = nullptr;
-						}
+						deleteBossAndSquad();
 						raid_boss_assist = !raid_boss_assist;
 					}
 				}
@@ -56,14 +67,7 @@ void threadRaidAssist() {
 			if (!timer.is_stopped()) {
 				timer.stop();
 			}
-			if (boss != nullptr) {
-				delete boss;
-				boss = nullptr;
-			}
-			if (squad != nullptr) {
-				delete squad;
-				squad = nullptr;
-			}
+			deleteBossAndSquad();
 		}
 
 		if (loopLimiter)
