@@ -24,7 +24,7 @@ bool ValeGuardian::matchesTarget(Agent &agent) {
 void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	if (phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD) {
 		RaidBoss::updateState();
-		updateDps(damageBuffer);
+		RaidBoss::updateDps(damageBuffer);
 	}
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {

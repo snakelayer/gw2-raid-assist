@@ -1283,7 +1283,7 @@ void displayDebug() {
 	ss << "Debug: \n";
 	ss << format("mapId: %d\n") % GetCurrentMapId();
 
-	displayAgent("target", GetLockedSelection(), ss);
+	//displayAgent("target", GetLockedSelection(), ss);
 	//displayAgent("self", GetOwnAgent(), ss);
 
 	if (squad != nullptr) {

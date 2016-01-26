@@ -19,7 +19,7 @@ bool Gorseval::matchesTarget(Agent &agent) {
 
 void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateState();
-	updateDps(damageBuffer);
+	RaidBoss::updateDps(damageBuffer);
 
 	// TODO: gorseval specific stuff
 }
