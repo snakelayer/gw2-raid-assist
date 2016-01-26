@@ -30,6 +30,11 @@ void RaidBoss::updateState() {
 	}
 }
 
+void RaidBoss::reset() {
+	secondsToDeath = 0.0f;
+	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
+}
+
 void RaidBoss::outputDps(stringstream &ss) {
 	ss << format("Est. Seconds To Death: %d\n") % (int)secondsToDeath;
 	ss << format("DPS(10s): %0.0f\n") % dps[0];

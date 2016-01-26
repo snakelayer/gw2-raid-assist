@@ -129,6 +129,10 @@ void Squad::tryReset(CharacterMap &characterMap) {
 			member.second.reset();
 		}
 	}
+
+	if (raidBoss != nullptr) {
+		raidBoss->reset();
+	}
 }
 
 void Squad::writeStatsToFile() {

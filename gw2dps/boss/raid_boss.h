@@ -26,6 +26,7 @@ class RaidBoss {
 		void updateState();
 		void outputDps(stringstream &ss);
 		string getOutputHeader() { return outputHeader; }
+		void reset();
 
 		virtual string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
