@@ -3,7 +3,7 @@
 #include "seeker.h"
 
 Seeker::Seeker() : state(SEEKER::INACTIVE) {
-	timer.stop(); // TODO: check if we need to instantiate
+	timer.stop();
 }
 
 SEEKER::State Seeker::getState() {

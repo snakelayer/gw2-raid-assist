@@ -21,7 +21,7 @@ class Seeker
 
 	private:
 		const float MAX_HP = 649260;
-		const float COOLDOWN = 20.0f;
+		const float COOLDOWN = 19.0f;
 
 		SEEKER::State state;
 		boost::timer::cpu_timer timer;

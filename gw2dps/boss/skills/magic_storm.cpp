@@ -3,7 +3,7 @@
 #include "magic_storm.h"
 
 MagicStorm::MagicStorm() : state(MS::PENDING) {
-	timer.stop(); // TODO: check if we need to instantiate
+	timer.stop();
 }
 
 MS::State MagicStorm::getState() {
