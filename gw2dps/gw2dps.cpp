@@ -33,7 +33,6 @@ string logDpsFile = "gw2dpsLog-Dps.txt";
 float averageDps[3] = { 0.0f, 0.0f, 0.0f };
 float secondsToDeath = 0.0f;
 bool logRaidAssistToFile = true;
-string logRaidAssistFile = "gw2dpsLog-RaidAssist.txt";
 
 bool logKillTimer = false;
 bool logKillTimerDetails = false;

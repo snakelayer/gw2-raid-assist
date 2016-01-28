@@ -2,9 +2,10 @@
 
 #include "raid_boss.h"
 
+const string RaidBoss::logFile = "gw2dpsLog-RaidAssist.txt";
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
-RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), logFile(""), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 }
 
@@ -91,6 +92,7 @@ float RaidBoss::dist (Vector3 p1, Vector3 p2)
 
 void RaidBoss::writeDataToFile() {
 	std::ofstream file;
+
 	file.open(logFile, std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
@@ -103,9 +105,6 @@ void RaidBoss::writeDataToFile() {
 		writeHealthData(file);
 
 		file.close();
-	}
-	else {
-		logFile = strerror(errno);
 	}
 }
 

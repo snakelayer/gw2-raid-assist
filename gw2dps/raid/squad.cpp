@@ -4,8 +4,10 @@
 
 #include "squad.h"
 
-Squad::Squad(string logFile)
-	: resetStateAtNextRespawn(false), outputMask(0), raidState(RAID::ACTIVE), logFile(logFile) {
+const string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
+
+Squad::Squad()
+	: resetStateAtNextRespawn(false), outputMask(0), raidState(RAID::ACTIVE) {
 	debugStr = "";
 
 	addPlayer(GW2LIB::GetOwnCharacter());
@@ -121,9 +123,7 @@ void Squad::tryReset(CharacterMap &characterMap) {
 	if (resetStateAtNextRespawn && GW2LIB::GetOwnCharacter().IsAlive()) {
 		resetStateAtNextRespawn = false;
 
-		if (logFile.length() > 0) {
-			writeStatsToFile();
-		}
+		writeStatsToFile();
 
 		for (auto &member : members) {
 			member.second.reset();
@@ -148,9 +148,6 @@ void Squad::writeStatsToFile() {
 
 		outputPlayerStats(file);
 		file.close();
-	}
-	else {
-		logFile = strerror(errno);
 	}
 }
 /*

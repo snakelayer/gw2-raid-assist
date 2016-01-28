@@ -41,7 +41,7 @@ class Squad
 
 		RAID::RaidState raidState;
 		bool resetStateAtNextRespawn;
-		string logFile;
+		static const string logFile;
 
 		int outputMask;
 		CharacterMap getCharacterMap();
@@ -56,7 +56,7 @@ class Squad
 		string debugStr;
 	public:
 		string getDebugStr() { return debugStr; }
-		Squad(string logFile = "");
+		Squad();
 		~Squad();
 		
 		void setBoss(RaidBoss *raidBoss);

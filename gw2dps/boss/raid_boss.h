@@ -22,7 +22,6 @@ class RaidBoss {
 	public:
 		RaidBoss(Agent agent);
 
-		void setLogFile(string file) { logFile = file; }
 		void updateState();
 		void outputDps(stringstream &ss);
 		string getOutputHeader() { return outputHeader; }
@@ -59,7 +58,7 @@ class RaidBoss {
 		void updateDps(boost::circular_buffer<float> &damageBuffer);
 
 	private:
-		string logFile;
+		static const string logFile;
 
 		vector<float> remainingHealth;
 		float secondsToDeath;

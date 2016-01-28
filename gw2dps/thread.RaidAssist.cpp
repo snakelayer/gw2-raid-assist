@@ -31,12 +31,7 @@ void threadRaidAssist() {
 				timer.start();
 				
 				if (squad == nullptr) {
-					if (logRaidAssistToFile) {
-						squad = new Squad(logRaidAssistFile);
-					}
-					else {
-						squad = new Squad();
-					}
+					squad = new Squad();
 				}
 				else {
 					squad->updateState();
@@ -46,9 +41,6 @@ void threadRaidAssist() {
 					boss = RaidBossFactory::get().getNextBoss();
 					if (boss != nullptr) {
 						squad->setBoss(boss);
-						if (logRaidAssistToFile) {
-							boss->setLogFile(logRaidAssistFile);
-						}
 					}
 					else {
 						disableRaidAssist();
