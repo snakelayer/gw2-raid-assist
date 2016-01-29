@@ -11,6 +11,7 @@
 #include "GameData.h"
 #include "gw2lib.h"
 
+#include "../commonTypedefs.h"
 #include "../boss/raid_boss.h"
 #include "squad_member.h"
 
@@ -26,11 +27,6 @@ namespace RAID {
 		DEAD // everyone is dead
 	};
 }
-
-typedef map<string, GW2LIB::Character> CharacterMap;
-typedef pair<string, GW2LIB::Character> CharacterEntry;
-typedef map<string, SquadMember> SquadMemberMap;
-typedef pair<string, SquadMember> SquadMemberEntry;
 
 class Squad
 {
@@ -62,8 +58,6 @@ class Squad
 		void setBoss(RaidBoss *raidBoss);
 		void addPlayer(GW2LIB::Character character);
 		void updateState();
-
-		SquadMemberMap getSquadMembers() { return members; }
 
 		void incrementDisplayMask();
 		void outputPlayerStats(ostream &stream);

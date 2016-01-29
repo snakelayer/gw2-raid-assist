@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <sstream>
 #include <string>
 
@@ -8,11 +9,10 @@
 #include <boost/format.hpp>
 
 #include "gw2lib.h"
+
+#include "../commonTypedefs.h"
 #include "../raid/encounter_timer.h"
 
-#include "../raid/squad.h"
-
-class Squad;
 
 using namespace boost;
 using namespace std;
@@ -29,7 +29,7 @@ class RaidBoss {
 
 		virtual string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
-		virtual void updateSquadState(Squad *squad) = 0;
+		virtual void updateSquadState(SquadMemberMap &members) = 0;
 		virtual void outputAssistInfo(stringstream &ss) = 0;
 
 		virtual void outputDebug(stringstream &ss) = 0;

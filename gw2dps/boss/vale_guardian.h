@@ -66,7 +66,7 @@ class ValeGuardian : public RaidBoss
 		static bool matchesTarget(Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void updateSquadState(Squad *squad);
+		void updateSquadState(SquadMemberMap &members);
 		void outputAssistInfo(stringstream &ss);
 
 		void outputDebug(stringstream &ss);

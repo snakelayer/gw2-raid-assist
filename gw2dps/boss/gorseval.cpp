@@ -24,9 +24,7 @@ void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
 	// TODO: gorseval specific stuff
 }
 
-void Gorseval::updateSquadState(Squad *squad) {
-	SquadMemberMap members = squad->getSquadMembers();
-
+void Gorseval::updateSquadState(SquadMemberMap &members) {
 	for (auto &member : members) {
 		if (member.second.getLastHealthDelta() < PLAYER_HIT_DAMAGE_THRESHOLD) {
 			member.second.incrementHitsTaken();
@@ -37,4 +35,9 @@ void Gorseval::updateSquadState(Squad *squad) {
 void Gorseval::outputAssistInfo(stringstream &ss) {
 	RaidBoss::outputAssistHeader(ss);
 	// TODO
+}
+
+void Gorseval::outputDebug(stringstream &ss) {
+	ss << outputHeader;
+	//outputHeader = "";
 }

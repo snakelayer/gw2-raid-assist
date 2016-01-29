@@ -10,7 +10,7 @@ class RaidBossFactory
 	private:
 		RaidBossFactory();
 		RaidBossFactory(RaidBossFactory const&) = delete;
-		void operator=(RaidBossFactory const&) = delete;
+		RaidBossFactory& operator=(RaidBossFactory const&) = delete;
 
 		typedef bool (*raidBossMatcher)(GW2LIB::Agent&);
 		typedef RaidBoss* (*raidBossSupplier)(GW2LIB::Agent);

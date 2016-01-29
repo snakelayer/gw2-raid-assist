@@ -11,6 +11,7 @@ class SquadMember {
 		int hitsTaken;
 		float totalDamageTaken;
 
+		bool isAlive;
 		float lastEndurance;
 		float lastHealth;
 		float lastHealthDelta;
@@ -18,6 +19,8 @@ class SquadMember {
 		void updateLastHealthDelta(GW2LIB::Character &character);
 		void updateDamageTaken();
 		void updateDodgeCount(GW2LIB::Character &character);
+
+		SquadMember() = delete;
 
 	public:
 		SquadMember(GW2LIB::Character character);
@@ -30,5 +33,5 @@ class SquadMember {
 		int getHitsTaken() { return hitsTaken; }
 		float getTotalDamageTaken() { return totalDamageTaken; }
 
-		void incrementHitsTaken() { ++hitsTaken; }
+		void incrementHitsTaken() { if (isAlive) { ++hitsTaken; } }
 };

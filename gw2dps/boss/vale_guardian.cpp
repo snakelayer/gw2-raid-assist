@@ -63,7 +63,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 }
 
-void ValeGuardian::updateSquadState(Squad *squad) {
+void ValeGuardian::updateSquadState(SquadMemberMap &members) {
 
 }
 

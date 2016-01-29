@@ -13,7 +13,7 @@ void UnknownBoss::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateDps(damageBuffer);
 }
 
-void UnknownBoss::updateSquadState(Squad *squad) {
+void UnknownBoss::updateSquadState(SquadMemberMap &members) {
 
 }
 

@@ -48,7 +48,7 @@ void threadRaidAssist() {
 				}
 				else {
 					boss->updateState(bufferBossDps);
-
+					
 					if (boss->isDead()) {
 						disableRaidAssist();
 					}

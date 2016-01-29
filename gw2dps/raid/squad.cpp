@@ -10,7 +10,6 @@ Squad::Squad()
 	: resetStateAtNextRespawn(false), outputMask(0), raidState(RAID::ACTIVE) {
 	debugStr = "";
 
-	addPlayer(GW2LIB::GetOwnCharacter());
 	GW2LIB::Character character;
 	while (character.BeNext()) {
 		if (members.size() == MAX_SQUAD_SIZE) {
@@ -46,13 +45,10 @@ void Squad::updateState() {
 		if (it != characterMap.end()) {
 			member.second.updateStats(it->second);
 		}
-		else {
-			// TODO: ???
-		}
 	}
 
 	if (raidBoss != nullptr) {
-		raidBoss->updateSquadState(this);
+		raidBoss->updateSquadState(members);
 	}
 	tryReset(characterMap);
 }
