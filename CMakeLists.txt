@@ -49,6 +49,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/boss/vale_guardian.cpp
 	gw2dps/boss/gorseval.h
 	gw2dps/boss/gorseval.cpp
+	gw2dps/boss/sabetha.h
+	gw2dps/boss/sabetha.cpp
 	gw2dps/boss/raid_boss_factory.h
 	gw2dps/boss/raid_boss_factory.cpp
 	gw2dps/gw2dps.h

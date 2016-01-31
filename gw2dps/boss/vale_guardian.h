@@ -60,10 +60,11 @@ class ValeGuardian : public RaidBoss
 
 	public:
 		~ValeGuardian();
+
 		static RaidBoss* instance(Agent agent) { return new ValeGuardian(agent); }
+		static bool matchesTarget(Agent &agent);
 
 		string getName() { return "Vale Guardian"; }
-		static bool matchesTarget(Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
