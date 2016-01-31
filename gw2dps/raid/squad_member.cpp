@@ -2,22 +2,87 @@
 
 #include "squad_member.h"
 
+const float SquadMember::SWIFTNESS_THRESHOLD = 22.0f;
+const float SquadMember::DODGE_THRESHOLD = 30.0f;
+const float SquadMember::SUPERSPEED_THRESHOLD = 38.0f;
+
 SquadMember::SquadMember(GW2LIB::Character character) :
 	name(character.GetName()),
 	dodgeCount(0),
 	hitsTaken(0),
 	totalDamageTaken(0.0f),
+	speedState(SM::SPEED_STATE::BASIC),
 	isAlive(character.IsAlive()),
 	lastEndurance(character.GetCurrentEndurance()),
 	lastHealth(character.GetCurrentHealth()),
 	lastHealthDelta(0.0f) {
+	dodgeTimer.stop();
 }
 
 void SquadMember::updateStats(GW2LIB::Character &character) {
 	isAlive = character.IsAlive();
 	updateLastHealthDelta(character);
 	updateDamageTaken();
-	updateDodgeCount(character);
+	//updateDodgeCount(character);
+}
+
+void SquadMember::inferDodgeStateWithSpeed(float speed) {
+	if (speedState == SM::SPEED_STATE::BASIC) {
+		if (speed > SUPERSPEED_THRESHOLD) {
+			// should not happen
+			speedState = SM::SPEED_STATE::SUPERSPEED;
+		}
+		else if (speed > DODGE_THRESHOLD) {
+			speedState = SM::SPEED_STATE::DODGE;
+			tryUpdateDodgeCount();
+		}
+		else if (speed > SWIFTNESS_THRESHOLD) {
+			speedState = SM::SPEED_STATE::SWIFTNESS;
+		}
+	}
+	else if (speedState == SM::SPEED_STATE::SWIFTNESS) {
+		if (speed > SUPERSPEED_THRESHOLD) {
+			//should not happen
+			speedState = SM::SPEED_STATE::SUPERSPEED;
+		}
+		else if (speed > DODGE_THRESHOLD) {
+			speedState = SM::SPEED_STATE::DODGE;
+			tryUpdateDodgeCount();
+		}
+		else if (speed > SWIFTNESS_THRESHOLD) {
+		}
+		else {
+			speedState = SM::SPEED_STATE::BASIC;
+		}
+	}
+	else if (speedState == SM::SPEED_STATE::DODGE) {
+		if (speed > SUPERSPEED_THRESHOLD) {
+			speedState = SM::SPEED_STATE::SUPERSPEED;
+			//tryUpdateDodgeCount(); // this is too unreliable
+		}
+		else if (speed > DODGE_THRESHOLD) {
+			tryUpdateDodgeCount();
+		}
+		else if (speed > SWIFTNESS_THRESHOLD) {
+			speedState = SM::SPEED_STATE::SWIFTNESS;
+		}
+		else {
+			speedState = SM::SPEED_STATE::BASIC;
+		}
+	}
+	else if (speedState == SM::SPEED_STATE::SUPERSPEED) {
+		if (speed > SUPERSPEED_THRESHOLD) {
+		}
+		else if (speed > DODGE_THRESHOLD) {
+			speedState = SM::SPEED_STATE::DODGE;
+		}
+		else if (speed > SWIFTNESS_THRESHOLD) {
+			speedState = SM::SPEED_STATE::SWIFTNESS;
+		}
+		else {
+			speedState = SM::SPEED_STATE::BASIC;
+		}
+	}
 }
 
 void SquadMember::reset() {
@@ -48,4 +113,23 @@ void SquadMember::updateDodgeCount(GW2LIB::Character &character) {
 	}
 
 	lastEndurance = endurance;
+}
+
+void SquadMember::tryUpdateDodgeCount() {
+	if (speedState == SM::SPEED_STATE::SUPERSPEED) {
+		dodgeTimer.stop();
+		--dodgeCount;
+	}
+	else {
+		if (!dodgeTimer.is_stopped()) { // recently already updated
+			if ((dodgeTimer.elapsed().wall / 1e6) > 800.0f) {
+				dodgeTimer.start();
+				++dodgeCount;
+			}
+		}
+		else {
+			dodgeTimer.start();
+			++dodgeCount;
+		}
+	}
 }

@@ -36,6 +36,20 @@ void Squad::addPlayer(GW2LIB::Character character) {
 	members.insert(SquadMemberEntry(character.GetName(), member));
 }
 
+CharacterMap Squad::getCharacterMap() {
+	GW2LIB::Character character;
+	CharacterMap characterMap;
+
+	while (character.BeNext()) {
+		SquadMemberMap::iterator it = members.find(character.GetName());
+		if (it != members.end()) {
+			characterMap.insert(CharacterEntry(character.GetName(), character));
+		}
+	}
+
+	return characterMap;
+}
+
 void Squad::updateState() {
 	CharacterMap characterMap = getCharacterMap();
 	updateRaidState(characterMap);
@@ -53,22 +67,22 @@ void Squad::updateState() {
 	tryReset(characterMap);
 }
 
-void Squad::incrementDisplayMask() {
-	++outputMask;
+void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
+	for (auto &characterSpeedEntry : characterSpeeds) {
+		string characterName = characterSpeedEntry.first;
+		circular_buffer<int> speedBuffer = characterSpeedEntry.second;
+
+		float totalSpeed = 0.0f;
+		for (auto &speed : speedBuffer) {
+			totalSpeed += speed;
+		}
+
+		(members.find(characterName)->second).inferDodgeStateWithSpeed(totalSpeed / speedBuffer.size());
+	}
 }
 
-CharacterMap Squad::getCharacterMap() {
-	GW2LIB::Character character;
-	CharacterMap characterMap;
-
-	while (character.BeNext()) {
-		SquadMemberMap::iterator it = members.find(character.GetName());
-		if (it != members.end()) {
-			characterMap.insert(CharacterEntry(character.GetName(), character));
-		}
-	}
-
-	return characterMap;
+void Squad::incrementDisplayMask() {
+	++outputMask;
 }
 
 bool Squad::shouldOutputDodges() {

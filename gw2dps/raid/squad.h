@@ -40,7 +40,6 @@ class Squad
 		static const string logFile;
 
 		int outputMask;
-		CharacterMap getCharacterMap();
 		bool shouldOutputDodges();
 		bool shouldOutputTotalDamageTaken();
 		void updateRaidState(CharacterMap &characterMap);
@@ -50,6 +49,7 @@ class Squad
 		bool hasPlayerWithName(string name);
 
 		string debugStr;
+
 	public:
 		string getDebugStr() { return debugStr; }
 		Squad();
@@ -57,7 +57,9 @@ class Squad
 		
 		void setBoss(RaidBoss *raidBoss);
 		void addPlayer(GW2LIB::Character character);
+		CharacterMap getCharacterMap();
 		void updateState();
+		void updateDodgeState(CharacterSpeeds &characterSpeeds);
 
 		void incrementDisplayMask();
 		void outputPlayerStats(ostream &stream);
