@@ -1282,9 +1282,13 @@ void displayDebug() {
 	stringstream ss;
 	ss << "Debug: \n";
 	ss << format("mapId: %d\n") % GetCurrentMapId();
+	ss << format("cameraPos: %f %f %f\n") % GetCameraPosition().x % GetCameraPosition().y % GetCameraPosition().z;
+	ss << format("viewVec: %f %f %f\n") % GetViewVector().x % GetViewVector().y % GetViewVector().z;
+	ss << format("FOV: %f\n") % GetFieldOfViewY();
+	ss << format("mousePos: %f %f %f\n") % GetMouseInWorld().x % GetMouseInWorld().y % GetMouseInWorld().z;
 
-	//displayAgent("target", GetLockedSelection(), ss);
-	//displayAgent("self", GetOwnAgent(), ss);
+	displayAgent("target", GetLockedSelection(), ss);
+	displayAgent("self", GetOwnAgent(), ss);
 
 	if (squad != nullptr) {
 		//displayAgent("first squad", squad->getFirstPlayerAgent(), ss);
@@ -1303,8 +1307,9 @@ void displayDebug() {
 
 void displayAgent(string prefix, Agent &agent, stringstream &ss) {
 	GW2LIB::Character character = agent.GetCharacter();
-	ss << format(prefix + " agentId: %d\n") % character.GetAgent().GetAgentId();
+	ss << format(prefix + " agentId: %d ptr: %p\n") % character.GetAgent().GetAgentId() % &character.GetAgent();
 	ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
+	ss << format(prefix + " rot: %f\n") % agent.GetRot();
 	ss << format(prefix + " name: %s\n") % character.GetName();
 	ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
 	ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
