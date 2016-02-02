@@ -22,7 +22,7 @@ bool ValeGuardian::matchesTarget(Agent &agent) {
 }
 
 void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
-	if (phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD) {
+	if (agent.IsValid() && (phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD)) {
 		RaidBoss::updateState();
 		RaidBoss::updateDps(damageBuffer);
 	}
@@ -75,6 +75,7 @@ void ValeGuardian::outputAssistInfo(stringstream &ss) {
 }
 
 void ValeGuardian::outputDebug(stringstream &ss) {
+	ss << format("agent valid: %s\n") % (agent.IsValid() ? "yes" : "no");
 	ss << format("boss agentId: %d\n") % agent.GetAgentId();
 	ss << format("boss phase: %d\n") % phase;
 	ss << format("boss encounter time: %d\n") % encounterTimer.getElapsedSeconds();
