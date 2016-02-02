@@ -44,6 +44,10 @@ void RaidBoss::outputDps(stringstream &ss) {
 }
 
 bool RaidBoss::getScreenLocation(float *x, float *y) {
+	if (!agent.IsValid()) {
+		return false;
+	}
+
 	bool onScreen = WorldToScreen(agent.GetPos(), x, y);
 	if (onScreen) {
 		if (lastX > 0.0 && lastY > 0.0) {
