@@ -48,10 +48,11 @@ void threadRaidAssist() {
 				}
 				else {
 					boss->updateState(bufferBossDps);
-					
-					if (boss->isDead()) {
-						disableRaidAssist();
-					}
+				}
+
+				if ((squad != nullptr && squad->turnOff()) ||
+					(boss != nullptr && boss->isDead())) {
+					disableRaidAssist();
 				}
 			}
 		}

@@ -1291,9 +1291,7 @@ void displayDebug() {
 	displayAgent("self", GetOwnAgent(), ss);
 
 	if (squad != nullptr) {
-		//displayAgent("first squad", squad->getFirstPlayerAgent(), ss);
 		ss << format("raid state: %d\n") % squad->getRaidState();
-		ss << format("raid reset: %s\n") % (squad->isResetAtSpawn() ? "yes" :  "no");
 		ss << format("raid log file: %s\n") % squad->getLogFileName();
 		ss << format("squad debugStr %s\n") % squad->getDebugStr();
 	}

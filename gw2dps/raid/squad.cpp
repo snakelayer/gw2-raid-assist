@@ -7,7 +7,7 @@
 const string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
 
 Squad::Squad()
-	: resetStateAtNextRespawn(false), outputMask(0), raidState(RAID::ACTIVE) {
+	: turnOffWhenRespawn(false), outputMask(0), raidState(RAID::ACTIVE) {
 	debugStr = "";
 
 	GW2LIB::Character character;
@@ -51,20 +51,22 @@ CharacterMap Squad::getCharacterMap() {
 }
 
 void Squad::updateState() {
-	CharacterMap characterMap = getCharacterMap();
-	updateRaidState(characterMap);
+	if (!turnOffWhenRespawn) {
+		CharacterMap characterMap = getCharacterMap();
 
-	for (auto &member : members) {
-		CharacterMap::iterator it = characterMap.find(member.first);
-		if (it != characterMap.end()) {
-			member.second.updateStats(it->second);
+		for (auto &member : members) {
+			CharacterMap::iterator it = characterMap.find(member.first);
+			if (it != characterMap.end()) {
+				member.second.updateStats(it->second);
+			}
 		}
-	}
 
-	if (raidBoss != nullptr) {
-		raidBoss->updateSquadState(members);
+		if (raidBoss != nullptr) {
+			raidBoss->updateSquadState(members);
+		}
+
+		updateRaidState(characterMap);
 	}
-	tryReset(characterMap);
 }
 
 void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
@@ -116,32 +118,16 @@ void Squad::updateRaidState(CharacterMap &characterMap) {
 		}
 	}
 
-
 	if (allDead) {
 		raidState = RAID::DEAD;
-		resetStateAtNextRespawn = true;
+		turnOffWhenRespawn = true;
+		writeStatsToFile();
 	}
 	else if (allDowned) {
 		raidState = RAID::DOWNED;
 	}
 	else {
 		raidState = RAID::ACTIVE;
-	}
-}
-
-void Squad::tryReset(CharacterMap &characterMap) {
-	if (resetStateAtNextRespawn && GW2LIB::GetOwnCharacter().IsAlive()) {
-		resetStateAtNextRespawn = false;
-
-		writeStatsToFile();
-
-		for (auto &member : members) {
-			member.second.reset();
-		}
-	}
-
-	if (raidBoss != nullptr) {
-		raidBoss->reset();
 	}
 }
 

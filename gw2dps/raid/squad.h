@@ -36,14 +36,13 @@ class Squad
 		RaidBoss *raidBoss;
 
 		RAID::RaidState raidState;
-		bool resetStateAtNextRespawn;
+		bool turnOffWhenRespawn;
 		static const string logFile;
 
 		int outputMask;
 		bool shouldOutputDodges();
 		bool shouldOutputTotalDamageTaken();
 		void updateRaidState(CharacterMap &characterMap);
-		void tryReset(CharacterMap &characterMap);
 		void writeStatsToFile();
 
 		bool hasPlayerWithName(string name);
@@ -65,6 +64,6 @@ class Squad
 		void outputPlayerStats(ostream &stream);
 
 		RAID::RaidState getRaidState() { return raidState; }
-		bool isResetAtSpawn() { return resetStateAtNextRespawn; }
+		bool turnOff() { return turnOffWhenRespawn && GW2LIB::GetOwnCharacter().IsAlive(); }
 		string getLogFileName() { return logFile; }
 };
