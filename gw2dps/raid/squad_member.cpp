@@ -3,7 +3,7 @@
 #include "squad_member.h"
 
 const float SquadMember::SWIFTNESS_THRESHOLD = 22.0f;
-const float SquadMember::DODGE_THRESHOLD = 30.0f;
+const float SquadMember::DODGE_THRESHOLD = 31.0f;
 const float SquadMember::SUPERSPEED_THRESHOLD = 38.0f;
 
 SquadMember::SquadMember(GW2LIB::Character character) :
