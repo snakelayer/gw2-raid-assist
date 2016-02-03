@@ -30,6 +30,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/keymap.cpp
 	gw2dps/hotkey.h
 	gw2dps/hotkey.cpp
+	gw2dps/assist_drawer.h
+	gw2dps/assist_drawer.cpp
 	gw2dps/commonTypedefs.h
 	gw2dps/raid/encounter_timer.h
 	gw2dps/raid/encounter_timer.cpp

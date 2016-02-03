@@ -3,6 +3,7 @@
 #include "config.h"
 #include "keymap.h"
 #include "hotkey.h"
+#include "assist_drawer.h"
 #include "raid/squad.h"
 #include "boss/unknown_boss.h"
 #include "boss/vale_guardian.h"
@@ -202,13 +203,13 @@ void ESP()
 		ss << format("[%i] Distance for Self/Enemy (%s)\n") % logDisplacementEnemy % get_key_description("Hotkeys.LOG_DISPLACEMENT_ENEMY");
 
 		StrInfo strInfo;
-		strInfo = StringInfo(ss.str());
+		strInfo = AssistDrawer::StringInfo(ss.str());
 		float x = round(aCenter.x - strInfo.x / 2);
 		float y = round(aCenter.y - strInfo.y / 2);
 
 		DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 		DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-		font.Draw(x, y, fontColor - (!loopLimiter ? 0x00aa0000 : 0), ss.str());
+		AssistDrawer::get().drawFont(x, y, fontColor - (!loopLimiter ? 0x00aa0000 : 0), ss.str());
 	}
 
 	// JP Skills
@@ -232,25 +233,6 @@ void ESP()
 		DWORD color = 0x4433ff00;
 		DrawCircleProjected(self.pos, 20.0f, color);
 		DrawCircleFilledProjected(self.pos, 20.0f, color - 0x30000000);
-	}
-
-	// Font Draw Debug
-	if (0) {
-		stringstream ss;
-		ss << format("Selected: 18,140 / 18,140 [100%s]") % "%%";
-		ss << format("Locked: 18,140 / 18,140 [100%s]") % "%%";
-
-		StrInfo strInfo;
-		strInfo = StringInfo(ss.str());
-		float x = 0;
-		float y = float(strInfo.lineCount * lineHeight + 1);
-		padX = 0;
-		padY = 0;
-
-		DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, 0xffffffff);
-		font.Draw(x, y, 0xff000000, ss.str());
-
-		return;
 	}
 
 	// Targets & Agents //
@@ -596,13 +578,13 @@ void ESP()
 		{
 			ss << format("%i") % (int)self.pHealth;
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			float x = round(aBottom.x - strInfo.x / 2);
-			float y = round(aBottom.y - lineHeight);
+			float y = round(aBottom.y - AssistDrawer::lineHeight);
 
 			//DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			//DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
 		}
 	}
 
@@ -620,7 +602,7 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
 			}
 			else if (selected.valid)
 			{
@@ -630,12 +612,12 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
 			}
 
 			if (targetInfo && selected.valid)
 			{
-				//aTopLeft.y += lineHeight;
+				//aTopLeft.y += AssistDrawer::lineHeight;
 
 				stringstream ss;
 				StrInfo strInfo;
@@ -668,7 +650,7 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += StringInfo(ss.str()).lineCount * lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
 
 				ss.str("");
 			}
@@ -699,13 +681,13 @@ void ESP()
 			if (floatSiege)
 				ss << format(" | Siege: %i") % floaters.siege.size();
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
 
 			aTop.y += strInfo.y + padY * 2;
 
@@ -727,13 +709,13 @@ void ESP()
 				ss << format(" | Necro: %i") % prof[8];
 				ss << format(" | Rev: %i") % prof[9];
 
-				strInfo = StringInfo(ss.str());
+				strInfo = AssistDrawer::StringInfo(ss.str());
 				float x = round(aTop.x - strInfo.x / 2);
 				float y = round(aTop.y);
 
 				DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 				DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-				font.Draw(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
+				AssistDrawer::get().drawFont(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
 
 				aTop.y += strInfo.y + padY * 2;
 			}
@@ -753,8 +735,8 @@ void ESP()
 							else
 								fs << format("%i") % floater.mHealth;
 
-							StrInfo fsInfo = StringInfo(fs.str());
-							font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
 
 							DWORD color = 0x4433ff00;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -774,8 +756,8 @@ void ESP()
 							else
 								fs << format("%i") % floater.mHealth;
 
-							StrInfo fsInfo = StringInfo(fs.str());
-							font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
 
 							DWORD color = 0x44ff3300;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -795,8 +777,8 @@ void ESP()
 							else
 								fs << format("%i") % floater.mHealth;
 
-							StrInfo fsInfo = StringInfo(fs.str());
-							font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
 
 							DWORD color = 0x4433ff00;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -816,8 +798,8 @@ void ESP()
 							else
 								fs << format("%i") % floater.mHealth;
 
-							StrInfo fsInfo = StringInfo(fs.str());
-							font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
 
 							DWORD color = 0x44ff3300;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -843,13 +825,13 @@ void ESP()
 			stringstream fs;
 			fs << format("Wold Bosses: %i") % wbosses.list.size();
 
-			StrInfo strInfo = StringInfo(fs.str());
+			StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
 			float lx = 12;
 			float ly = 32;
 
 			DrawRectFilled(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(lx, ly, fontColor, fs.str());
+			AssistDrawer::get().drawFont(lx, ly, fontColor, fs.str());
 
 			ly = ly + 12;
 
@@ -863,13 +845,13 @@ void ESP()
 						//fs << format("%i / %i") % wboss.cHealth % wboss.mHealth;
 						fs << format("[%i] %i") % wboss.id % int(Dist(self.pos, wboss.pos));
 
-						StrInfo strInfo = StringInfo(fs.str());
+						StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
 						fx = round(fx - strInfo.x / 2);
 						fy = round(fy - 15);
 
 						DrawRectFilled(fx - padX, fy - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 						DrawRect(fx - padX, fy - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-						font.Draw(fx, fy, fontColor, fs.str());
+						AssistDrawer::get().drawFont(fx, fy, fontColor, fs.str());
 					}
 
 					// list
@@ -877,12 +859,12 @@ void ESP()
 						stringstream fs;
 						fs << format("[%i] %i / %i (%i)") % wboss.id % (int)wboss.cHealth % (int)wboss.mHealth % int(Dist(self.pos, wboss.pos));
 
-						StrInfo strInfo = StringInfo(fs.str());
+						StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
 						ly = round(ly + strInfo.y + padY);
 
 						DrawRectFilled(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 						DrawRect(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-						font.Draw(lx, ly, fontColor, fs.str());
+						AssistDrawer::get().drawFont(lx, ly, fontColor, fs.str());
 					}
 				}
 			}
@@ -925,13 +907,13 @@ void ESP()
 				ss << format("0 in/s, 0 in/s");
 			}
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (logSpeedometerEnemy ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (logSpeedometerEnemy ? 0x00aa0000 : 0), ss.str());
 
 			aTop.y += strInfo.y + padY * 2;
 		}
@@ -943,13 +925,13 @@ void ESP()
 
 			ss << format("Distance: %i") % bufferDisplacement.dist;
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (logDisplacementEnemy ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (logDisplacementEnemy ? 0x00aa0000 : 0), ss.str());
 
 			aTop.y += strInfo.y + padY * 2;
 
@@ -994,7 +976,7 @@ void ESP()
 				ss << format("(no target)\n");
 			}
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			strInfo.x = aAdjustX; // box min-width with history stream
 			float x = round(aTopRight.x - aAdjustX / 2); // perma anchor offset
 			float y = round(aTopRight.y);
@@ -1002,11 +984,11 @@ void ESP()
 			// Draw
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
+			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
 			aTopRight.x -= aAdjustX / 2 + padX + 2;
 		}
 
@@ -1030,7 +1012,7 @@ void ESP()
 					ss << format("\nDPS: 0.0");
 			}
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 			float x = 0;
 			float y = round(aTopRight.y);
 			if (logDps)
@@ -1042,11 +1024,11 @@ void ESP()
 			// Draw
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
+			aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
 			//aTopRight.x -= 0;
 		}
 
@@ -1105,7 +1087,7 @@ void ESP()
 			ss << format("\n");
 			ss << format("Threshold: %i hits\n") % AttackRateChainHits;
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 
 			float aAdjustX = 120; // adjust anchor -120
 			if (strInfo.x < aAdjustX)
@@ -1116,11 +1098,11 @@ void ESP()
 			// Draw
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (logAttackRateToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (logAttackRateToFile ? 0x00aa0000 : 0), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
+			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
 			aRight.x = x - padX * 2 - 5;
 		}
 
@@ -1170,7 +1152,7 @@ void ESP()
 				}
 			}
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 
 
 			float aAdjustX = 120; // adjust anchor -120
@@ -1182,11 +1164,11 @@ void ESP()
 			// Draw
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (logHitsToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (logHitsToFile ? 0x00aa0000 : 0), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
+			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
 			aRight.x = x - padX * 2 - 5;
 		}
 
@@ -1226,7 +1208,7 @@ void ESP()
 			ss << format("Sample Hit: %i\n") % logCritsSample;
 
 
-			strInfo = StringInfo(ss.str());
+			strInfo = AssistDrawer::StringInfo(ss.str());
 
 
 			float aAdjustX = 120; // adjust anchor -120
@@ -1238,11 +1220,11 @@ void ESP()
 			// Draw
 			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
 			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			font.Draw(x, y, fontColor - (logCritsToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawFont(x, y, fontColor - (logCritsToFile ? 0x00aa0000 : 0), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * lineHeight + padY * 2;
+			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
 			aRight.x = x - padX * 2 - 5;
 		}
 
@@ -1337,13 +1319,13 @@ float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
 }
 
 void drawElementAt(stringstream &ss, Anchor &location) {
-	StrInfo strInfo = StringInfo(ss.str());
+	StrInfo strInfo = AssistDrawer::StringInfo(ss.str());
 	float x = round(location.x - strInfo.x / 2);
 	float y = round(location.y);
 
 	DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000); //black background
 	DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor); // white border
-	font.Draw(x, y, fontColor, ss.str());
+	AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
 }
 
 void GW2LIB::gw2lib_main()
@@ -1364,12 +1346,6 @@ void GW2LIB::gw2lib_main()
 	thread t8(&threadRaidAssist);
 	thread t9(&threadBossDps);
 	thread t10(&threadSquadSpeedometer);
-
-	if (!font.Init(lineHeight, "Verdana"))
-	{
-		//DbgOut("could not create font");
-		return;
-	}
 
 	// wait for exit hotkey
 	while (GetAsyncKeyState(VK_F12) >= 0)

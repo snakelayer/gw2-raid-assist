@@ -8,21 +8,17 @@
 #include <boost/math/special_functions/round.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
-#include <boost/regex.hpp>
 
 #include <sstream> // stringstream
 #include <algorithm> // min/max_element()
 #include <fstream> // ofstream / file
 #include <locale> // locale
-#include <algorithm> // count()
 
 using namespace GW2LIB;
 using namespace boost;
 using namespace std;
 
 // Font Settings
-Font font;
-int lineHeight = 16;
 int padX = 5;
 int padY = 2;
 static const DWORD fontColor = 0xffffffff;
@@ -157,107 +153,6 @@ string SecondsToString(double input)
 	if (input == 0) ss << "0.00s";
 
 	return ss.str();
-}
-struct StrInfo {
-	StrInfo() : lineCount(0), x(0), y(0) {}
-
-	size_t lineCount;
-	float x;
-	float y;
-};
-
-inline wstring convert(const string& as)
-{
-	wstring ws = wstring(as.begin(), as.end());
-	replace_all(ws, "%%", "%");
-	replace_all(ws, "&", "&&");
-	wstring rval = ws;
-
-	//wchar_t* buf = new wchar_t[as.size() * 2 + 2];
-	//swprintf(buf, L"%S", as.c_str());
-	//wstring rval = buf;
-	//delete[] buf;
-
-	return rval;
-}
-HWND hwnd = FindWindowEx(NULL, NULL, L"Guild Wars 2", NULL);
-StrInfo StringInfo(string str)
-{
-	StrInfo strInfo;
-	
-	// Line Count
-	{
-		size_t lineCount = 0;
-		regex token("\n");
-		sregex_token_iterator i(str.begin(), str.end(), token, -1);
-		sregex_token_iterator j;
-		while (i != j)
-		{
-			cout << *i++ << endl;
-			lineCount++;
-		}
-		strInfo.lineCount = lineCount;
-	}
-	
-	// Width
-	{
-		typedef vector<string> split_vector_type;
-		split_vector_type lines; // #2: Search for tokens
-		split(lines, str, is_any_of("\n"), token_compress_on);
-
-		HDC hdc = GetDC(hwnd);
-		HFONT hFont = CreateFont(lineHeight, 0, 0, 0, 600, FALSE, FALSE, FALSE,
-			DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_TT_ALWAYS, ANTIALIASED_QUALITY,
-			DEFAULT_PITCH, L"Verdana");
-		HFONT hFontOld = (HFONT)SelectObject(hdc, hFont);
-		
-		// Sanitize
-		//replace_all(str, "%%", "");
-		//replace_all(str, "&&", "&");
-		
-		// find longest line
-		LONG width = 0;
-		string longLine;
-		for (auto & line : lines) {
-			RECT r = { 0, 0, 0, 0 };
-			DrawText(hdc, convert(line.c_str()).c_str(), -1, &r, DT_CALCRECT);
-			LONG w = abs(r.right - r.left);
-
-			// refine the width
-			size_t i;
-			i = count(line.begin(), line.end(), ':'); w -= i * 2;
-			i = count(line.begin(), line.end(), ','); w -= i * 1;
-			i = count(line.begin(), line.end(), ' '); w -= i * 2;
-			i = count(line.begin(), line.end(), '['); w -= i * 1;
-			i = count(line.begin(), line.end(), ']'); w -= i * 1;
-			i = count(line.begin(), line.end(), 'T'); w -= i * 2;
-			i = count(line.begin(), line.end(), 't'); w -= i * 1;
-			//i = count(line.begin(), line.end(), '%'); w -= i * 6;
-
-			i = count(line.begin(), line.end(), 'm'); w += i * 1;
-			i = count(line.begin(), line.end(), 'o'); w += i * 1;
-
-			if (w > width) {
-				width = w;
-				longLine = line;
-			}
-		}
-
-		if (0) { // Test Draw
-			//DbgOut("%s\n", longLine.c_str());
-
-			RECT r = { 0, 0, 0, 0 };
-			DrawText(hdc, convert(longLine.c_str()).c_str(), -1, &r, DT_CALCRECT);
-			DrawText(hdc, convert(longLine.c_str()).c_str(), -1, &r, NULL);
-		}
-		DeleteObject(hFont);
-		ReleaseDC(hwnd, hdc);
-
-		strInfo.x = float(width);
-		strInfo.y = float(strInfo.lineCount * lineHeight);
-	}
-
-	return strInfo;
 }
 
 struct baseHpReturn {
