@@ -39,7 +39,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 		}
 	}
 	else if (phase == VG::Phase::FIRST_SPLIT) {
-		if (reacquireValeGuardian()) {
+		if (tryResetBossAgent()) {
 			phase = VG::Phase::SECOND;
 			outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
@@ -56,7 +56,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 		}
 	}
 	else if (phase == VG::Phase::SECOND_SPLIT) {
-		if (reacquireValeGuardian()) {
+		if (tryResetBossAgent()) {
 			phase = VG::Phase::THIRD;
 			outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 		}
@@ -133,19 +133,6 @@ void ValeGuardian::addSeekerStatus(stringstream &ss) {
 	else if (seeker.getState() == SEEKER::ACTIVE) {
 		ss << format("Seeker respawn: %d\n") % seeker.getRespawnTime();
 	}
-}
-
-bool ValeGuardian::reacquireValeGuardian() {
-	Agent nextAgent;
-
-	while (nextAgent.BeNext()) {
-		if (nextAgent.GetCharacter().GetMaxHealth() == MAX_HP) {
-			agent.m_ptr = nextAgent.m_ptr;
-			return true;
-		}
-	}
-
-	return false;
 }
 
 bool ValeGuardian::findRedGuardian() {

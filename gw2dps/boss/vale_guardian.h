@@ -51,11 +51,12 @@ class ValeGuardian : public RaidBoss
 
 		ValeGuardian(Agent agent);
 
+		float getMaxHp() { return MAX_HP; }
+
 		void addEstTimeToSplit(stringstream &ss);
 		void addMagicStormStatus(stringstream &ss);
 		void addSeekerStatus(stringstream &ss);
 
-		bool reacquireValeGuardian();
 		bool findRedGuardian();
 
 	public:

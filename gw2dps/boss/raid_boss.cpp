@@ -10,9 +10,16 @@ RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f), la
 }
 
 void RaidBoss::updateState() {
+	if (agent.GetCharacter().GetMaxHealth() != getMaxHp()) {
+		outputHeader += str(format("// DEBUG agentId %d switch %f %f\n") % agent.GetAgentId() % getMaxHp() % agent.GetCharacter().GetMaxHealth());
+		tryResetBossAgent();
+		outputHeader += str(format("// DEBUG new agentId %d\n") % agent.GetAgentId());
+	}
+
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		encounterTimer.start();
 		outputHeader += str(format("\n// Boss: %s\n") % getName());
+		outputHeader += str(format("// DEBUG agentId: %d\n") % agent.GetAgentId());
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		outputHeader += str(format("// start time: %s\n") % now);
@@ -66,6 +73,19 @@ bool RaidBoss::getScreenLocation(float *x, float *y) {
 	return false;
 }
 
+bool RaidBoss::tryResetBossAgent() {
+	Agent nextAgent;
+
+	while (nextAgent.BeNext()) {
+		if (nextAgent.GetCharacter().GetMaxHealth() == getMaxHp()) {
+			agent.m_ptr = nextAgent.m_ptr;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void RaidBoss::outputAssistHeader(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
 	ss << format("Dist: %.0f\n") % dist(agent.GetPos(), GetOwnAgent().GetPos());
@@ -106,6 +126,7 @@ void RaidBoss::writeDataToFile() {
 		file << format("// end time: %s\n") % now;
 		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
 		file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
+		file << format("// DEBUG ending agentId: %d\n") % agent.GetAgentId();
 		writeHealthData(file);
 
 		file.close();

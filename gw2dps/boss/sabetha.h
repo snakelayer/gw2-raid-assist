@@ -41,6 +41,8 @@ class Sabetha : public RaidBoss
 
 		Sabetha(Agent agent);
 
+		float getMaxHp() { return MAX_HP; }
+
 		SABETHA::COMPASS getNextCannonDirection();
 		Vector3 getDirectionPosition(Vector3 origin, SABETHA::COMPASS direction);
 		void drawCompass();

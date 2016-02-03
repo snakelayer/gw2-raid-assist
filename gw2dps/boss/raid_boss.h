@@ -53,6 +53,8 @@ class RaidBoss {
 
 		string outputHeader;
 
+		virtual float getMaxHp() = 0;
+		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
 		void outputAssistHeader(stringstream &ss);
 		void updateDps(boost::circular_buffer<float> &damageBuffer);

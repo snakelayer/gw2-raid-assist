@@ -28,6 +28,8 @@ class Gorseval : public RaidBoss
 
 		Gorseval(Agent agent);
 
+		float getMaxHp() { return MAX_HP; }
+
 	public:
 		static RaidBoss* instance(Agent agent) { return new Gorseval(agent); }
 
