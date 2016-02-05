@@ -11,7 +11,7 @@
 #include "GameData.h"
 #include "gw2lib.h"
 
-#include "../commonTypedefs.h"
+#include "../common_typedefs.h"
 #include "../boss/raid_boss.h"
 #include "squad_member.h"
 

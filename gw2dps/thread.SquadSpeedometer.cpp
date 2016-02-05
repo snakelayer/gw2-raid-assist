@@ -1,7 +1,7 @@
 #include <map>
 #include <utility>
 
-#include "commonTypedefs.h"
+#include "common_typedefs.h"
 
 void threadSquadSpeedometer() {
 	double pollingRate = 100; // ms

@@ -10,7 +10,7 @@
 
 #include "gw2lib.h"
 
-#include "../commonTypedefs.h"
+#include "../common_typedefs.h"
 #include "../raid/encounter_timer.h"
 
 
