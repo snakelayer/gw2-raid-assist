@@ -3,6 +3,11 @@
 
 #include "common_typedefs.h"
 
+float horizontalDist(Vector3 p1, Vector3 p2)
+{
+	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
 void threadSquadSpeedometer() {
 	double pollingRate = 100; // ms
 
@@ -35,7 +40,7 @@ void threadSquadSpeedometer() {
 					Vector3 currentPos = character.GetAgent().GetPos();
 
 					if (characterPositions.find(characterName) != characterPositions.end()) {
-						int distance = int(Dist(characterPositions[characterName], currentPos));
+						int distance = int(horizontalDist(characterPositions[characterName], currentPos));
 
 						if (characterSpeeds[characterName].capacity() == 0) {
 							characterSpeeds[characterName].set_capacity(9); // sample for a length of time equal to 1 dodge (+ 1 more sample)
