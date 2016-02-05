@@ -1,5 +1,3 @@
-#pragma once
-
 #include "gw2lib.h"
 
 #include "unknown_boss.h"

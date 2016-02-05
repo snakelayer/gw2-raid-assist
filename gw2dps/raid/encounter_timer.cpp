@@ -1,5 +1,3 @@
-#pragma once
-
 #include "encounter_timer.h"
 
 EncounterTimer::EncounterTimer() : lastElapsed(0.0f) {

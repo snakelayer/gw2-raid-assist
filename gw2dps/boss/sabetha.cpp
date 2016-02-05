@@ -1,5 +1,3 @@
-#pragma once
-
 #include "sabetha.h"
 
 const float Sabetha::MAX_HP = 34015256;

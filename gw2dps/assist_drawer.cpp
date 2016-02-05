@@ -1,5 +1,3 @@
-#pragma once
-
 #include "assist_drawer.h"
 
 const HWND AssistDrawer::hwnd = FindWindowEx(NULL, NULL, L"Guild Wars 2", NULL);

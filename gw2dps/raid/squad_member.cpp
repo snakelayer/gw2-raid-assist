@@ -1,5 +1,3 @@
-#pragma once
-
 #include "squad_member.h"
 
 const float SquadMember::SWIFTNESS_THRESHOLD = 22.0f;

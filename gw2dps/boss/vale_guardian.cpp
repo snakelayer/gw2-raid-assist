@@ -1,5 +1,3 @@
-#pragma once
-
 #include "vale_guardian.h"
 #include "skills/magic_storm.h"
 

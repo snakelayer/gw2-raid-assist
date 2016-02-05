@@ -1,7 +1,3 @@
-#pragma once
-
-#include "../hacklib/include/hacklib/Logging.h"
-
 #include "squad.h"
 
 const string Squad::logFile = "gw2dpsLog-RaidAssist.txt";

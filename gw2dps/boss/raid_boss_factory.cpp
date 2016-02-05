@@ -1,5 +1,3 @@
-#pragma once
-
 #include "raid_boss_factory.h"
 #include "vale_guardian.h"
 #include "gorseval.h"

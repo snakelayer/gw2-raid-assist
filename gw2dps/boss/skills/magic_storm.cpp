@@ -1,5 +1,3 @@
-#pragma once
-
 #include "magic_storm.h"
 
 MagicStorm::MagicStorm() : state(MS::PENDING) {

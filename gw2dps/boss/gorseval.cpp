@@ -1,5 +1,3 @@
-#pragma once
-
 #include "gorseval.h"
 
 const float Gorseval::MAX_HP = 21628200;

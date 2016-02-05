@@ -1,5 +1,3 @@
-#pragma once
-
 #include "raid_boss.h"
 
 const string RaidBoss::logFile = "gw2dpsLog-RaidAssist.txt";

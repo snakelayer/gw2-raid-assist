@@ -1,5 +1,3 @@
-#pragma once
-
 #include "seeker.h"
 
 Seeker::Seeker() : state(SEEKER::INACTIVE) {
