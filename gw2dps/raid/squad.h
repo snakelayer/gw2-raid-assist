@@ -39,13 +39,8 @@ class Squad
 		bool turnOffWhenRespawn;
 		static const string logFile;
 
-		int outputMask;
-		bool shouldOutputDodges();
-		bool shouldOutputTotalDamageTaken();
 		void updateRaidState(CharacterMap &characterMap);
 		void writeStatsToFile();
-
-		bool hasPlayerWithName(string name);
 
 		string debugStr;
 
@@ -60,7 +55,6 @@ class Squad
 		void updateState();
 		void updateDodgeState(CharacterSpeeds &characterSpeeds);
 
-		void incrementDisplayMask();
 		void outputPlayerStats(ostream &stream);
 
 		RAID::RaidState getRaidState() { return raidState; }

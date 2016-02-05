@@ -3,7 +3,7 @@
 const string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
 
 Squad::Squad()
-	: turnOffWhenRespawn(false), outputMask(0), raidState(RAID::ACTIVE) {
+	: turnOffWhenRespawn(false), raidState(RAID::ACTIVE) {
 	debugStr = "";
 
 	GW2LIB::Character character;
@@ -79,18 +79,6 @@ void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
 	}
 }
 
-void Squad::incrementDisplayMask() {
-	++outputMask;
-}
-
-bool Squad::shouldOutputDodges() {
-	return ((outputMask >> 0) % 2 == 0);
-}
-
-bool Squad::shouldOutputTotalDamageTaken() {
-	return ((outputMask >> 1) % 2 == 0);
-}
-
 void Squad::outputPlayerStats(ostream &stream) {
 	stream << "Player\tDodges\tHitsTaken\tTotalDamageTaken\n";
 	for (auto &member : members) {
@@ -141,82 +129,4 @@ void Squad::writeStatsToFile() {
 		outputPlayerStats(file);
 		file.close();
 	}
-}
-/*
- * This is unused for 2 reasons:
- *  There's an unresolved pointer issue somewhere.
- *  Even if the column toggling worked, displaying this dramatically reduces fps.
- */
-/*bool Squad::writePlayerStats(stringstream &ss) {
-	bool shouldOutput = false;
-	string headerFormatString("%-10s");
-	string rowFormatString("%-10s");
-	vector<bool> outputRowIndex;
-	vector<string> headerFields;
-
-	outputRowIndex.push_back(true);
-	headerFields.push_back("Name");
-
-	if (shouldOutputDodges()) {
-		shouldOutput = true;
-		headerFormatString += "%-7s ";
-		rowFormatString += "%-7d ";
-		outputRowIndex.push_back(true);
-		headerFields.push_back("Dodges");
-	}
-	else {
-		outputRowIndex.push_back(false);
-	}
-
-	if (shouldOutputTotalDamageTaken()) {
-		shouldOutput = true;
-		headerFormatString += "%18s";
-		rowFormatString += "%18d";
-		outputRowIndex.push_back(true);
-		headerFields.push_back("Total Damage Taken");
-	}
-	else {
-		outputRowIndex.push_back(false);
-	}
-
-	headerFormatString += "\n";
-	rowFormatString += "\n";
-
-	if (shouldOutput) {
-		format headerFormat(headerFormatString);
-
-		for (int i = 0; i < outputRowIndex.size(); i++) {
-			if (outputRowIndex[i]) {
-				headerFormat % headerFields[i];
-			}
-		}
-		ss << headerFormat;
-
-		for (auto &member : members) {
-			format rowFormat(rowFormatString);
-			rowFormat % member.getName();
-
-			if (shouldOutputDodges()) {
-				rowFormat % member.getDodgeCount();
-			}
-
-			if (shouldOutputTotalDamageTaken()) {
-				rowFormat % (int)member.getTotalDamageTaken();
-			}
-
-			ss << rowFormat;
-		}
-	}
-
-	return shouldOutput;
-}*/
-
-bool Squad::hasPlayerWithName(string name) {
-	for (auto &member : members) {
-		if (member.second.getName().compare(name) == 0) {
-			return true;
-		}
-	}
-
-	return false;
 }
