@@ -4,8 +4,6 @@
 
 #include "GameData.h"
 
-using namespace std;
-
 namespace SM {
 
 	enum SPEED_STATE {
@@ -22,7 +20,7 @@ class SquadMember {
 		static const float DODGE_THRESHOLD;
 		static const float SUPERSPEED_THRESHOLD;
 
-		string name;
+		std::string name;
 		int dodgeCount;
 		int hitsTaken;
 		float totalDamageTaken;
@@ -47,7 +45,7 @@ class SquadMember {
 		void inferDodgeStateWithSpeed(float speed);
 		void reset();
 
-		string getName() { return name; }
+		std::string getName() { return name; }
 		int getDodgeCount() { return dodgeCount; }
 		float getLastHealthDelta() { return lastHealthDelta; }
 		int getHitsTaken() { return hitsTaken; }

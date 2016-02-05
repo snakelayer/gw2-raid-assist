@@ -12,10 +12,6 @@
 #include "skills/magic_storm.h"
 #include "skills/seeker.h"
 
-using namespace boost;
-using namespace std;
-using namespace GW2LIB;
-
 namespace VG {
 
 	enum Phase {
@@ -49,27 +45,27 @@ class ValeGuardian : public RaidBoss
 		MagicStorm magicStorm;
 		VG::Phase phase;
 
-		ValeGuardian(Agent agent);
+		ValeGuardian(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
 
-		void addEstTimeToSplit(stringstream &ss);
-		void addMagicStormStatus(stringstream &ss);
-		void addSeekerStatus(stringstream &ss);
+		void addEstTimeToSplit(std::stringstream &ss);
+		void addMagicStormStatus(std::stringstream &ss);
+		void addSeekerStatus(std::stringstream &ss);
 
 		bool findRedGuardian();
 
 	public:
 		~ValeGuardian();
 
-		static RaidBoss* instance(Agent agent) { return new ValeGuardian(agent); }
-		static bool matchesTarget(Agent &agent);
+		static RaidBoss* instance(GW2LIB::Agent agent) { return new ValeGuardian(agent); }
+		static bool matchesTarget(GW2LIB::Agent &agent);
 
-		string getName() { return "Vale Guardian"; }
+		std::string getName() { return "Vale Guardian"; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
-		void outputAssistInfo(stringstream &ss);
+		void outputAssistInfo(std::stringstream &ss);
 
-		void outputDebug(stringstream &ss);
+		void outputDebug(std::stringstream &ss);
 };

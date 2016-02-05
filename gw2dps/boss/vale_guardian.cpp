@@ -1,6 +1,10 @@
 #include "vale_guardian.h"
 #include "skills/magic_storm.h"
 
+using namespace boost;
+using namespace GW2LIB;
+using namespace std;
+
 const float ValeGuardian::MAX_HP = 22021440;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)

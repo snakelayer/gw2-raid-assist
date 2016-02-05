@@ -26,39 +26,39 @@ class Sabetha : public RaidBoss
 		const float SECOND_PHASE_TRANSITION_HP = 16643379;
 		const float THIRD_PHASE_TRANSITION_HP = MAX_HP/4; // TODO verify
 
-		static map<SABETHA::COMPASS, Vector3> launchPositionMap;
+		static std::map<SABETHA::COMPASS, GW2LIB::Vector3> launchPositionMap;
 
 		const float COMPASS_RADIUS = 50.0f;
 		const float COMPASS_DIRECTION_LENGTH = 60.0f;
 		const float CANNON_LINE_FRACTION = 0.4f;
-		static map<int, SABETHA::COMPASS> cannonRotationMap;
+		static std::map<int, SABETHA::COMPASS> cannonRotationMap;
 
-		Font font;
+		GW2LIB::Font font;
 		static const int fontSize = 14;
 		static const DWORD BLACK = 0x00000000;
 		static const DWORD WHITE = 0xFFFFFFFF;
 		static const DWORD GREEN = 0x00FF00FF; // ??
 
-		Sabetha(Agent agent);
+		Sabetha(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
 
 		SABETHA::COMPASS getNextCannonDirection();
-		Vector3 getDirectionPosition(Vector3 origin, SABETHA::COMPASS direction);
+		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);
 		void drawCompass();
 		void drawLineToNextCannon();
-		Vector3 getCannonLaunchPosition(SABETHA::COMPASS direction);
+		GW2LIB::Vector3 getCannonLaunchPosition(SABETHA::COMPASS direction);
 
 	public:
 
-		static RaidBoss* instance(Agent agent) { return new Sabetha(agent); }
-		static bool matchesTarget(Agent &agent);
+		static RaidBoss* instance(GW2LIB::Agent agent) { return new Sabetha(agent); }
+		static bool matchesTarget(GW2LIB::Agent &agent);
 
-		string getName() { return "Sabetha"; }
+		std::string getName() { return "Sabetha"; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
-		void outputAssistInfo(stringstream &ss);
+		void outputAssistInfo(std::stringstream &ss);
 
-		void outputDebug(stringstream &ss);
+		void outputDebug(std::stringstream &ss);
 };

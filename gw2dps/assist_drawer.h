@@ -9,9 +9,6 @@
 
 #include "gw2lib.h"
 
-using namespace boost;
-using namespace std;
-
 struct StrInfo {
 	StrInfo() : lineCount(0), x(0), y(0) {}
 
@@ -31,7 +28,7 @@ class AssistDrawer
 		AssistDrawer(AssistDrawer const&) = delete;
 		AssistDrawer& operator=(AssistDrawer const&) = delete;
 
-		static inline wstring convert(const string& as);
+		static inline std::wstring convert(const std::string& as);
 
 	public:
 		static const int lineHeight = 16;
@@ -42,7 +39,7 @@ class AssistDrawer
 			return instance;
 		}
 
-		static StrInfo StringInfo(string str);
+		static StrInfo StringInfo(std::string str);
 
 		void drawFont(float x, float y, DWORD color, std::string format, ...);
 };

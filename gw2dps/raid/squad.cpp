@@ -1,6 +1,9 @@
 #include "squad.h"
 
-const string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
+using namespace boost;
+using namespace std;
+
+const std::string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
 
 Squad::Squad()
 	: turnOffWhenRespawn(false), raidState(RAID::ACTIVE) {

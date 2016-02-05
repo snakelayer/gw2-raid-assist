@@ -1,5 +1,9 @@
 #include "sabetha.h"
 
+using namespace boost;
+using namespace GW2LIB;
+using namespace std;
+
 const float Sabetha::MAX_HP = 34015256;
 map<SABETHA::COMPASS, Vector3> Sabetha::launchPositionMap = boost::assign::map_list_of
 	(SABETHA::COMPASS::NORTH, Vector3(-4980, 4390, -2480))

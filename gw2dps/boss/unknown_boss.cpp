@@ -2,7 +2,9 @@
 
 #include "unknown_boss.h"
 
-UnknownBoss::UnknownBoss(Agent agent) : RaidBoss(agent) {
+using namespace std;
+
+UnknownBoss::UnknownBoss(GW2LIB::Agent agent) : RaidBoss(agent) {
 
 }
 

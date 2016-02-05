@@ -4,8 +4,6 @@
 
 #include "raid_boss.h"
 
-using namespace GW2LIB;
-
 class Gorseval : public RaidBoss
 {
 	private:
@@ -26,19 +24,19 @@ class Gorseval : public RaidBoss
 		// anything below this (higher in damage) is considered a dodgeable hit the player took
 		static const int PLAYER_HIT_DAMAGE_THRESHOLD = -1500;
 
-		Gorseval(Agent agent);
+		Gorseval(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
 
 	public:
-		static RaidBoss* instance(Agent agent) { return new Gorseval(agent); }
+		static RaidBoss* instance(GW2LIB::Agent agent) { return new Gorseval(agent); }
 
-		string getName() { return "Gorseval"; }
-		static bool matchesTarget(Agent &agent);
+		std::string getName() { return "Gorseval"; }
+		static bool matchesTarget(GW2LIB::Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
-		void outputAssistInfo(stringstream &ss);
+		void outputAssistInfo(std::stringstream &ss);
 
-		void outputDebug(stringstream &ss);
+		void outputDebug(std::stringstream &ss);
 };

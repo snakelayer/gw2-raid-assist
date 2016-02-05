@@ -1,5 +1,9 @@
 #include "raid_boss.h"
 
+using namespace boost;
+using namespace GW2LIB;
+using namespace std;
+
 const string RaidBoss::logFile = "gw2dpsLog-RaidAssist.txt";
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 

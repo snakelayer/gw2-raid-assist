@@ -1,5 +1,8 @@
 #include "gorseval.h"
 
+using namespace GW2LIB;
+using namespace std;
+
 const float Gorseval::MAX_HP = 21628200;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)

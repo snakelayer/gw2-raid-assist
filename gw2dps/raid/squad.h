@@ -15,9 +15,6 @@
 #include "../boss/raid_boss.h"
 #include "squad_member.h"
 
-using namespace boost;
-using namespace std;
-
 class RaidBoss;
 
 namespace RAID {
@@ -37,15 +34,15 @@ class Squad
 
 		RAID::RaidState raidState;
 		bool turnOffWhenRespawn;
-		static const string logFile;
+		static const std::string logFile;
 
 		void updateRaidState(CharacterMap &characterMap);
 		void writeStatsToFile();
 
-		string debugStr;
+		std::string debugStr;
 
 	public:
-		string getDebugStr() { return debugStr; }
+		std::string getDebugStr() { return debugStr; }
 		Squad();
 		~Squad();
 		
@@ -55,9 +52,9 @@ class Squad
 		void updateState();
 		void updateDodgeState(CharacterSpeeds &characterSpeeds);
 
-		void outputPlayerStats(ostream &stream);
+		void outputPlayerStats(std::ostream &stream);
 
 		RAID::RaidState getRaidState() { return raidState; }
 		bool turnOff() { return turnOffWhenRespawn && GW2LIB::GetOwnCharacter().IsAlive(); }
-		string getLogFileName() { return logFile; }
+		std::string getLogFileName() { return logFile; }
 };

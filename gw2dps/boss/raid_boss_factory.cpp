@@ -30,7 +30,7 @@ RaidBoss* RaidBossFactory::getNextBoss() {
 		}
 	}
 
-	agent = GetLockedSelection();
+	agent = GW2LIB::GetLockedSelection();
 	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
 		return new UnknownBoss(agent);
 	}

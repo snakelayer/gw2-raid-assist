@@ -1,5 +1,8 @@
 #include "assist_drawer.h"
 
+using namespace boost;
+using namespace std;
+
 const HWND AssistDrawer::hwnd = FindWindowEx(NULL, NULL, L"Guild Wars 2", NULL);
 
 AssistDrawer::AssistDrawer() {
