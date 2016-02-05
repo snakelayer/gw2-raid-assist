@@ -4,6 +4,8 @@
 #include "sabetha.h"
 #include "unknown_boss.h"
 
+using namespace GW2LIB;
+
 RaidBossFactory::RaidBossFactory() {
 	addBossEntry(&ValeGuardian::matchesTarget, &ValeGuardian::instance);
 	addBossEntry(&Gorseval::matchesTarget, &Gorseval::instance);
@@ -30,7 +32,7 @@ RaidBoss* RaidBossFactory::getNextBoss() {
 		}
 	}
 
-	agent = GW2LIB::GetLockedSelection();
+	agent = GetLockedSelection();
 	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
 		return new UnknownBoss(agent);
 	}

@@ -117,9 +117,13 @@ void Sabetha::updateSquadState(SquadMemberMap &members) {
 
 }
 
-void Sabetha::outputAssistInfo(stringstream &ss) {
+void Sabetha::drawAssistInfo() {
+	stringstream ss;
+
 	drawCompass();
 	drawLineToNextCannon();
+
+	drawToWindow(ss);
 }
 
 void Sabetha::outputDebug(stringstream &ss) {

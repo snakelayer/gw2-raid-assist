@@ -1,6 +1,7 @@
 #include "assist_drawer.h"
 
 using namespace boost;
+using namespace GW2LIB;
 using namespace std;
 
 const HWND AssistDrawer::hwnd = FindWindowEx(NULL, NULL, L"Guild Wars 2", NULL);
@@ -91,4 +92,13 @@ void AssistDrawer::drawFont(float x, float y, DWORD color, std::string format, .
 	va_start(vl, format);
 	font.vDraw(x, y, color, format, vl);
 	va_end(vl);
+}
+
+void AssistDrawer::drawStreamToWindow(stringstream &ss, float x, float y) {
+	StrInfo strInfo = StringInfo(ss.str());
+	float adjusted_x = round(x - strInfo.x / 2);
+
+	DrawRectFilled(adjusted_x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BACKGROUND_COLOR); //black background
+	DrawRect(adjusted_x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BORDER_COLOR); // white border
+	drawFont(adjusted_x, y, BLACK, ss.str());
 }

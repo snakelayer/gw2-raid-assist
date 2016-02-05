@@ -23,7 +23,7 @@ class UnknownBoss : public RaidBoss
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
 		void outputDps(std::stringstream &ss);
-		void outputAssistInfo(std::stringstream &ss);
+		void drawAssistInfo();
 		int getEncounterTime();
 
 		void outputDebug(std::stringstream &ss);

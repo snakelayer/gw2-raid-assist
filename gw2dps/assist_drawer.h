@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include <windows.h>
 
 #include <boost/algorithm/string.hpp>
@@ -20,7 +21,13 @@ struct StrInfo {
 class AssistDrawer
 {
 	private:
-		const static HWND hwnd;
+		static const HWND hwnd;
+
+		static const int PADX = 5;
+		static const int PADY = 2;
+		static const DWORD BACKGROUND_COLOR = 0xdd000000;
+		static const DWORD BORDER_COLOR = 0xff444444;
+		static const DWORD BLACK = 0xffffffff;
 
 		GW2LIB::Font font;
 
@@ -42,4 +49,5 @@ class AssistDrawer
 		static StrInfo StringInfo(std::string str);
 
 		void drawFont(float x, float y, DWORD color, std::string format, ...);
+		void drawStreamToWindow(std::stringstream &ss, float x, float y);
 };

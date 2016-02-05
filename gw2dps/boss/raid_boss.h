@@ -10,6 +10,7 @@
 
 #include "gw2lib.h"
 
+#include "../assist_drawer.h"
 #include "../common_typedefs.h"
 #include "../raid/encounter_timer.h"
 
@@ -25,7 +26,7 @@ class RaidBoss {
 		virtual std::string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
 		virtual void updateSquadState(SquadMemberMap &members) = 0;
-		virtual void outputAssistInfo(std::stringstream &ss) = 0;
+		virtual void drawAssistInfo() = 0;
 
 		virtual void outputDebug(std::stringstream &ss) = 0;
 
@@ -51,7 +52,9 @@ class RaidBoss {
 		virtual float getMaxHp() = 0;
 		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
+		void drawToWindow(std::stringstream &ss);
 		void outputAssistHeader(std::stringstream &ss);
+
 		void updateDps(boost::circular_buffer<float> &damageBuffer);
 
 	private:

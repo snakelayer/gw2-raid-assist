@@ -21,8 +21,10 @@ void UnknownBoss::outputDps(stringstream &ss) {
 
 }
 
-void UnknownBoss::outputAssistInfo(stringstream &ss) {
+void UnknownBoss::drawAssistInfo() {
+	stringstream ss;
 	RaidBoss::outputAssistHeader(ss);
+	drawToWindow(ss);
 }
 
 int UnknownBoss::getEncounterTime() {

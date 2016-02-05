@@ -36,7 +36,7 @@ class Gorseval : public RaidBoss
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
-		void outputAssistInfo(std::stringstream &ss);
+		void drawAssistInfo();
 
 		void outputDebug(std::stringstream &ss);
 };

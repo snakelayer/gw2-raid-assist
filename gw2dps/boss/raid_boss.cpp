@@ -88,6 +88,17 @@ bool RaidBoss::tryResetBossAgent() {
 	return false;
 }
 
+void RaidBoss::drawToWindow(stringstream &ss) {
+	float x, y;
+	if (getScreenLocation(&x, &y)) {
+		y += 20; // keep targeting circle visible
+		AssistDrawer::get().drawStreamToWindow(ss, x, y);
+	}
+	else {
+		AssistDrawer::get().drawStreamToWindow(ss, round(GetWindowWidth() / 2), round(GetWindowHeight() / 8));
+	}
+}
+
 void RaidBoss::outputAssistHeader(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
 	ss << format("Dist: %.0f\n") % dist(agent.GetPos(), GetOwnAgent().GetPos());

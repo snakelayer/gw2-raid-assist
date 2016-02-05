@@ -126,13 +126,10 @@ void ESP()
 {
 	// Element Anchors
 	Anchor aLeft, aTopLeft, aTop, aTopRight, aRight, aCenter, aBottom;
-	Anchor aBelowHealthBar, bossDpsAnchor;
+	Anchor bossDpsAnchor;
 
 	bossDpsAnchor.x = round(GetWindowWidth() * 5 / 7);
 	bossDpsAnchor.y = 8;
-
-	aBelowHealthBar.x = round(GetWindowWidth() / 2);
-	aBelowHealthBar.y = 160;
 
 	aLeft.x = round(GetWindowWidth() / 10);
 	aLeft.y = 75;
@@ -1234,17 +1231,7 @@ void ESP()
 
 		if (raid_boss_assist) {
 			if (boss != nullptr) {
-				stringstream ssMain;
-
-				boss->outputAssistInfo(ssMain);
-				Anchor bossLocation;
-				if (boss->getScreenLocation(&bossLocation.x, &bossLocation.y)) {
-					bossLocation.y += 20; // keep targeting circle visible
-					drawElementAt(ssMain, bossLocation);
-				}
-				else {
-					drawElementAt(ssMain, aBelowHealthBar);
-				}
+				boss->drawAssistInfo();
 
 				if (logDps) {					
 					stringstream ssDps;

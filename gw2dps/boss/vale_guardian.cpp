@@ -69,11 +69,15 @@ void ValeGuardian::updateSquadState(SquadMemberMap &members) {
 
 }
 
-void ValeGuardian::outputAssistInfo(stringstream &ss) {
+void ValeGuardian::drawAssistInfo() {
+	stringstream ss;
+
 	RaidBoss::outputAssistHeader(ss);
 	addEstTimeToSplit(ss);
 	addSeekerStatus(ss);
 	addMagicStormStatus(ss);
+
+	drawToWindow(ss);
 }
 
 void ValeGuardian::outputDebug(stringstream &ss) {
