@@ -116,7 +116,7 @@ void ValeGuardian::addMagicStormStatus(stringstream &ss) {
 	}
 
 	if (magicStorm.getState() == MS::PENDING) {
-		ss << "Magic Storm: PENDING";
+		//ss << "Magic Storm: PENDING";
 	}
 	else if (magicStorm.getState() == MS::READY) {
 		ss << "Magic Storm: READY\n";

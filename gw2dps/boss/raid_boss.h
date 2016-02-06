@@ -50,6 +50,7 @@ class RaidBoss {
 		std::string outputHeader;
 
 		virtual float getMaxHp() = 0;
+		virtual float getBossHeight() = 0;
 		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
 		void drawToWindow(std::stringstream &ss);

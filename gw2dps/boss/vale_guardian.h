@@ -48,6 +48,7 @@ class ValeGuardian : public RaidBoss
 		ValeGuardian(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
+		float getBossHeight() { return 160.0f; }
 
 		void addEstTimeToSplit(std::stringstream &ss);
 		void addMagicStormStatus(std::stringstream &ss);

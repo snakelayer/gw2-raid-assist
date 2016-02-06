@@ -42,6 +42,7 @@ class Sabetha : public RaidBoss
 		Sabetha(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
+		float getBossHeight() { return 140.0f; } //TODO: check this
 
 		SABETHA::COMPASS getNextCannonDirection();
 		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);

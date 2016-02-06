@@ -57,7 +57,10 @@ bool RaidBoss::getScreenLocation(float *x, float *y) {
 		return false;
 	}
 
-	bool onScreen = WorldToScreen(agent.GetPos(), x, y);
+	Vector3 bossPos = agent.GetPos();
+	bossPos.z -= getBossHeight();
+	bool onScreen = WorldToScreen(bossPos, x, y);
+
 	if (onScreen) {
 		if (lastX > 0.0 && lastY > 0.0) {
 			if ((*x < X_BUFFER) || (*x + X_BUFFER > GetWindowWidth())) {
@@ -91,7 +94,6 @@ bool RaidBoss::tryResetBossAgent() {
 void RaidBoss::drawToWindow(stringstream &ss) {
 	float x, y;
 	if (getScreenLocation(&x, &y)) {
-		y += 20; // keep targeting circle visible
 		AssistDrawer::get().drawStreamToWindow(ss, x, y);
 	}
 	else {
