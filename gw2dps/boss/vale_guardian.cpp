@@ -24,7 +24,7 @@ bool ValeGuardian::matchesTarget(Agent &agent) {
 }
 
 void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
-	if (agent.IsValid() && (phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD)) {
+	if (agent.IsValid() && !isSplit()) {
 		RaidBoss::updateState();
 		RaidBoss::updateDps(damageBuffer);
 		updateSeekerState();
@@ -35,34 +35,26 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 		agent.m_ptr = nullptr;
 		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
-	else if (phase == VG::Phase::FIRST_TRANSITION) {
-		if (findRedGuardian()) {
-			phase = VG::Phase::FIRST_SPLIT;
-			outputHeader += str(format("// first transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
-		}
+	else if (phase == VG::Phase::FIRST_TRANSITION && findRedGuardian()) {
+		phase = VG::Phase::FIRST_SPLIT;
+		outputHeader += str(format("// first transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
-	else if (phase == VG::Phase::FIRST_SPLIT) {
-		if (tryResetBossAgent()) {
-			phase = VG::Phase::SECOND;
-			outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
-		}
+	else if (phase == VG::Phase::FIRST_SPLIT && tryResetBossAgent()) {
+		phase = VG::Phase::SECOND;
+		outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
 	else if (phase == VG::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SECOND_TRANSITION;
 		agent.m_ptr = nullptr;
 		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
-	else if (phase == VG::Phase::SECOND_TRANSITION) {
-		if (findRedGuardian()) {
-			phase = VG::Phase::SECOND_SPLIT;
-			outputHeader += str(format("// second transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
-		}
+	else if (phase == VG::Phase::SECOND_TRANSITION && findRedGuardian()) {
+		phase = VG::Phase::SECOND_SPLIT;
+		outputHeader += str(format("// second transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
-	else if (phase == VG::Phase::SECOND_SPLIT) {
-		if (tryResetBossAgent()) {
-			phase = VG::Phase::THIRD;
-			outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
-		}
+	else if (phase == VG::Phase::SECOND_SPLIT && tryResetBossAgent()) {
+		phase = VG::Phase::THIRD;
+		outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
 	}
 }
 
@@ -73,15 +65,21 @@ void ValeGuardian::updateSquadState(SquadMemberMap &members) {
 void ValeGuardian::drawAssistInfo() {
 	stringstream ss;
 
-	RaidBoss::outputAssistHeader(ss);
-	addEstTimeToSplit(ss);
-	addMagicStormStatus(ss);
+	if (!isSplit()) {
+		RaidBoss::outputAssistHeader(ss);
+		addEstTimeToSplit(ss);
+		addMagicStormStatus(ss);
 
-	Vector3 pos = agent.GetPos();
-	pos.z -= getBossHeight();
-	drawToWindow(ss, pos);
+		Vector3 pos = agent.GetPos();
+		pos.z -= getBossHeight();
+		drawToWindow(ss, pos);
 
-	drawSeekerStatus();
+		drawSeekerStatus();
+	}
+	else {
+		ss.str("split phase\n");
+		AssistDrawer::get().drawStreamToWindow(ss, round(GetWindowWidth() / 2), round(GetWindowHeight() / 8));
+	}
 }
 
 void ValeGuardian::outputDebug(stringstream &ss) {
@@ -161,6 +159,7 @@ void ValeGuardian::drawSeekerStatus() {
 	stringstream ss;
 
 	for (auto &seeker : seekers) {
+		ss.str("");
 		ss << seeker.getRespawnTime();
 		drawToWindow(ss, seeker.getPosition());
 	}

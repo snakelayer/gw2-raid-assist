@@ -29,7 +29,7 @@ class ValeGuardian : public RaidBoss
 {
 	private:
 		static const float MAX_HP;
-		const float FIRST_PHASE_TRANSITION_HP = 14526603;
+		const float FIRST_PHASE_TRANSITION_HP = 14553669;
 		const float SECOND_PHASE_TRANSITION_HP = 7255058;
 		const float MAGIC_STORM_COOLDOWN = 30.0f;
 
@@ -48,7 +48,8 @@ class ValeGuardian : public RaidBoss
 		ValeGuardian(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
-		float getBossHeight() { return 160.0f; }
+		float getBossHeight() { return 350.0f; }
+		bool isSplit() { return !(phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD); }
 
 		void updateSeekerState();
 
@@ -69,6 +70,9 @@ class ValeGuardian : public RaidBoss
 		void updateState(boost::circular_buffer<float> &damageBuffer);
 		void updateSquadState(SquadMemberMap &members);
 		void drawAssistInfo();
+
+
+		bool isDead() { return !isSplit() && RaidBoss::isDead(); }
 
 		void outputDebug(std::stringstream &ss);
 };

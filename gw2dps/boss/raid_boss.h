@@ -28,15 +28,15 @@ class RaidBoss {
 		virtual void updateSquadState(SquadMemberMap &members) = 0;
 		virtual void drawAssistInfo() = 0;
 
-		virtual void outputDebug(std::stringstream &ss) = 0;
-
-		bool isDead() { return !agent.GetCharacter().IsAlive(); }
+		virtual bool isDead() { return !agent.GetCharacter().IsAlive(); }
 		int getAgentId() { return agent.GetAgentId(); }
 		float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
 		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
 		GW2LIB::GW2::BreakbarState breakbarState() { return agent.GetCharacter().GetBreakbarState(); }
 
 		bool getScreenLocation(float *x, float *y, GW2LIB::Vector3 pos);
+
+		virtual void outputDebug(std::stringstream &ss) = 0;
 
 	protected:
 		GW2LIB::Agent agent;
