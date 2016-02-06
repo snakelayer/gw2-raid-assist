@@ -36,7 +36,7 @@ class RaidBoss {
 		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
 		GW2LIB::GW2::BreakbarState breakbarState() { return agent.GetCharacter().GetBreakbarState(); }
 
-		bool getScreenLocation(float *x, float *y);
+		bool getScreenLocation(float *x, float *y, GW2LIB::Vector3 pos);
 
 	protected:
 		GW2LIB::Agent agent;
@@ -53,7 +53,7 @@ class RaidBoss {
 		virtual float getBossHeight() = 0;
 		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
-		void drawToWindow(std::stringstream &ss);
+		void drawToWindow(std::stringstream &ss, GW2LIB::Vector3 pos);
 		void outputAssistHeader(std::stringstream &ss);
 
 		void updateDps(boost::circular_buffer<float> &damageBuffer);

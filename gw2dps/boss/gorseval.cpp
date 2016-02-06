@@ -38,7 +38,9 @@ void Gorseval::drawAssistInfo() {
 	RaidBoss::outputAssistHeader(ss);
 	// TODO
 
-	drawToWindow(ss);
+	Vector3 pos = agent.GetPos();
+	pos.z -= getBossHeight();
+	drawToWindow(ss, pos);
 }
 
 void Gorseval::outputDebug(stringstream &ss) {

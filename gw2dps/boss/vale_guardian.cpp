@@ -27,6 +27,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	if (agent.IsValid() && (phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD)) {
 		RaidBoss::updateState();
 		RaidBoss::updateDps(damageBuffer);
+		updateSeekerState();
 	}
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
@@ -74,10 +75,13 @@ void ValeGuardian::drawAssistInfo() {
 
 	RaidBoss::outputAssistHeader(ss);
 	addEstTimeToSplit(ss);
-	addSeekerStatus(ss);
 	addMagicStormStatus(ss);
 
-	drawToWindow(ss);
+	Vector3 pos = agent.GetPos();
+	pos.z -= getBossHeight();
+	drawToWindow(ss, pos);
+
+	drawSeekerStatus();
 }
 
 void ValeGuardian::outputDebug(stringstream &ss) {
@@ -86,6 +90,27 @@ void ValeGuardian::outputDebug(stringstream &ss) {
 	ss << format("boss phase: %d\n") % phase;
 	ss << format("boss encounter time: %d\n") % encounterTimer.getElapsedSeconds();
 	ss << format("boss current hp: %f\n") % getCurrentHealth();
+}
+
+void ValeGuardian::updateSeekerState() {
+	for (list<Seeker>::iterator it = seekers.begin(); it != seekers.end();) {
+		if (it->getRespawnTime() <= 0) {
+			it = seekers.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+
+	if (seekers.empty()) {
+		Agent agent;
+
+		while (agent.BeNext()) {
+			if (agent.GetCharacter().GetMaxHealth() == Seeker::getMaxHp()) {
+				seekers.push_back(Seeker(agent));
+			}
+		}
+	}
 }
 
 void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
@@ -132,12 +157,12 @@ void ValeGuardian::addMagicStormStatus(stringstream &ss) {
 	}
 }
 
-void ValeGuardian::addSeekerStatus(stringstream &ss) {
-	if (seeker.getState() == SEEKER::INACTIVE) {
-		ss << "Seeker: INACTIVE\n";
-	}
-	else if (seeker.getState() == SEEKER::ACTIVE) {
-		ss << format("Seeker respawn: %d\n") % seeker.getRespawnTime();
+void ValeGuardian::drawSeekerStatus() {
+	stringstream ss;
+
+	for (auto &seeker : seekers) {
+		ss << seeker.getRespawnTime();
+		drawToWindow(ss, seeker.getPosition());
 	}
 }
 

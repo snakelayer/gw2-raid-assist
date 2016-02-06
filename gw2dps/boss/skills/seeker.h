@@ -4,27 +4,20 @@
 
 #include <boost/timer/timer.hpp>
 
-namespace SEEKER {
-	enum State
-	{
-		INACTIVE = 0,
-		ACTIVE
-	};
-}
-
 class Seeker
 {
 	public:
-		Seeker();
-		SEEKER::State getState();
+		static float getMaxHp() { return MAX_HP; }
+
+		Seeker(GW2LIB::Agent agent);
 		int getRespawnTime();
+		GW2LIB::Vector3 getPosition();
 
 	private:
-		const float MAX_HP = 649260;
-		const float COOLDOWN = 19.0f;
+		static const float MAX_HP;
+		const float COOLDOWN = 21.0f;
 
-		SEEKER::State state;
+		GW2LIB::Agent agent;
+		GW2LIB::Vector3 position;
 		boost::timer::cpu_timer timer;
-
-		bool isSpawned();
 };

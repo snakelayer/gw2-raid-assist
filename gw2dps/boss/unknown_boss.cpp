@@ -1,7 +1,6 @@
-#include "gw2lib.h"
-
 #include "unknown_boss.h"
 
+using namespace GW2LIB;
 using namespace std;
 
 UnknownBoss::UnknownBoss(GW2LIB::Agent agent) : RaidBoss(agent) {
@@ -24,7 +23,10 @@ void UnknownBoss::outputDps(stringstream &ss) {
 void UnknownBoss::drawAssistInfo() {
 	stringstream ss;
 	RaidBoss::outputAssistHeader(ss);
-	drawToWindow(ss);
+
+	Vector3 pos = agent.GetPos();
+	pos.z -= getBossHeight();
+	drawToWindow(ss, pos);
 }
 
 int UnknownBoss::getEncounterTime() {

@@ -41,7 +41,7 @@ class ValeGuardian : public RaidBoss
 		const float GREEN_GUARDIAN_MAX_HP = 722579;
 		const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
-		Seeker seeker;
+		std::list<Seeker> seekers;
 		MagicStorm magicStorm;
 		VG::Phase phase;
 
@@ -50,9 +50,11 @@ class ValeGuardian : public RaidBoss
 		float getMaxHp() { return MAX_HP; }
 		float getBossHeight() { return 160.0f; }
 
+		void updateSeekerState();
+
 		void addEstTimeToSplit(std::stringstream &ss);
 		void addMagicStormStatus(std::stringstream &ss);
-		void addSeekerStatus(std::stringstream &ss);
+		void drawSeekerStatus();
 
 		bool findRedGuardian();
 

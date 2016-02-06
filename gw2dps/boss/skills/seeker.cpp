@@ -1,24 +1,10 @@
 #include "seeker.h"
 
-Seeker::Seeker() : state(SEEKER::INACTIVE) {
-	timer.stop();
-}
+using namespace GW2LIB;
 
-SEEKER::State Seeker::getState() {
-	if ((state == SEEKER::INACTIVE) && (isSpawned())) {
-		state = SEEKER::ACTIVE;
-		timer.start();
-	}
-	else {
-		if (!isSpawned()) {
-			state = SEEKER::INACTIVE;
-			timer.stop();
-		}
-		else if (getRespawnTime() <= 0.0f) {
-			timer.start();
-		}
-	}
-	return state;
+const float Seeker::MAX_HP = 649260;
+
+Seeker::Seeker(Agent agent) : agent(agent), position(agent.GetPos()) {
 }
 
 int Seeker::getRespawnTime() {
@@ -26,14 +12,11 @@ int Seeker::getRespawnTime() {
 	return (int)(COOLDOWN - secondsElapsed);
 }
 
-bool Seeker::isSpawned() {
-	GW2LIB::Agent agent;
-
-	while (agent.BeNext()) {
-		if (agent.GetCharacter().GetMaxHealth() == MAX_HP) {
-			return true;
-		}
+Vector3 Seeker::getPosition() {
+	if (agent.IsValid()) {
+		position = agent.GetPos();
 	}
 
-	return false;
+	return position;
 }
+

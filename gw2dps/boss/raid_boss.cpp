@@ -52,14 +52,12 @@ void RaidBoss::outputDps(stringstream &ss) {
 	ss << format("DPS(60s): %0.0f\n") % dps[2];
 }
 
-bool RaidBoss::getScreenLocation(float *x, float *y) {
+bool RaidBoss::getScreenLocation(float *x, float *y, Vector3 pos) {
 	if (!agent.IsValid()) {
 		return false;
 	}
 
-	Vector3 bossPos = agent.GetPos();
-	bossPos.z -= getBossHeight();
-	bool onScreen = WorldToScreen(bossPos, x, y);
+	bool onScreen = WorldToScreen(pos, x, y);
 
 	if (onScreen) {
 		if (lastX > 0.0 && lastY > 0.0) {
@@ -91,9 +89,9 @@ bool RaidBoss::tryResetBossAgent() {
 	return false;
 }
 
-void RaidBoss::drawToWindow(stringstream &ss) {
+void RaidBoss::drawToWindow(stringstream &ss, Vector3 pos) {
 	float x, y;
-	if (getScreenLocation(&x, &y)) {
+	if (getScreenLocation(&x, &y, pos)) {
 		AssistDrawer::get().drawStreamToWindow(ss, x, y);
 	}
 	else {
