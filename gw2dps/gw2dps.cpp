@@ -204,9 +204,8 @@ void ESP()
 		float x = round(aCenter.x - strInfo.x / 2);
 		float y = round(aCenter.y - strInfo.y / 2);
 
-		DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-		DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-		AssistDrawer::get().drawFont(x, y, fontColor - (!loopLimiter ? 0x00aa0000 : 0), ss.str());
+		AssistDrawer::get().drawBackground(x, y, strInfo);
+		AssistDrawer::get().drawFont(x, y, (loopLimiter ? AssistDrawer::WHITE : AssistDrawer::CYAN), ss.str());
 	}
 
 	// JP Skills
@@ -218,11 +217,11 @@ void ESP()
 		float box = 2;
 		float line = 10;
 
-		DrawLine(x - line, y, x + line, y, borderColor);
-		DrawLine(x, y - line, x, y + line, borderColor);
+		DrawLine(x - line, y, x + line, y, AssistDrawer::BORDER_COLOR);
+		DrawLine(x, y - line, x, y + line, AssistDrawer::BORDER_COLOR);
 
 		DrawRectFilled(x - box, y - box, box * 2, box * 2, 0xccFF0000);
-		DrawRect(x - box, y - box, box * 2, box * 2, borderColor);
+		DrawRect(x - box, y - box, box * 2, box * 2, AssistDrawer::BORDER_COLOR);
 	}
 
 	if (selfFloat)
@@ -579,9 +578,7 @@ void ESP()
 			float x = round(aBottom.x - strInfo.x / 2);
 			float y = round(aBottom.y - AssistDrawer::lineHeight);
 
-			//DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			//DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, ss.str());
 		}
 	}
 
@@ -599,7 +596,7 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
 			}
 			else if (selected.valid)
 			{
@@ -609,7 +606,7 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
 			}
 
 			if (targetInfo && selected.valid)
@@ -617,7 +614,6 @@ void ESP()
 				//aTopLeft.y += AssistDrawer::lineHeight;
 
 				stringstream ss;
-				StrInfo strInfo;
 
 				if (targetInfoAlt)
 				{
@@ -647,7 +643,7 @@ void ESP()
 				drawElementAt(ss, aTopLeft);
 
 				// Prepare for Next Element
-				aTopLeft.y += AssistDrawer::StringInfo(ss.str()).lineCount * AssistDrawer::lineHeight + padY * 2;
+				aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
 
 				ss.str("");
 			}
@@ -682,11 +678,10 @@ void ESP()
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (floatCircles ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-			aTop.y += strInfo.y + padY * 2;
+			aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
 
 			if (floatAllyPlayerProf)
 			{
@@ -710,11 +705,10 @@ void ESP()
 				float x = round(aTop.x - strInfo.x / 2);
 				float y = round(aTop.y);
 
-				DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-				DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-				AssistDrawer::get().drawFont(x, y, fontColor - (floatCircles ? 0x00aa0000 : 0), ss.str());
+				AssistDrawer::get().drawBackground(x, y, strInfo);
+				AssistDrawer::get().drawFont(x, y, (floatCircles ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-				aTop.y += strInfo.y + padY * 2;
+				aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
 			}
 
 
@@ -733,7 +727,7 @@ void ESP()
 								fs << format("%i") % floater.mHealth;
 
 							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
 
 							DWORD color = 0x4433ff00;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -754,7 +748,7 @@ void ESP()
 								fs << format("%i") % floater.mHealth;
 
 							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
 
 							DWORD color = 0x44ff3300;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -775,7 +769,7 @@ void ESP()
 								fs << format("%i") % floater.mHealth;
 
 							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
 
 							DWORD color = 0x4433ff00;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -796,7 +790,7 @@ void ESP()
 								fs << format("%i") % floater.mHealth;
 
 							StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+							AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
 
 							DWORD color = 0x44ff3300;
 							DrawCircleProjected(floater.pos, 20.0f, color);
@@ -826,9 +820,8 @@ void ESP()
 			float lx = 12;
 			float ly = 32;
 
-			DrawRectFilled(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(lx, ly, fontColor, fs.str());
+			AssistDrawer::get().drawBackground(lx, ly, strInfo);
+			AssistDrawer::get().drawFont(lx, ly, AssistDrawer::WHITE, fs.str());
 
 			ly = ly + 12;
 
@@ -846,9 +839,8 @@ void ESP()
 						fx = round(fx - strInfo.x / 2);
 						fy = round(fy - 15);
 
-						DrawRectFilled(fx - padX, fy - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-						DrawRect(fx - padX, fy - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-						AssistDrawer::get().drawFont(fx, fy, fontColor, fs.str());
+						AssistDrawer::get().drawBackground(fx, fy, strInfo);
+						AssistDrawer::get().drawFont(fx, fy, AssistDrawer::WHITE, fs.str());
 					}
 
 					// list
@@ -857,11 +849,10 @@ void ESP()
 						fs << format("[%i] %i / %i (%i)") % wboss.id % (int)wboss.cHealth % (int)wboss.mHealth % int(Dist(self.pos, wboss.pos));
 
 						StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
-						ly = round(ly + strInfo.y + padY);
+						ly = round(ly + strInfo.y + AssistDrawer::PADY);
 
-						DrawRectFilled(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-						DrawRect(lx - padX, ly - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-						AssistDrawer::get().drawFont(lx, ly, fontColor, fs.str());
+						AssistDrawer::get().drawBackground(lx, ly, strInfo);
+						AssistDrawer::get().drawFont(lx, ly, AssistDrawer::WHITE, fs.str());
 					}
 				}
 			}
@@ -908,11 +899,10 @@ void ESP()
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (logSpeedometerEnemy ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (logSpeedometerEnemy ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-			aTop.y += strInfo.y + padY * 2;
+			aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
 		}
 
 		if (logDisplacement)
@@ -926,11 +916,10 @@ void ESP()
 			float x = round(aTop.x - strInfo.x / 2);
 			float y = round(aTop.y);
 
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (logDisplacementEnemy ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (logDisplacementEnemy ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-			aTop.y += strInfo.y + padY * 2;
+			aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
 
 		}
 		else
@@ -978,15 +967,13 @@ void ESP()
 			float x = round(aTopRight.x - aAdjustX / 2); // perma anchor offset
 			float y = round(aTopRight.y);
 
-			// Draw
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
-			aTopRight.x -= aAdjustX / 2 + padX + 2;
+			//aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+			aTopRight.x -= aAdjustX / 2 + AssistDrawer::PADX + 2;
 		}
 
 		if (logKillTimer)
@@ -1013,19 +1000,16 @@ void ESP()
 			float x = 0;
 			float y = round(aTopRight.y);
 			if (logDps)
-				x = round(aTopRight.x - strInfo.x - padX); // perma anchor offset with logDps
+				x = round(aTopRight.x - strInfo.x - AssistDrawer::PADX); // perma anchor offset with logDps
 			else
 				x = round(aTopRight.x - strInfo.x / 2); // center otherwise
 
-
-			// Draw
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
+			aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
 			//aTopRight.x -= 0;
 		}
 
@@ -1092,15 +1076,13 @@ void ESP()
 			float x = round(aRight.x - strInfo.x);
 			float y = round(aRight.y);
 
-			// Draw
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (logAttackRateToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (logAttackRateToFile ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
-			aRight.x = x - padX * 2 - 5;
+			//aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+			aRight.x = AssistDrawer::adjustXForNextElement(x);
 		}
 
 		if (logHits)
@@ -1158,15 +1140,13 @@ void ESP()
 			float x = round(aRight.x - strInfo.x);
 			float y = round(aRight.y);
 
-			// Draw
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (logHitsToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (logHitsToFile ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
-			aRight.x = x - padX * 2 - 5;
+			//aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+			aRight.x = AssistDrawer::adjustXForNextElement(x);
 		}
 
 		if (logCrits)
@@ -1214,15 +1194,13 @@ void ESP()
 			float x = round(aRight.x - strInfo.x);
 			float y = round(aRight.y);
 
-			// Draw
-			DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000);
-			DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor);
-			AssistDrawer::get().drawFont(x, y, fontColor - (logCritsToFile ? 0x00aa0000 : 0), ss.str());
+			AssistDrawer::get().drawBackground(x, y, strInfo);
+			AssistDrawer::get().drawFont(x, y, (logCritsToFile ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
 			// Prepare for Next Element
 			//ss.str("");
-			//aTopRight.y += strInfo.lineCount * AssistDrawer::lineHeight + padY * 2;
-			aRight.x = x - padX * 2 - 5;
+			//aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+			aRight.x = AssistDrawer::adjustXForNextElement(x);
 		}
 
 		if (raid_debug) {
@@ -1310,9 +1288,8 @@ void drawElementAt(stringstream &ss, Anchor &location) {
 	float x = round(location.x - strInfo.x / 2);
 	float y = round(location.y);
 
-	DrawRectFilled(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, backColor - 0x22000000); //black background
-	DrawRect(x - padX, y - padY, strInfo.x + padX * 2, strInfo.y + padY * 2, borderColor); // white border
-	AssistDrawer::get().drawFont(x, y, fontColor, ss.str());
+	AssistDrawer::get().drawBackground(x, y, strInfo);
+	AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, ss.str());
 }
 
 void GW2LIB::gw2lib_main()

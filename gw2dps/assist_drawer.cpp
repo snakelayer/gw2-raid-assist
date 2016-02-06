@@ -87,7 +87,12 @@ StrInfo AssistDrawer::StringInfo(string str) {
 	return strInfo;
 }
 
-void AssistDrawer::drawFont(float x, float y, DWORD color, std::string format, ...) {
+void AssistDrawer::drawBackground(float x, float y, StrInfo strInfo) {
+	DrawRectFilled(x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BACKGROUND_COLOR); //black background
+	DrawRect(x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BORDER_COLOR); // white border
+}
+
+void AssistDrawer::drawFont(float x, float y, DWORD color, string format, ...) {
 	va_list vl;
 	va_start(vl, format);
 	font.vDraw(x, y, color, format, vl);
@@ -100,5 +105,5 @@ void AssistDrawer::drawStreamToWindow(stringstream &ss, float x, float y) {
 
 	DrawRectFilled(adjusted_x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BACKGROUND_COLOR); //black background
 	DrawRect(adjusted_x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BORDER_COLOR); // white border
-	drawFont(adjusted_x, y, BLACK, ss.str());
+	drawFont(adjusted_x, y, WHITE, ss.str());
 }

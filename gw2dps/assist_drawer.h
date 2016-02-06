@@ -23,11 +23,7 @@ class AssistDrawer
 	private:
 		static const HWND hwnd;
 
-		static const int PADX = 5;
-		static const int PADY = 2;
 		static const DWORD BACKGROUND_COLOR = 0xdd000000;
-		static const DWORD BORDER_COLOR = 0xff444444;
-		static const DWORD BLACK = 0xffffffff;
 
 		GW2LIB::Font font;
 
@@ -38,7 +34,13 @@ class AssistDrawer
 		static inline std::wstring convert(const std::string& as);
 
 	public:
+		static const int PADX = 5;
+		static const int PADY = 2;
 		static const int lineHeight = 16;
+
+		static const DWORD BORDER_COLOR = 0xff444444;
+		static const DWORD WHITE = 0xffffffff;
+		static const DWORD CYAN = 0xff66ffff;
 
 		static AssistDrawer& get()
 		{
@@ -48,6 +50,19 @@ class AssistDrawer
 
 		static StrInfo StringInfo(std::string str);
 
+		static float adjustXForNextElement(float x) {
+			return x - PADX * 3;
+		}
+
+		static float adjustYForNextElementByPos(float pos) {
+			return pos + PADY * 2;
+		}
+
+		static float adjustYForNextElementByLines(size_t lines) {
+			return float(lines * lineHeight + PADY * 2);
+		}
+
+		void drawBackground(float x, float y, StrInfo strInfo);
 		void drawFont(float x, float y, DWORD color, std::string format, ...);
 		void drawStreamToWindow(std::stringstream &ss, float x, float y);
 };

@@ -18,13 +18,6 @@ using namespace GW2LIB;
 using namespace boost;
 using namespace std;
 
-// Font Settings
-int padX = 5;
-int padY = 2;
-static const DWORD fontColor = 0xffffffff;
-static const DWORD backColor = 0xff000000;
-static const DWORD borderColor = 0xff444444;
-
 // THREADS //
 int targetLockID;
 struct Target {
