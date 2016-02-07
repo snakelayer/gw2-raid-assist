@@ -108,7 +108,8 @@ void ValeGuardian::updateSeekerState() {
 		Agent agent;
 
 		while (agent.BeNext()) {
-			if (agent.GetCharacter().GetMaxHealth() == Seeker::getMaxHp()) {
+			if ((agent.GetCharacter().GetMaxHealth() == Seeker::getMaxHp()) &&
+			    (Seeker::isSpawnPosition(agent))) {
 				seekers.push_back(Seeker(agent));
 			}
 		}

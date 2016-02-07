@@ -1,17 +1,18 @@
 #include "sabetha.h"
 
 using namespace boost;
+using namespace boost::assign;
 using namespace GW2LIB;
 using namespace std;
 
 const float Sabetha::MAX_HP = 34015256;
-map<SABETHA::COMPASS, Vector3> Sabetha::launchPositionMap = boost::assign::map_list_of
+map<SABETHA::COMPASS, Vector3> Sabetha::launchPositionMap = map_list_of
 	(SABETHA::COMPASS::NORTH, Vector3(-4980, 4390, -2480))
 	(SABETHA::COMPASS::EAST,  Vector3(-4020, 3190, -2480))
 	(SABETHA::COMPASS::SOUTH, Vector3(-5220, 2180, -2480))
 	(SABETHA::COMPASS::WEST,  Vector3(-6200, 3400, -2450));
 
-map<int, SABETHA::COMPASS> Sabetha::cannonRotationMap = boost::assign::map_list_of
+map<int, SABETHA::COMPASS> Sabetha::cannonRotationMap = map_list_of
 	(0, SABETHA::COMPASS::SOUTH)
 	(1, SABETHA::COMPASS::WEST)
 	(2, SABETHA::COMPASS::NORTH)
