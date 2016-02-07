@@ -32,11 +32,12 @@ void RaidBoss::updateState() {
 
 		writeDataToFile();
 		outputHeader.clear();
-		remainingHealth.clear();
+		remainingHealthMap.clear();
 	}
 
 	if (!encounterTimer.isStopped() && agent.GetCharacter().IsAlive()) {
-		remainingHealth.push_back(getCurrentHealth());
+		int elapsed = encounterTimer.getElapsedMilliseconds();
+		remainingHealthMap.insert(pair<int, float>(elapsed, getCurrentHealth()));
 	}
 }
 
@@ -148,7 +149,8 @@ void RaidBoss::writeDataToFile() {
 
 void RaidBoss::writeHealthData(ostream &stream) {
 	stream << "\n// Boss health over time:\n";
-	for (auto hp : remainingHealth) {
-		stream << format("%.0f\n") % hp;
+	for (auto health : remainingHealthMap) {
+		stream << format("[%s, %s],\n") % to_string(health.first) % to_string(int(health.second));
+		//stream << fixed << "[" << health.first << ", " << health.second << "],\n";
 	}
 }

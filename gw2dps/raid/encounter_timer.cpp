@@ -16,6 +16,11 @@ bool EncounterTimer::isStopped() {
 	return timer.is_stopped();
 }
 
+int EncounterTimer::getElapsedMilliseconds() {
+	lastElapsed = timer.elapsed().wall / 1e6;
+	return (int)lastElapsed;
+}
+
 int EncounterTimer::getElapsedSeconds() {
 	lastElapsed = timer.elapsed().wall / 1e9;
 	return (int)lastElapsed;

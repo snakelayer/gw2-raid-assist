@@ -15,6 +15,7 @@ class EncounterTimer
 		void start();
 		void stop();
 		bool isStopped();
+		int getElapsedMilliseconds();
 		int getElapsedSeconds();
 		int getElapsedSecondsSinceLast();
 

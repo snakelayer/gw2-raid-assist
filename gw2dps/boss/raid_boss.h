@@ -61,7 +61,7 @@ class RaidBoss {
 	private:
 		static const std::string logFile;
 
-		std::vector<float> remainingHealth;
+		std::map<int, float> remainingHealthMap;
 		float secondsToDeath;
 
 		const float X_BUFFER = 100.0f;
