@@ -31,7 +31,6 @@ class ValeGuardian : public RaidBoss
 		static const float MAX_HP;
 		const float FIRST_PHASE_TRANSITION_HP = 14553669;
 		const float SECOND_PHASE_TRANSITION_HP = 7255058;
-		const float MAGIC_STORM_COOLDOWN = 30.0f;
 
 		// for reference, HP of each guardian at the entrance:
 		// red:   2457750
