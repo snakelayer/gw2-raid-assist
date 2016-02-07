@@ -83,15 +83,6 @@ void SquadMember::inferDodgeStateWithSpeed(float speed) {
 	}
 }
 
-void SquadMember::reset() {
-	dodgeCount = 0;
-	hitsTaken = 0;
-	totalDamageTaken = 0.0f;
-	lastEndurance = 0.0f;
-	lastHealth = 0.0f;
-	lastHealthDelta = 0.0f;
-}
-
 void SquadMember::updateLastHealthDelta(GW2LIB::Character &character) {
 	float health = character.GetCurrentHealth();
 	lastHealthDelta = health - lastHealth;

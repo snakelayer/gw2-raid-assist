@@ -43,7 +43,6 @@ class SquadMember {
 		SquadMember(GW2LIB::Character character);
 		void updateStats(GW2LIB::Character &character);
 		void inferDodgeStateWithSpeed(float speed);
-		void reset();
 
 		std::string getName() { return name; }
 		int getDodgeCount() { return dodgeCount; }
