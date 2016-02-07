@@ -22,7 +22,7 @@ class Gorseval : public RaidBoss
 		*/
 
 		// anything below this (higher in damage) is considered a dodgeable hit the player took
-		static const int PLAYER_HIT_DAMAGE_THRESHOLD = -1500;
+		static const int HEAVY_HIT_DAMAGE_THRESHOLD = -1500;
 
 		Gorseval(GW2LIB::Agent agent);
 

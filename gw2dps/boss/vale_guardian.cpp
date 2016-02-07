@@ -59,7 +59,11 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 }
 
 void ValeGuardian::updateSquadState(SquadMemberMap &members) {
-
+	for (auto &member : members) {
+		if (member.second.getLastHealthDelta() < HEAVY_HIT_DAMAGE_THRESHOLD) {
+			member.second.incrementHitsTaken();
+		}
+	}
 }
 
 void ValeGuardian::drawAssistInfo() {
