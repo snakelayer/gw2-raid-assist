@@ -13,6 +13,7 @@ void disableRaidAssist() {
 }
 
 void threadRaidAssist() {
+	float pBossHealth = 0;
 	double pollingRate = 250; // ms
 
 	timer::cpu_timer timer;
@@ -30,24 +31,43 @@ void threadRaidAssist() {
 			if (elapsedMs > pollingRate) {
 				timer.start();
 				
-				if (squad == nullptr) {
-					squad = new Squad();
-				}
-				else {
-					squad->updateState();
-				}
-				
-				if (boss == nullptr) {
-					boss = RaidBossFactory::get().getNextBoss();
-					if (boss != nullptr) {
-						squad->setBoss(boss);
+				//squad&boss creation/update scope
+				{
+					if (squad == nullptr) {
+						squad = new Squad();
 					}
 					else {
-						disableRaidAssist();
+						squad->updateState();
+					}
+
+					if (boss == nullptr) {
+						boss = RaidBossFactory::get().getNextBoss();
+						if (boss != nullptr) {
+							squad->setBoss(boss);
+						}
+						else {
+							disableRaidAssist();
+						}
+					}
+					else {
+						boss->updateState(bufferBossDps);
 					}
 				}
-				else {
-					boss->updateState(bufferBossDps);
+
+				// boss damage buffer scope
+				if (boss != nullptr) {
+					float cHealth = boss->getCurrentHealth();
+
+					if (pBossHealth == 0)
+						pBossHealth = cHealth;
+
+					float dmg = pBossHealth - cHealth;
+					pBossHealth = cHealth;
+
+					if (!dpsAllowNegative && dmg < 0)
+						dmg = 0;
+
+					bufferBossDps.push_front(dmg);
 				}
 
 				if ((squad != nullptr && squad->turnOff()) ||
@@ -59,8 +79,16 @@ void threadRaidAssist() {
 		else {
 			if (!timer.is_stopped()) {
 				timer.stop();
+				pBossHealth = 0;
 			}
+
+			if (!bufferBossDps.empty())
+				bufferBossDps.clear();
+
 			disableRaidAssist();
+
+			if (!raid_boss_assist)
+				Sleep(100); // Thread not needed, sleep
 		}
 
 		if (loopLimiter)
