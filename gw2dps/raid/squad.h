@@ -33,7 +33,7 @@ class Squad
 		RaidBoss *raidBoss;
 
 		RAID::RaidState raidState;
-		bool turnOffWhenRespawn;
+		bool disable;
 		static const std::string logFile;
 
 		void updateRaidState(CharacterMap &characterMap);
@@ -55,6 +55,6 @@ class Squad
 		void outputPlayerStats(std::ostream &stream);
 
 		RAID::RaidState getRaidState() { return raidState; }
-		bool turnOff() { return turnOffWhenRespawn && GW2LIB::GetOwnCharacter().IsAlive(); }
+		bool turnOff() { return disable; }
 		std::string getLogFileName() { return logFile; }
 };

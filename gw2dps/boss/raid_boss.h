@@ -17,6 +17,7 @@
 class RaidBoss {
 	public:
 		RaidBoss(GW2LIB::Agent agent);
+		~RaidBoss();
 
 		void updateState();
 		void outputDps(std::stringstream &ss);

@@ -1,13 +1,13 @@
 void disableRaidAssist() {
-	if (boss != nullptr) {
-		delete boss;
-	}
-	boss = nullptr;
-
 	if (squad != nullptr) {
 		delete squad;
 	}
 	squad = nullptr;
+
+	if (boss != nullptr) {
+		delete boss;
+	}
+	boss = nullptr;
 
 	raid_boss_assist = false;
 }

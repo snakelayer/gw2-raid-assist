@@ -11,6 +11,10 @@ RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f), la
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 }
 
+RaidBoss::~RaidBoss() {
+	writeDataToFile();
+}
+
 void RaidBoss::updateState() {
 	if (agent.GetCharacter().GetMaxHealth() != getMaxHp()) {
 		outputHeader += str(format("// DEBUG agentId %d switch %f %f\n") % agent.GetAgentId() % getMaxHp() % agent.GetCharacter().GetMaxHealth());
@@ -25,14 +29,6 @@ void RaidBoss::updateState() {
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		outputHeader += str(format("// start time: %s\n") % now);
-	}
-	else if ((!encounterTimer.isStopped() && !hasTakenDamage()) ||
-	          !agent.GetCharacter().IsAlive()) {
-		encounterTimer.stop();
-
-		writeDataToFile();
-		outputHeader.clear();
-		remainingHealthMap.clear();
 	}
 
 	if (!encounterTimer.isStopped() && agent.GetCharacter().IsAlive()) {
@@ -151,6 +147,5 @@ void RaidBoss::writeHealthData(ostream &stream) {
 	stream << "\n// Boss health over time:\n";
 	for (auto health : remainingHealthMap) {
 		stream << format("[%s, %s],\n") % to_string(health.first) % to_string(int(health.second));
-		//stream << fixed << "[" << health.first << ", " << health.second << "],\n";
 	}
 }
