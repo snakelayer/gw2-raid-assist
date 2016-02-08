@@ -8,6 +8,7 @@
 #include "gw2lib.h"
 
 #include "raid_boss.h"
+#include "../assist_drawer.h"
 
 namespace SABETHA {
 	enum COMPASS {
@@ -32,12 +33,6 @@ class Sabetha : public RaidBoss
 		const float COMPASS_DIRECTION_LENGTH = 60.0f;
 		const float CANNON_LINE_FRACTION = 0.4f;
 		static std::map<int, SABETHA::COMPASS> cannonRotationMap;
-
-		GW2LIB::Font font;
-		static const int fontSize = 14;
-		static const DWORD BLACK = 0x00000000;
-		static const DWORD WHITE = 0xFFFFFFFF;
-		static const DWORD GREEN = 0x00FF00FF; // ??
 
 		Sabetha(GW2LIB::Agent agent);
 

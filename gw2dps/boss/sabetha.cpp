@@ -24,7 +24,6 @@ map<int, SABETHA::COMPASS> Sabetha::cannonRotationMap = map_list_of
 
 Sabetha::Sabetha(Agent agent) : RaidBoss(agent)
 {
-	font.Init(fontSize, "Verdana");
 }
 
 SABETHA::COMPASS Sabetha::getNextCannonDirection() {
@@ -37,28 +36,28 @@ Vector3 Sabetha::getDirectionPosition(Vector3 origin, SABETHA::COMPASS direction
 		return Vector3(
 			origin.x,
 			origin.y + COMPASS_DIRECTION_LENGTH,
-			origin.z - fontSize
+			origin.z - AssistDrawer::lineHeight
 		);
 	}
 	else if (direction == SABETHA::COMPASS::EAST) {
 		return Vector3(
 			origin.x + COMPASS_DIRECTION_LENGTH,
 			origin.y,
-			origin.z - fontSize
+			origin.z - AssistDrawer::lineHeight
 		);
 	}
 	else if (direction == SABETHA::COMPASS::SOUTH) {
 		return Vector3(
 			origin.x,
 			origin.y - COMPASS_DIRECTION_LENGTH,
-			origin.z - fontSize
+			origin.z - AssistDrawer::lineHeight
 		);
 	}
 	else if (direction == SABETHA::COMPASS::WEST) {
 		return Vector3(
 			origin.x - COMPASS_DIRECTION_LENGTH,
 			origin.y,
-			origin.z - fontSize
+			origin.z - AssistDrawer::lineHeight
 		);
 	}
 	else { // shut up compiler
@@ -68,20 +67,20 @@ Vector3 Sabetha::getDirectionPosition(Vector3 origin, SABETHA::COMPASS direction
 
 void Sabetha::drawCompass() {
 	Vector3 selfPos = GetOwnAgent().GetPos();
-	DrawCircleProjected(selfPos, COMPASS_RADIUS, WHITE);
+	DrawCircleProjected(selfPos, COMPASS_RADIUS, AssistDrawer::WHITE);
 	SABETHA::COMPASS direction = getNextCannonDirection();
 	int secondsUntilNextCannon = 30 - (encounterTimer.getElapsedSeconds() % 30);
 
 	float x, y;
 
 	WorldToScreen(getDirectionPosition(selfPos, SABETHA::COMPASS::NORTH), &x, &y);
-	font.Draw(x, y, WHITE, (direction == SABETHA::COMPASS::NORTH) ? str(format("N: %d") % secondsUntilNextCannon) : "N");
+	AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, (direction == SABETHA::COMPASS::NORTH) ? str(format("N: %d") % secondsUntilNextCannon) : "N");
 	WorldToScreen(getDirectionPosition(selfPos, SABETHA::COMPASS::EAST), &x, &y);
-	font.Draw(x, y, WHITE, (direction == SABETHA::COMPASS::EAST) ? str(format("E: %d") % secondsUntilNextCannon) : "E");
+	AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, (direction == SABETHA::COMPASS::EAST) ? str(format("E: %d") % secondsUntilNextCannon) : "E");
 	WorldToScreen(getDirectionPosition(selfPos, SABETHA::COMPASS::SOUTH), &x, &y);
-	font.Draw(x, y, WHITE, (direction == SABETHA::COMPASS::SOUTH) ? str(format("S: %d") % secondsUntilNextCannon) : "S");
+	AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, (direction == SABETHA::COMPASS::SOUTH) ? str(format("S: %d") % secondsUntilNextCannon) : "S");
 	WorldToScreen(getDirectionPosition(selfPos, SABETHA::COMPASS::WEST), &x, &y);
-	font.Draw(x, y, WHITE, (direction == SABETHA::COMPASS::WEST) ? str(format("W: %d") % secondsUntilNextCannon) : "W");
+	AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, (direction == SABETHA::COMPASS::WEST) ? str(format("W: %d") % secondsUntilNextCannon) : "W");
 }
 
 void Sabetha::drawLineToNextCannon() {
@@ -94,7 +93,7 @@ void Sabetha::drawLineToNextCannon() {
 		selfPos.y + ((launchPos.y - selfPos.y) * CANNON_LINE_FRACTION),
 		selfPos.z + ((launchPos.z - selfPos.z) * CANNON_LINE_FRACTION));
 
-	DrawLineProjected(selfPos, partialLaunchPoint, WHITE);
+	DrawLineProjected(selfPos, partialLaunchPoint, AssistDrawer::WHITE);
 }
 
 Vector3 Sabetha::getCannonLaunchPosition(SABETHA::COMPASS direction) {
