@@ -39,28 +39,28 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::FIRST_TRANSITION;
 		agent.m_ptr = nullptr;
-		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == VG::Phase::FIRST_TRANSITION && findRedGuardian()) {
 		phase = VG::Phase::FIRST_SPLIT;
-		outputHeader += str(format("// first transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// first transition phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == VG::Phase::FIRST_SPLIT && tryResetBossAgent()) {
 		phase = VG::Phase::SECOND;
-		outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == VG::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SECOND_TRANSITION;
 		agent.m_ptr = nullptr;
-		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == VG::Phase::SECOND_TRANSITION && findRedGuardian()) {
 		phase = VG::Phase::SECOND_SPLIT;
-		outputHeader += str(format("// second transition phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// second transition phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == VG::Phase::SECOND_SPLIT && tryResetBossAgent()) {
 		phase = VG::Phase::THIRD;
-		outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getElapsedSecondsSinceLast());
+		outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 }
 

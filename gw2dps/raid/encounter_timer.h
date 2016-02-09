@@ -17,6 +17,6 @@ class EncounterTimer
 		bool isStopped();
 		int getElapsedMilliseconds();
 		int getElapsedSeconds();
-		int getElapsedSecondsSinceLast();
+		int getSplitSeconds();
 
 };

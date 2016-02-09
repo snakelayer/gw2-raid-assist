@@ -17,16 +17,14 @@ bool EncounterTimer::isStopped() {
 }
 
 int EncounterTimer::getElapsedMilliseconds() {
-	lastElapsed = timer.elapsed().wall / 1e6;
-	return (int)lastElapsed;
+	return int(timer.elapsed().wall / 1e6);
 }
 
 int EncounterTimer::getElapsedSeconds() {
-	lastElapsed = timer.elapsed().wall / 1e9;
-	return (int)lastElapsed;
+	return int(timer.elapsed().wall / 1e9);
 }
 
-int EncounterTimer::getElapsedSecondsSinceLast() {
+int EncounterTimer::getSplitSeconds() {
 	double currentElapsed = timer.elapsed().wall / 1e9;
 	int difference = (int)(currentElapsed - lastElapsed);
 
