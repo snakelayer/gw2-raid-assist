@@ -130,7 +130,7 @@ void ESP()
 	bossDpsAnchor.x = round(GetWindowWidth() * 5 / 7);
 	bossDpsAnchor.y = 8;
 
-	aLeft.x = round(GetWindowWidth() / 10);
+	aLeft.x = round(GetWindowWidth() / 6);
 	aLeft.y = 75;
 
 	//aTopLeft.x = round((GetWindowWidth() / 2 - 316 + 280) / 2 + 316);

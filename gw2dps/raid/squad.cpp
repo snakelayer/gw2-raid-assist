@@ -82,7 +82,7 @@ void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
 }
 
 void Squad::outputPlayerStats(ostream &stream) {
-	stream << "Player\tDodges\tHitsTaken\tTotalDamageTaken\n";
+	stream << "Player\tDodgeSpeedAttainedCount\tHitsTaken\tTotalDamageTaken\n";
 	for (auto &member : members) {
 		stream << format("%-20s\t%d\t%d\t%d\n") % member.second.getName() % member.second.getDodgeCount() % member.second.getHitsTaken() % member.second.getTotalDamageTaken();
 	}
@@ -121,13 +121,12 @@ void Squad::writeStatsToFile() {
 	file.open(logFile, std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
-		string raidBossName = (raidBoss == nullptr ? "?" : raidBoss->getName());
-		file << format("\n// Boss: %s\n") % raidBossName;
-
+		file << "\n// start squad output\n";
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		file << format("// end time: %s\n") % now;
 
 		outputPlayerStats(file);
+		file << format("// end squad output\n");
 		file.close();
 	}
 }

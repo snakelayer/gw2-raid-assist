@@ -29,7 +29,8 @@ void RaidBoss::updateState() {
 
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		encounterTimer.start();
-		outputHeader += str(format("\n// Boss: %s\n") % getName());
+		outputHeader += "\n// start raid boss output\n";
+		outputHeader += str(format("// Boss: %s\n") % getName());
 		outputHeader += str(format("// DEBUG agentId: %d\n") % agent.GetAgentId());
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
@@ -126,25 +127,24 @@ float RaidBoss::dist (Vector3 p1, Vector3 p2)
 
 void RaidBoss::writeDataToFile() {
 	std::ofstream file;
-
 	file.open(logFile, std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
 		file << getOutputHeader();
 
-		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
-		file << format("// end time: %s\n") % now;
 		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
 		file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
 		file << format("// DEBUG ending agentId: %d\n") % agent.GetAgentId();
 		writeHealthData(file);
 
+		file << format("// end raid boss output\n");
 		file.close();
 	}
 }
 
 void RaidBoss::writeHealthData(ostream &stream) {
-	stream << "\n// Boss health over time:\n";
+	stream << "\n// https://jsfiddle.net/snakelayer/n7vbpjbf/" << endl;
+	stream << "// [milliseconds, boss health]:\n";
 	for (auto health : remainingHealthMap) {
 		stream << format("[%s, %s],\n") % to_string(health.first) % to_string(int(health.second));
 	}
