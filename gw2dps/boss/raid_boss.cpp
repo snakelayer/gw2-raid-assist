@@ -17,9 +17,14 @@ RaidBoss::~RaidBoss() {
 
 void RaidBoss::updateState() {
 	if (agent.GetCharacter().GetMaxHealth() != getMaxHp()) {
+		outputHeader += str(format("// DEBUG CharacterData ptr %p\n") % agent.GetCharacter().m_ptr);
 		outputHeader += str(format("// DEBUG agentId %d switch %f %f\n") % agent.GetAgentId() % getMaxHp() % agent.GetCharacter().GetMaxHealth());
-		tryResetBossAgent();
-		outputHeader += str(format("// DEBUG new agentId %d\n") % agent.GetAgentId());
+		if (tryResetBossAgent()) {
+			outputHeader += str(format("// DEBUG new agentId %d\n") % agent.GetAgentId());
+		}
+		else {
+			outputHeader += str(format("// DEBUG new agentId (same) %d\n") % agent.GetAgentId());
+		}
 	}
 
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
@@ -35,11 +40,6 @@ void RaidBoss::updateState() {
 		int elapsed = encounterTimer.getElapsedMilliseconds();
 		remainingHealthMap.insert(pair<int, float>(elapsed, getCurrentHealth()));
 	}
-}
-
-void RaidBoss::reset() {
-	secondsToDeath = 0.0f;
-	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 }
 
 void RaidBoss::outputDps(stringstream &ss) {
