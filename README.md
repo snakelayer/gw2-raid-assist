@@ -1,56 +1,19 @@
-GW2DPS
-=======
-- A DPS meter for GW2. Based on rafi's [gw2lib](http://www.gamerevision.com/showthread.php?3691-Gw2lib&p=45709).
+# gw2dps Raid Assist
+Raid Assist is a tool to help players perform better at GW2 raids. It is based on @frifox's [gw2dps](https://github.com/frifox/gw2dps/releases). That, in turn, is based on rafi's [gw2lib](http://www.gamerevision.com/showthread.php?3691-Gw2lib&p=45709). See frifox's [project page](https://github.com/frifox/gw2dps) for initial usage/build instructions.
 
-Download
-=======
-- Download & extract latest release [here](https://github.com/frifox/gw2dps/releases)
-- Run gw2dps.exe
-- File > Inject
-- Have fun.
-- To exit, hit F12 key
+# How to Use
+- Be inside a raid instance with all squad members
+- Target the raid boss and activate Raid Assist (default: Alt-B)
+- After an attempt ends (boss dies or squad wipes), stats will be output to your Gw2.exe folder. Raid Assist will automatically turn off.
 
-Build it yourself
-=======
-1. Install Git
-2. Install Visual Studio 2013
-3. Install CMake
-4. Setup Boost
-	- download [BOOST](http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.zip/download)
-	- extract to c:\local so boost root ends up as "c:\local\boost_1_59_0"
-	- open cli and run,
-	- ```setx BOOST_ROOT "c:\local\boost_1_59_0"```
-	- ```cd %BOOST_ROOT%```
-	- ```"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"```
-	- ```bootstrap.bat```
-	- ```b2 variant=release```
-5. Setup wxWidgets
-	- download [wxWidgets](http://sourceforge.net/projects/wxwindows/files/3.0.2/wxWidgets-3.0.2.zip/download)
-	- extract to c:\local, so the wxwidgets root ends up as "c:\local\wxWidgets-3.0.2"
-	- open cli and run,
-	- ```"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"```
-	- ```setx WXWIDGET_ROOT "C:\local\wxWidgets-3.0.2"```
-	- ```cd %WXWIDGET_ROOT%\build\msw```
-	- ```nmake -f makefile.vc BUILD=release```
-6. Setup the project
-	- make a dir where you'll store the files, ie "c:\hacklib"
-	- open cli and run,
-	- ```cd c:\hacklib```
-	- ```git clone https://bitbucket.org/rafzi/hacklib.git .```
-	- ```git clone https://bitbucket.org/rafzi/hacklib_gw2.git ./src/hacklib_gw2```
-	- ```git clone https://github.com/frifox/gw2dps.git ./src/gw2dps```
-	- ```rd /s /q src\disableGfx src\injector src\veh_benchmark```
-	- ```cmake .```
-7. Build
-	- open c:\hacklib\hacklib_project.sln (should auto open with VS2013)
-	- Swap build to Release
-	- Build > Build Solution
-	- compiled binaries will be found in c:\hacklib\bin folder
+# Features
+- Intended for longer encounters, so DPS is shown over a longer (10s, 30s, and 60s) period of time.
+- Tracks and displays internal state of players and bosses, which is intended to help learning and/or performing better at raids. The output is customized to be relevant for each boss, eg:
+ - Vale guardian: cooldown for Magic Storm attack
+ - Sabetha: compass and cannon timer
+- Outputs stats for each raid attempt, which is intended to help players understand what went wrong, where/when errors occurred, and possible ways to improve.
+- Player output columns:
+ - DodgeSpeedAttainedCount: The number of times the player's movement speed suggested they were dodging. Clients are not sent endurance values of other agents, so dodges can't be directly counted (except for yourself). This is an attempted *estimate* at the number of times a player has dodged. As such, this number can both overestimate (eg: Superspeed) and underestimate (eg: dodging into a horizontal barrier).
+ - HitsTaken: The number of times a player took a **heavy** hit. A heavy hit is any single amount of damage above a specific boss-dependent threshold. Usually, (at the time of this writing) damage values above this threshold can be avoided. Values lower than this is generally unavoidable periodic damage. The intention is to show how many avoidable hits each player takes.
+ - TotalDamageTaken: The total damage a player has taken in a single raid attempt.
 
-Notes
-=======
-- Before launching GW2DPS switch GW2 to "Windowed"/"Windowed Fullscreen" mode (Options->Graphics->Resolution). Once GW2DPS is running, feel free to switch back to Fullscreen. 
-- Some reported SweetFX caususing compatiblity issues. If it's causing crashes, switch it off.
-- If app is complaining about missing MSVCP120d.dll, install vsredist_x86.exe.
-- If app is complaining about missing dx3dx9_43.dll, install dxwebsetup.exe.
-- both vsredist_x86 and dxwebsetup can be found here: https://github.com/frifox/gw2dps/releases/tag/redist
