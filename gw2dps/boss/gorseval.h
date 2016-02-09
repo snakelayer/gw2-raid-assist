@@ -27,7 +27,7 @@ class Gorseval : public RaidBoss
 		Gorseval(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
-		float getBossHeight() { return 200.0f; } //TODO: check this
+		float getBossHeight() { return 500.0f; } //TODO: check this
 
 	public:
 		static RaidBoss* instance(GW2LIB::Agent agent) { return new Gorseval(agent); }
