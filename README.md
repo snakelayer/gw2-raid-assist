@@ -12,8 +12,10 @@ Raid Assist is a tool to help players perform better at GW2 raids. It is based o
  - Vale guardian: cooldown for Magic Storm attack
  - Sabetha: compass and cannon timer
 - Outputs stats for each raid attempt, which is intended to help players understand what went wrong, where/when errors occurred, and possible ways to improve.
-- Player output columns:
+- Explanation of stat output columns:
  - DodgeSpeedAttainedCount: The number of times the player's movement speed suggested they were dodging. Clients are not sent endurance values of other agents, so dodges can't be directly counted (except for yourself). This is an attempted *estimate* at the number of times a player has dodged. As such, this number can both overestimate (eg: Superspeed) and underestimate (eg: dodging into a horizontal barrier).
- - HitsTaken: The number of times a player took a **heavy** hit. A heavy hit is any single amount of damage above a specific boss-dependent threshold. Usually, (at the time of this writing) damage values above this threshold can be avoided. Values lower than this is generally unavoidable periodic damage. The intention is to show how many avoidable hits each player takes.
+ - HitsTaken: The number of times a player took a **heavy** hit. A heavy hit is any single instance of damage above a specific boss-dependent threshold. Usually, (at the time of this writing) damage values above this threshold can be avoided. Values lower than this are generally unavoidable periodic damage.
  - TotalDamageTaken: The total damage a player has taken in a single raid attempt.
 
+# Notes
+ - If the program complains that MSVCP140.dll is missing, you need the [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145). Make sure you get the version appropriate for your OS version.
