@@ -7,6 +7,8 @@ using namespace std;
 const string RaidBoss::logFile = "gw2dpsLog-RaidAssist.txt";
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
+const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
+
 RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 }
@@ -48,6 +50,13 @@ void RaidBoss::outputDps(stringstream &ss) {
 	ss << format("DPS(10s): %0.0f\n") % dps[0];
 	ss << format("DPS(30s): %0.0f\n") % dps[1];
 	ss << format("DPS(60s): %0.0f\n") % dps[2];
+}
+
+void RaidBoss::drawAssistInfo() {
+	if (GetOwnCharacter().GetProfession() == GW2::Profession::PROFESSION_ENGINEER) {
+		Vector3 pos = agent.GetPos();
+		DrawCircleProjected(pos, BOMB_KIT_RANGE, AssistDrawer::WHITE);
+	}
 }
 
 bool RaidBoss::getScreenLocation(float *x, float *y, Vector3 pos) {
@@ -105,7 +114,6 @@ void RaidBoss::drawToWindow(stringstream &ss, Vector3 pos) {
 
 void RaidBoss::outputAssistHeader(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
-	ss << format("Dist: %.0f\n") % dist(agent.GetPos(), GetOwnAgent().GetPos());
 }
 
 void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
@@ -124,11 +132,6 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 	}
 
 	secondsToDeath = (dps[1] == 0.0f ? 0 : getCurrentHealth() / dps[1]);
-}
-
-float RaidBoss::dist (Vector3 p1, Vector3 p2)
-{
-	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
 }
 
 void RaidBoss::writeDataToFile() {

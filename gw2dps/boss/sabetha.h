@@ -51,8 +51,8 @@ class Sabetha : public RaidBoss
 
 		static std::map<SABETHA::COMPASS, GW2LIB::Vector3> launchPositionMap;
 
-		const float COMPASS_RADIUS = 50.0f;
-		const float COMPASS_DIRECTION_LENGTH = 60.0f;
+		const float COMPASS_RADIUS = 240.0f;
+		const float COMPASS_DIRECTION_LENGTH = 250.0f;
 		const float CANNON_LINE_FRACTION = 0.4f;
 		static std::map<int, SABETHA::COMPASS> cannonRotationMap;
 

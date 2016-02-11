@@ -26,7 +26,7 @@ class RaidBoss {
 		virtual std::string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
 		virtual void updateSquadState(SquadMemberMap &members) = 0;
-		virtual void drawAssistInfo() = 0;
+		virtual void drawAssistInfo();
 
 		virtual bool isDead() { return !agent.GetCharacter().IsAlive(); }
 		int getAgentId() { return agent.GetAgentId(); }
@@ -65,12 +65,13 @@ class RaidBoss {
 		std::map<int, float> remainingHealthMap;
 		float secondsToDeath;
 
+		static const float BOMB_KIT_RANGE;
+
 		const float X_BUFFER = 100.0f;
 		const float Y_BUFFER = 50.0f;
 		float lastX;
 		float lastY;
 
-		float dist(GW2LIB::Vector3 p1, GW2LIB::Vector3 p2);
 		void writeDataToFile();
 		void writeHealthData(std::ostream &stream);
 };

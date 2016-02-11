@@ -34,6 +34,8 @@ void Gorseval::updateSquadState(SquadMemberMap &members) {
 }
 
 void Gorseval::drawAssistInfo() {
+	RaidBoss::drawAssistInfo();
+
 	stringstream ss;
 	RaidBoss::outputAssistHeader(ss);
 	// TODO

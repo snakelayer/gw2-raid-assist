@@ -21,6 +21,8 @@ void UnknownBoss::outputDps(stringstream &ss) {
 }
 
 void UnknownBoss::drawAssistInfo() {
+	RaidBoss::drawAssistInfo();
+
 	stringstream ss;
 	RaidBoss::outputAssistHeader(ss);
 

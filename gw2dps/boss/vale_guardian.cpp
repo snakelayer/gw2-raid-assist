@@ -77,6 +77,7 @@ void ValeGuardian::drawAssistInfo() {
 	stringstream ss;
 
 	if (!isSplit()) {
+		RaidBoss::drawAssistInfo();
 		RaidBoss::outputAssistHeader(ss);
 		addEstTimeToSplit(ss);
 		drawMagicStormStatus();
