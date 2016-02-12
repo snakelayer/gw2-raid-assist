@@ -21,7 +21,7 @@ RaidBoss* RaidBossFactory::getNextBoss() {
 
 	/*agent = GetLockedSelection();
 	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
-		return Sabetha::instance(agent);
+		return ValeGuardian::instance(agent);
 	}*/
 
 	while (agent.BeNext()) {

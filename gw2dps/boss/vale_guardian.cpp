@@ -34,6 +34,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 		RaidBoss::updateState();
 		RaidBoss::updateDps(damageBuffer);
 		updateSeekerState();
+		updateMagicStormState();
 	}
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
@@ -78,13 +79,10 @@ void ValeGuardian::drawAssistInfo() {
 	if (!isSplit()) {
 		RaidBoss::outputAssistHeader(ss);
 		addEstTimeToSplit(ss);
-		addMagicStormStatus(ss);
-
-		Vector3 pos = agent.GetPos();
-		pos.z -= getBossHeight();
-		drawToWindow(ss, pos);
-
+		drawMagicStormStatus();
 		drawSeekerStatus();
+
+		drawToWindow(ss, getDrawAssistPosition());
 	}
 	else {
 		ss.str("split phase\n");
@@ -122,6 +120,18 @@ void ValeGuardian::updateSeekerState() {
 	}
 }
 
+void ValeGuardian::updateMagicStormState() {
+	if ((magicStorm.getState() == MS::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
+		magicStorm.setState(MS::READY);
+	}
+	else if ((magicStorm.getState() == MS::READY) && (getBreakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() == 1.0f)) { // transition to active
+		magicStorm.setState(MS::ACTIVE);
+	}
+	else if ((magicStorm.getState() == MS::ACTIVE) && (getBreakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {
+		magicStorm.setState(MS::RECHARGING);
+	}
+}
+
 void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 	float remainingHealth = 0.0f;
 
@@ -138,31 +148,17 @@ void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 	}
 }
 
-void ValeGuardian::addMagicStormStatus(stringstream &ss) {
-	if ((magicStorm.getState() == MS::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
-		magicStorm.setState(MS::READY);
-	}
-	else if ((magicStorm.getState() == MS::READY) && (breakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() > 0.9f)) { // transition to active
-		magicStorm.setState(MS::ACTIVE);
-	}
-	else if ((magicStorm.getState() == MS::ACTIVE) && (breakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {// && breakbar() == 0) { // transition from active to recharging
-		magicStorm.setState(MS::RECHARGING);
+void ValeGuardian::drawMagicStormStatus() {
+	if (magicStorm.getState() == MS::PENDING) {
+		return;
 	}
 
-	if (magicStorm.getState() == MS::PENDING) {
-		//ss << "Magic Storm: PENDING";
-	}
-	else if (magicStorm.getState() == MS::READY) {
-		ss << "Magic Storm: READY\n";
-	}
-	else if (magicStorm.getState() == MS::ACTIVE) {
-		ss << "Magic Storm: ACTIVE\n";
-	}
-	else if (magicStorm.getState() == MS::RECHARGING) {
-		ss << format("Magic Storm: %d\n") % magicStorm.getCooldown();
-	}
-	else {
-		ss << "Magic Storm: ?\n";
+	Vector3 pos = getDrawAssistPosition();
+	float x, y;
+
+	if (getScreenLocation(&x, &y, pos)) {
+		y += magicStormDisplayOffset;
+		magicStorm.drawStatusMeter(x, y, getBreakbar());
 	}
 }
 

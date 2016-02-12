@@ -24,9 +24,7 @@ void UnknownBoss::drawAssistInfo() {
 	stringstream ss;
 	RaidBoss::outputAssistHeader(ss);
 
-	Vector3 pos = agent.GetPos();
-	pos.z -= getBossHeight();
-	drawToWindow(ss, pos);
+	drawToWindow(ss, getDrawAssistPosition());
 }
 
 int UnknownBoss::getEncounterTime() {

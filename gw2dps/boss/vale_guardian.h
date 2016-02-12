@@ -54,6 +54,8 @@ class ValeGuardian : public RaidBoss
 		*/
 		static const int HEAVY_HIT_DAMAGE_THRESHOLD = -1800;
 
+		const float magicStormDisplayOffset = 40.0f;
+
 		std::list<Seeker> seekers;
 		MagicStorm magicStorm;
 		VG::Phase phase;
@@ -65,9 +67,10 @@ class ValeGuardian : public RaidBoss
 		bool isSplit() { return !(phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD); }
 
 		void updateSeekerState();
+		void updateMagicStormState();
 
 		void addEstTimeToSplit(std::stringstream &ss);
-		void addMagicStormStatus(std::stringstream &ss);
+		void drawMagicStormStatus();
 		void drawSeekerStatus();
 
 		bool findRedGuardian();

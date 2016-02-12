@@ -123,9 +123,7 @@ void Sabetha::drawAssistInfo() {
 	drawCompass();
 	drawLineToNextCannon();
 
-	Vector3 pos = agent.GetPos();
-	pos.z -= getBossHeight();
-	drawToWindow(ss, pos);
+	drawToWindow(ss, getDrawAssistPosition());
 }
 
 void Sabetha::outputDebug(stringstream &ss) {

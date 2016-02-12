@@ -74,6 +74,12 @@ bool RaidBoss::getScreenLocation(float *x, float *y, Vector3 pos) {
 	return false;
 }
 
+Vector3 RaidBoss::getDrawAssistPosition() {
+	Vector3 pos = agent.GetPos();
+	pos.z -= getBossHeight();
+	return pos;
+}
+
 bool RaidBoss::tryResetBossAgent() {
 	Agent nextAgent;
 

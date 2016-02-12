@@ -42,6 +42,10 @@ class AssistDrawer
 		static const DWORD WHITE = 0xffffffff;
 		static const DWORD CYAN = 0xff66ffff;
 
+		static const DWORD BREAKBAR_FULL = 0xff418278;
+		static const DWORD BREAKBAR_DEPLETING = 0xff418278;
+		static const DWORD BREAKBAR_RECHARGING = 0Xffa06841;
+
 		static AssistDrawer& get()
 		{
 			static AssistDrawer instance;
