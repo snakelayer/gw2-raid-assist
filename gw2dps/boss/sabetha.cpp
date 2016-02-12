@@ -22,7 +22,7 @@ map<int, SABETHA::COMPASS> Sabetha::cannonRotationMap = map_list_of
 	(6, SABETHA::COMPASS::WEST)
 	(7, SABETHA::COMPASS::EAST);
 
-Sabetha::Sabetha(Agent agent) : RaidBoss(agent)
+Sabetha::Sabetha(Agent agent) : RaidBoss(agent), phase(SABETHA::Phase::FIRST)
 {
 }
 
@@ -111,6 +111,31 @@ bool Sabetha::matchesTarget(Agent &agent) {
 void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateState();
 	RaidBoss::updateDps(damageBuffer);
+
+	if (phase == SABETHA::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
+		phase = SABETHA::Phase::KERNAN;
+		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
+	else if (phase == SABETHA::Phase::KERNAN && isAtStartPosition()) {
+		phase = SABETHA::Phase::SECOND;
+		outputHeader += str(format("// Kernan phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
+	else if(phase == SABETHA::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
+		phase = SABETHA::Phase::KNUCKLES;
+		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
+	else if (phase == SABETHA::Phase::KNUCKLES && isAtStartPosition()) {
+		phase = SABETHA::Phase::THIRD;
+		outputHeader += str(format("// Knuckles phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
+	else if (phase == SABETHA::Phase::THIRD && getCurrentHealth() <= THIRD_PHASE_TRANSITION_HP) {
+		phase = SABETHA::Phase::KARDE;
+		outputHeader += str(format("// third phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
+	else if (phase == SABETHA::Phase::KARDE && isAtStartPosition()) {
+		phase = SABETHA::Phase::FOURTH;
+		outputHeader += str(format("// Karde phase: %d\n") % encounterTimer.getSplitSeconds());
+	}
 }
 
 void Sabetha::updateSquadState(SquadMemberMap &members) {

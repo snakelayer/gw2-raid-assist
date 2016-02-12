@@ -11,6 +11,16 @@
 #include "../assist_drawer.h"
 
 namespace SABETHA {
+	enum Phase {
+		FIRST = 0,
+		KERNAN,
+		SECOND,
+		KNUCKLES,
+		THIRD,
+		KARDE,
+		FOURTH
+	};
+
 	enum COMPASS {
 		NORTH = 0,
 		EAST,
@@ -27,6 +37,18 @@ class Sabetha : public RaidBoss
 		const float SECOND_PHASE_TRANSITION_HP = 16643379;
 		const float THIRD_PHASE_TRANSITION_HP = MAX_HP/4; // TODO verify
 
+		const float KERNAN_MAX_HP = 3440850;
+		const float KNUCKLES_MAX_HP = 3440850;
+		const float KARDE_MAX_HP = 4423950;
+
+		SABETHA::Phase phase;
+
+		const GW2LIB::Vector3 SABETHA_START_POSITION = GW2LIB::Vector3(
+			-5078.209961f,
+			3356.969971f,
+			-2457.178711f);
+		const GW2LIB::Vector3 SABETHA_PHASE_POSITION;
+
 		static std::map<SABETHA::COMPASS, GW2LIB::Vector3> launchPositionMap;
 
 		const float COMPASS_RADIUS = 50.0f;
@@ -38,6 +60,11 @@ class Sabetha : public RaidBoss
 
 		float getMaxHp() { return MAX_HP; }
 		float getBossHeight() { return 140.0f; } //TODO: check this
+		bool isAtStartPosition() {
+			return (SABETHA_START_POSITION.x == agent.GetPos().x) &&
+				   (SABETHA_START_POSITION.y == agent.GetPos().y) &&
+				   (SABETHA_START_POSITION.z == agent.GetPos().z);
+		}
 
 		SABETHA::COMPASS getNextCannonDirection();
 		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);
