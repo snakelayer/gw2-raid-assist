@@ -1,5 +1,5 @@
 # gw2 Raid Assist
-Raid Assist is a tool to help players perform better at GW2 raids. It is based on @frifox's [gw2dps](https://github.com/frifox/gw2dps/releases). That, in turn, is based on rafi's [gw2lib](http://www.gamerevision.com/showthread.php?3691-Gw2lib&p=45709). See frifox's [project page](https://github.com/frifox/gw2dps) for initial usage/build instructions.
+Raid Assist is a tool to help players perform better at GW2 raids. It is based on @frifox's [gw2dps](https://github.com/frifox/gw2dps/releases). That, in turn, is based on rafi's [hacklib_gw2](http://www.gamerevision.com/showthread.php?3691-Gw2lib&p=45709). See frifox's [project page](https://github.com/frifox/gw2dps) for initial usage/build instructions.
 
 # How to Use
 - Be inside a raid instance with all squad members
