@@ -1,4 +1,4 @@
-void disableRaidAssist() {
+int disableRaidAssist() {
 	if (squad != nullptr) {
 		delete squad;
 	}
@@ -10,9 +10,11 @@ void disableRaidAssist() {
 	boss = nullptr;
 
 	raid_boss_assist = false;
+	return 0;
 }
 
 void threadRaidAssist() {
+	int mapId = 0;
 	float pBossHealth = 0;
 	double pollingRate = 250; // ms
 
@@ -22,6 +24,14 @@ void threadRaidAssist() {
 		this_thread::interruption_point();
 
 		if (raid_boss_assist) {
+			if (mapId == 0) {
+				mapId = GetCurrentMapId();
+			}
+			else if (mapId != GetCurrentMapId()) {
+				mapId = disableRaidAssist();
+				continue;
+			}
+
 			if (timer.is_stopped()) {
 				timer.start();
 			}
@@ -46,7 +56,7 @@ void threadRaidAssist() {
 							squad->setBoss(boss);
 						}
 						else {
-							disableRaidAssist();
+							mapId = disableRaidAssist();
 						}
 					}
 					else {
@@ -70,9 +80,13 @@ void threadRaidAssist() {
 					bufferBossDps.push_front(dmg);
 				}
 
+				if (squad != nullptr && boss != nullptr) {
+					mapId = GetCurrentMapId();
+				}
+
 				if ((squad != nullptr && squad->turnOff()) ||
 					(boss != nullptr && boss->isDead())) {
-					disableRaidAssist();
+					mapId = disableRaidAssist();
 				}
 			}
 		}
@@ -85,7 +99,7 @@ void threadRaidAssist() {
 			if (!bufferBossDps.empty())
 				bufferBossDps.clear();
 
-			disableRaidAssist();
+			mapId = disableRaidAssist();
 
 			if (!raid_boss_assist)
 				Sleep(100); // Thread not needed, sleep
