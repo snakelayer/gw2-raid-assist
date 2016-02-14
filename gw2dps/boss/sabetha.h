@@ -43,6 +43,8 @@ class Sabetha : public RaidBoss
 		const float KNUCKLES_MAX_HP = 3440850;
 		const float KARDE_MAX_HP = 4423950;
 
+		const float flamewallDisplayOffset = 20.0f;
+
 		SABETHA::Phase phase;
 		Flamewall flamewall;
 
@@ -62,7 +64,7 @@ class Sabetha : public RaidBoss
 		Sabetha(GW2LIB::Agent agent);
 
 		float getMaxHp() { return MAX_HP; }
-		float getBossHeight() { return 140.0f; } //TODO: check this
+		float getBossHeight() { return 300.0f; } //TODO: check this
 		bool isAtStartPosition() {
 			return (SABETHA_START_POSITION.x == agent.GetPos().x) &&
 				   (SABETHA_START_POSITION.y == agent.GetPos().y) &&
@@ -70,6 +72,7 @@ class Sabetha : public RaidBoss
 		}
 
 		void updateFlamewallState();
+		void drawFlamewallStatus();
 
 		SABETHA::COMPASS getNextCannonDirection();
 		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);

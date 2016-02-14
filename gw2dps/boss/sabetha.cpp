@@ -40,7 +40,7 @@ void Sabetha::updateFlamewallState() {
 		}
 	}
 	else if (flamewall.getState() == FW::State::ACTIVATING) {
-		if (!flamewall.tryUpdateRotation(agent.GetRot())) { // TODO: this may not be the same when sabetha returns to center
+		if (!flamewall.tryUpdateRotation(agent.GetRot())) {
 			flamewall.tryStartAttack();
 		}
 	}
@@ -52,6 +52,31 @@ void Sabetha::updateFlamewallState() {
 	else if (flamewall.getState() == FW::State::RECHARGING) {
 		if (!isAtStartPosition()) {
 			flamewall.disable();
+		}
+	}
+}
+
+void Sabetha::drawFlamewallStatus() {
+	Vector3 pos = getDrawAssistPosition();
+	float x, y;
+	bool onScreen = getScreenLocation(&x, &y, pos);
+	y += flamewallDisplayOffset;
+
+	if ((flamewall.getState() == FW::State::FIRST_CHARGE) || (flamewall.getState() == FW::State::RECHARGING)) {
+		if (onScreen) {
+			flamewall.drawCooldownMeter(x, y);
+		}
+	}
+	else if (flamewall.getState() == FW::State::ACTIVATING) {
+		flamewall.drawActivatingMarker(SABETHA_START_POSITION);
+		if (onScreen) {
+			flamewall.drawCooldownMeter(x, y);
+		}
+	}
+	else if (flamewall.getState() == FW::State::ACTIVE) {
+		flamewall.drawActiveMarker(SABETHA_START_POSITION);
+		if (onScreen) {
+			flamewall.drawCooldownMeter(x, y);
 		}
 	}
 }
@@ -178,12 +203,15 @@ void Sabetha::updateSquadState(SquadMemberMap &members) {
 }
 
 void Sabetha::drawAssistInfo() {
-	stringstream ss;
-
 	drawCompass();
 	drawLineToNextCannon();
 
-	drawToWindow(ss, getDrawAssistPosition());
+	if (isAtStartPosition()) {
+		drawFlamewallStatus();
+	}
+
+	//stringstream ss;
+	//drawToWindow(ss, getDrawAssistPosition());
 }
 
 void Sabetha::outputDebug(stringstream &ss) {
@@ -192,4 +220,8 @@ void Sabetha::outputDebug(stringstream &ss) {
 	ss << format("agent ptr: %p\n") % &agent;
 	ss << format("boss dead: %s\n") % (isDead() ? "yes" : "no");
 	ss << format("elapsed: %d\n") % encounterTimer.getElapsedSeconds();
+	ss << format("fw cooldown: %f\n") % flamewall.getCooldown();
+	ss << format("fw state: %d\n") % flamewall.getState();
+	ss << format("is centered: %s\n") % (isAtStartPosition() ? "yes" : "no");
+	ss << outputHeader;
 }
