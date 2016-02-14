@@ -43,6 +43,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/boss/skills/seeker.cpp
 	gw2dps/boss/skills/magic_storm.h
 	gw2dps/boss/skills/magic_storm.cpp
+	gw2dps/boss/skills/flamewall.h
+	gw2dps/boss/skills/flamewall.cpp
 	gw2dps/boss/raid_boss.h
 	gw2dps/boss/raid_boss.cpp
 	gw2dps/boss/unknown_boss.h

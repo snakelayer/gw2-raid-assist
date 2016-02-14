@@ -1,5 +1,4 @@
 #include "vale_guardian.h"
-#include "skills/magic_storm.h"
 
 using namespace boost;
 using namespace GW2LIB;

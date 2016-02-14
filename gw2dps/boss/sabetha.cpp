@@ -6,6 +6,7 @@ using namespace GW2LIB;
 using namespace std;
 
 const float Sabetha::MAX_HP = 34015256;
+
 map<SABETHA::COMPASS, Vector3> Sabetha::launchPositionMap = map_list_of
 	(SABETHA::COMPASS::NORTH, Vector3(-4980, 4390, -2480))
 	(SABETHA::COMPASS::EAST,  Vector3(-4020, 3190, -2480))
@@ -24,6 +25,35 @@ map<int, SABETHA::COMPASS> Sabetha::cannonRotationMap = map_list_of
 
 Sabetha::Sabetha(Agent agent) : RaidBoss(agent), phase(SABETHA::Phase::FIRST)
 {
+}
+
+void Sabetha::updateFlamewallState() {
+	if (flamewall.getState() == FW::State::PENDING_START && !encounterTimer.isStopped()) {
+		flamewall.startFirstCharge();
+	}
+	else if (flamewall.getState() == FW::State::PENDING_CENTER && isAtStartPosition()) {
+		flamewall.startActivating();
+	}
+	else if (flamewall.getState() == FW::State::FIRST_CHARGE) {
+		if (!isAtStartPosition()) {
+			flamewall.disable();
+		}
+	}
+	else if (flamewall.getState() == FW::State::ACTIVATING) {
+		if (!flamewall.tryUpdateRotation(agent.GetRot())) { // TODO: this may not be the same when sabetha returns to center
+			flamewall.tryStartAttack();
+		}
+	}
+	else if (flamewall.getState() == FW::State::ACTIVE) {
+		if (!isAtStartPosition()) {
+			flamewall.disable();
+		}
+	}
+	else if (flamewall.getState() == FW::State::RECHARGING) {
+		if (!isAtStartPosition()) {
+			flamewall.disable();
+		}
+	}
 }
 
 SABETHA::COMPASS Sabetha::getNextCannonDirection() {
@@ -112,8 +142,11 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateState();
 	RaidBoss::updateDps(damageBuffer);
 
+	updateFlamewallState();
+
 	if (phase == SABETHA::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KERNAN;
+		flamewall.disable();
 		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == SABETHA::Phase::KERNAN && isAtStartPosition()) {
@@ -122,6 +155,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 	else if(phase == SABETHA::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KNUCKLES;
+		flamewall.disable();
 		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == SABETHA::Phase::KNUCKLES && isAtStartPosition()) {
@@ -130,6 +164,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 	else if (phase == SABETHA::Phase::THIRD && getCurrentHealth() <= THIRD_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KARDE;
+		flamewall.disable();
 		outputHeader += str(format("// third phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if (phase == SABETHA::Phase::KARDE && isAtStartPosition()) {

@@ -8,6 +8,8 @@
 #include "gw2lib.h"
 
 #include "raid_boss.h"
+#include "skills/flamewall.h"
+
 #include "../assist_drawer.h"
 
 namespace SABETHA {
@@ -42,6 +44,7 @@ class Sabetha : public RaidBoss
 		const float KARDE_MAX_HP = 4423950;
 
 		SABETHA::Phase phase;
+		Flamewall flamewall;
 
 		const GW2LIB::Vector3 SABETHA_START_POSITION = GW2LIB::Vector3(
 			-5078.209961f,
@@ -65,6 +68,8 @@ class Sabetha : public RaidBoss
 				   (SABETHA_START_POSITION.y == agent.GetPos().y) &&
 				   (SABETHA_START_POSITION.z == agent.GetPos().z);
 		}
+
+		void updateFlamewallState();
 
 		SABETHA::COMPASS getNextCannonDirection();
 		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);
