@@ -33,9 +33,10 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	if (agent.IsValid() && !isSplit()) {
 		RaidBoss::updateState();
 		RaidBoss::updateDps(damageBuffer);
-		updateSeekerState();
 		updateMagicStormState();
 	}
+
+	updateSeekerState();
 
 	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::FIRST_TRANSITION;
@@ -76,12 +77,12 @@ void ValeGuardian::updateSquadState(SquadMemberMap &members) {
 void ValeGuardian::drawAssistInfo() {
 	stringstream ss;
 
+	drawSeekerStatus();
 	if (!isSplit()) {
 		RaidBoss::drawAssistInfo();
 		RaidBoss::outputAssistHeader(ss);
 		addEstTimeToSplit(ss);
 		drawMagicStormStatus();
-		drawSeekerStatus();
 
 		drawToWindow(ss, getDrawAssistPosition());
 	}
