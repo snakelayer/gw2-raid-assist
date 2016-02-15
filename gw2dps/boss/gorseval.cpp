@@ -28,7 +28,7 @@ void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
 void Gorseval::updateSquadState(SquadMemberMap &members) {
 	for (auto &member : members) {
 		if (member.second.getLastHealthDelta() < HEAVY_HIT_DAMAGE_THRESHOLD) {
-			member.second.incrementHitsTaken();
+			member.second.takeHeavyHit();
 		}
 	}
 }

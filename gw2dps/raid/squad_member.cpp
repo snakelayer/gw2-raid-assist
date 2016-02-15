@@ -7,7 +7,8 @@ const float SquadMember::SUPERSPEED_THRESHOLD = 38.0f;
 SquadMember::SquadMember(GW2LIB::Character character) :
 	name(character.GetName()),
 	dodgeCount(0),
-	hitsTaken(0),
+	heavyHitsTaken(0),
+	heavyDamageTaken(0.0f),
 	totalDamageTaken(0.0f),
 	speedState(SM::SPEED_STATE::BASIC),
 	isAlive(character.IsAlive()),
@@ -18,10 +19,10 @@ SquadMember::SquadMember(GW2LIB::Character character) :
 }
 
 void SquadMember::updateStats(GW2LIB::Character &character) {
-	isAlive = character.IsAlive();
 	updateLastHealthDelta(character);
 	updateDamageTaken();
 	//updateDodgeCount(character);
+	isAlive = character.IsAlive();
 }
 
 void SquadMember::inferDodgeStateWithSpeed(float speed) {
@@ -83,10 +84,29 @@ void SquadMember::inferDodgeStateWithSpeed(float speed) {
 	}
 }
 
+void SquadMember::takeHeavyHit() {
+	heavyDamageTaken -= lastHealthDelta;
+	++heavyHitsTaken;
+}
+
 void SquadMember::updateLastHealthDelta(GW2LIB::Character &character) {
 	float health = character.GetCurrentHealth();
-	lastHealthDelta = health - lastHealth;
-	lastHealth = health;
+
+	if (isAlive && character.IsAlive()) {
+		lastHealthDelta = health - lastHealth;
+		lastHealth = health;
+	}
+	else if (isAlive) {
+		lastHealthDelta = -lastHealth;
+		lastHealth = 0;
+	}
+	else if (character.IsAlive()) {
+		lastHealthDelta = 0;
+		lastHealth = health;
+	}
+	else {
+		lastHealthDelta = 0;
+	}
 }
 
 void SquadMember::updateDamageTaken() {

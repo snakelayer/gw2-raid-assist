@@ -82,9 +82,9 @@ void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
 }
 
 void Squad::outputPlayerStats(ostream &stream) {
-	stream << "Player\tDodgeSpeedAttainedCount\tHitsTaken\tTotalDamageTaken\n";
+	stream << "Player\tDodgeSpeedAttainedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\n";
 	for (auto &member : members) {
-		stream << format("%-20s\t%d\t%d\t%d\n") % member.second.getName() % member.second.getDodgeCount() % member.second.getHitsTaken() % member.second.getTotalDamageTaken();
+		stream << format("%-20s\t%d\t%d\t%d\t%d\n") % member.second.getName() % member.second.getDodgeCount() % member.second.getHeavyHitsTaken() % member.second.getHeavyDamageTaken() % member.second.getTotalDamageTaken();
 	}
 }
 

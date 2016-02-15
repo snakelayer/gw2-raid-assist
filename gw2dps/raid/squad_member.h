@@ -22,7 +22,8 @@ class SquadMember {
 
 		std::string name;
 		int dodgeCount;
-		int hitsTaken;
+		int heavyHitsTaken;
+		float heavyDamageTaken;
 		float totalDamageTaken;
 
 		SM::SPEED_STATE speedState;
@@ -47,10 +48,11 @@ class SquadMember {
 		std::string getName() { return name; }
 		int getDodgeCount() { return dodgeCount; }
 		float getLastHealthDelta() { return lastHealthDelta; }
-		int getHitsTaken() { return hitsTaken; }
+		int getHeavyHitsTaken() { return heavyHitsTaken; }
+		float getHeavyDamageTaken() { return heavyDamageTaken; }
 		float getTotalDamageTaken() { return totalDamageTaken; }
 
-		void incrementHitsTaken() { if (isAlive) { ++hitsTaken; } }
+		void takeHeavyHit();
 
 		SM::SPEED_STATE getSpeedState() { return speedState; }
 };
