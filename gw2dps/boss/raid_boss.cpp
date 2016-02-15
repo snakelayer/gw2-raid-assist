@@ -18,22 +18,10 @@ RaidBoss::~RaidBoss() {
 }
 
 void RaidBoss::updateState() {
-	if (agent.GetCharacter().GetMaxHealth() != getMaxHp()) {
-		outputHeader += str(format("// DEBUG CharacterData ptr %p\n") % agent.GetCharacter().m_ptr);
-		outputHeader += str(format("// DEBUG agentId %d switch %f %f\n") % agent.GetAgentId() % getMaxHp() % agent.GetCharacter().GetMaxHealth());
-		if (tryResetBossAgent()) {
-			outputHeader += str(format("// DEBUG new agentId %d\n") % agent.GetAgentId());
-		}
-		else {
-			outputHeader += str(format("// DEBUG new agentId (same) %d\n") % agent.GetAgentId());
-		}
-	}
-
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		encounterTimer.start();
 		outputHeader += "\n// start raid boss output\n";
 		outputHeader += str(format("// Boss: %s\n") % getName());
-		outputHeader += str(format("// DEBUG agentId: %d\n") % agent.GetAgentId());
 
 		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
 		outputHeader += str(format("// start time: %s\n") % now);
@@ -57,6 +45,17 @@ void RaidBoss::drawAssistInfo() {
 		Vector3 pos = agent.GetPos();
 		DrawCircleProjected(pos, BOMB_KIT_RANGE, AssistDrawer::WHITE);
 	}
+}
+
+bool RaidBoss::isDead() {
+	Character character = agent.GetCharacter();
+	if (character.m_ptr == nullptr) {
+		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+		outputHeader += str(format("// DEBUG could not find character object for isDead check at time: %s\n") % now);
+		return false;
+	}
+
+	return !character.IsAlive();
 }
 
 bool RaidBoss::getScreenLocation(float *x, float *y, Vector3 pos) {
@@ -143,7 +142,6 @@ void RaidBoss::writeDataToFile() {
 
 		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
 		file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
-		file << format("// DEBUG ending agentId: %d\n") % agent.GetAgentId();
 		writeHealthData(file);
 
 		file << format("// end raid boss output\n");

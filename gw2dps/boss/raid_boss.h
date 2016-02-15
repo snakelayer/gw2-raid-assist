@@ -28,7 +28,7 @@ class RaidBoss {
 		virtual void updateSquadState(SquadMemberMap &members) = 0;
 		virtual void drawAssistInfo();
 
-		virtual bool isDead() { return !agent.GetCharacter().IsAlive(); }
+		virtual bool isDead();
 		int getAgentId() { return agent.GetAgentId(); }
 		float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
 		float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
