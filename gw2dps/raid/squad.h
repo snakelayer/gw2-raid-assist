@@ -34,7 +34,7 @@ class Squad
 
 		RAID::RaidState raidState;
 		bool disable;
-		static const std::string logFile;
+		static const std::string logFilePrefix;
 
 		void updateRaidState(CharacterMap &characterMap);
 		void writeStatsToFile();
@@ -56,5 +56,5 @@ class Squad
 
 		RAID::RaidState getRaidState() { return raidState; }
 		bool turnOff() { return disable; }
-		std::string getLogFileName() { return logFile; }
+		std::string getLogFileName();
 };

@@ -3,7 +3,7 @@
 using namespace boost;
 using namespace std;
 
-const std::string Squad::logFile = "gw2dpsLog-RaidAssist.txt";
+const std::string Squad::logFilePrefix = "gw2dpsLog-RaidAssist-";
 
 Squad::Squad()
 	: disable(false), raidState(RAID::ACTIVE) {
@@ -88,6 +88,11 @@ void Squad::outputPlayerStats(ostream &stream) {
 	}
 }
 
+string Squad::getLogFileName() {
+	string localNow = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
+	return logFilePrefix + localNow + ".txt";
+}
+
 void Squad::updateRaidState(CharacterMap &characterMap) {
 	bool allDead = true;
 	bool allDowned = true;
@@ -118,13 +123,10 @@ void Squad::updateRaidState(CharacterMap &characterMap) {
 
 void Squad::writeStatsToFile() {
 	std::ofstream file;
-	file.open(logFile, std::ofstream::out | std::ofstream::app);
+	file.open(getLogFileName(), std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
 		file << "\n// start squad output\n";
-		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
-		file << format("// end time: %s\n") % now;
-
 		outputPlayerStats(file);
 		file << format("// end squad output\n");
 		file.close();

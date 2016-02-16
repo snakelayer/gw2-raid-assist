@@ -4,7 +4,7 @@ using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 
-const string RaidBoss::logFile = "gw2dpsLog-RaidAssist.txt";
+const string RaidBoss::logFilePrefix = "gw2dpsLog-RaidAssist-";
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
 const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
@@ -135,11 +135,12 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
 
 void RaidBoss::writeDataToFile() {
 	std::ofstream file;
-	file.open(logFile, std::ofstream::out | std::ofstream::app);
+	file.open(getLogFileName(), std::ofstream::out | std::ofstream::app);
 
 	if (file.is_open()) {
 		file << getOutputHeader();
-
+		string universalNow = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+		file << format("//   end time: %s\n") % universalNow;
 		file << format("// remaining health: %d\n") % (int)getCurrentHealth();
 		file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
 		writeHealthData(file);
@@ -155,4 +156,9 @@ void RaidBoss::writeHealthData(ostream &stream) {
 	for (auto health : remainingHealthMap) {
 		stream << format("[%s, %s],\n") % to_string(health.first) % to_string(int(health.second));
 	}
+}
+
+string RaidBoss::getLogFileName() {
+	string localNow = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
+	return logFilePrefix + localNow + ".txt";
 }

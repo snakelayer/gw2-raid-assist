@@ -60,7 +60,7 @@ class RaidBoss {
 		void updateDps(boost::circular_buffer<float> &damageBuffer);
 
 	private:
-		static const std::string logFile;
+		static const std::string logFilePrefix;
 
 		std::map<int, float> remainingHealthMap;
 		float secondsToDeath;
@@ -74,4 +74,5 @@ class RaidBoss {
 
 		void writeDataToFile();
 		void writeHealthData(std::ostream &stream);
+		std::string getLogFileName();
 };
