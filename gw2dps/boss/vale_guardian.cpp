@@ -9,10 +9,10 @@ const float ValeGuardian::MAX_HP = 22021440;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
-	if (getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
+	if (agent.GetCharacter().GetCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::SECOND_SPLIT;
 	}
-	else if (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
+	else if (agent.GetCharacter().GetCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = VG::Phase::FIRST_SPLIT;
 	}
 }
