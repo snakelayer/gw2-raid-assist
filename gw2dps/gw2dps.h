@@ -18,10 +18,12 @@ using namespace GW2LIB;
 using namespace boost;
 using namespace std;
 
+Texture icon;
+
 // THREADS //
 int targetLockID;
 struct Target {
-	Target() : valid(false), alive(true), id(0), type(0), cHealth(0), mHealth(0), pHealth(0), lvl(0), lvlActual(0), pos(Vector3(0,0,0)), breakbar(0) {}
+	Target() : valid(false), alive(true), id(0), type(0), cHealth(0), mHealth(0), pHealth(0), lvl(0), lvlActual(0), pos(Vector3(0,0,0)), breakbar(0), rot(0) {}
 
 	bool valid;
 	bool alive;
@@ -35,12 +37,13 @@ struct Target {
 	float breakbar;
 
 	Vector3 pos;
+    float rot;
 };
 Target selected;
 Target locked;
 Target self;
 struct Ally {
-	Ally() : id(0), profession(0), lvl(0), lvlActual(0), cHealth(0), mHealth(0), pHealth(0), vitality(0), pos({ 0, 0, 0 }), name("") {}
+	Ally() : id(0), profession(0), lvl(0), lvlActual(0), cHealth(0), mHealth(0), pHealth(0), vitality(0), pos({ 0, 0, 0 }), name(""), rot(0) {}
 
 	int id;
 	int profession;
@@ -51,6 +54,7 @@ struct Ally {
 	float pHealth; // current health in percent
 
 	Vector3 pos;
+    float rot;
 
 	int vitality;
 	string name;
@@ -70,6 +74,7 @@ struct Allies {
 };
 struct Float {
 	Vector3 pos;
+    float rot = 0;
 	float mHealth;
 	int prof;
 };

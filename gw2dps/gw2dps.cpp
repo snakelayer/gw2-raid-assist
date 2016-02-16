@@ -10,6 +10,9 @@
 #include "boss/vale_guardian.h"
 #include "boss/raid_boss_factory.h"
 
+#include "hacklib/Main.h"
+#include "hacklib/Logging.h"
+
 // Settings //
 bool killApp = false;
 
@@ -83,6 +86,11 @@ bool logDisplacement = false;
 bool logDisplacementEnemy = false;
 Vector3 logDisplacementStart = Vector3(0, 0, 0);
 
+bool mouse_down = false;
+int mouse_delta = 0, mouse_btn = 0, mouse_x = 0, mouse_y = 0, mouse_keys = 0;
+string chat;
+timer::cpu_timer timer2;
+
 bool raid_debug = false;
 bool raid_boss_assist = false;
 
@@ -153,6 +161,7 @@ void ESP()
 	aBottom.x = round(GetWindowWidth() * float(0.5));
 	aBottom.y = round(GetWindowHeight() - float(85));
 
+	AssistDrawer::get().drawFont(10, 10, AssistDrawer::WHITE, "delta: %i  down: %i  keys: %i  x: %i  y: %i  btn: %i\n%s", mouse_delta, mouse_down, mouse_keys, mouse_x, mouse_y, mouse_btn, chat.c_str());
 
 	if (help)
 	{
@@ -224,13 +233,6 @@ void ESP()
 		DrawRect(x - box, y - box, box * 2, box * 2, AssistDrawer::BORDER_COLOR);
 	}
 
-	if (selfFloat)
-	{
-		DWORD color = 0x4433ff00;
-		DrawCircleProjected(self.pos, 20.0f, color);
-		DrawCircleFilledProjected(self.pos, 20.0f, color - 0x30000000);
-	}
-
 	// Targets & Agents //
 	me = GetOwnCharacter();
 	if (me.IsValid()){
@@ -248,6 +250,29 @@ void ESP()
 		self.lvlActual = me.GetLevel();
 		self.alive = me.IsAlive();
 	}
+
+    if (selfFloat && GetOwnAgent().IsValid())
+    {
+        Vector3 rotArrow = {
+            self.pos.x + cos(GetOwnAgent().GetRot()) * 50.0f,
+            self.pos.y + sin(GetOwnAgent().GetRot()) * 50.0f,
+            self.pos.z
+        };
+
+        DWORD color = 0x4433ff00;
+        DrawCircleProjected(self.pos, 20.0f, color);
+        DrawRectFilledProjected(rotArrow, 20, 5, GetOwnAgent().GetRot(), color);
+        DrawCircleFilledProjected(self.pos, 20.0f, color - 0x30000000);
+        
+        /*float x, y;
+        if (WorldToScreen(self.pos, &x, &y)) {
+            stringstream fs;
+            fs << format("%.4f") % GetOwnAgent().GetRot();
+            StrInfo fsInfo = StringInfo(fs.str());
+            font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
+        }*/
+    }
+
 	Agent agLocked = GetLockedSelection();
 	if (agLocked.IsValid())
 	{
@@ -470,6 +495,7 @@ void ESP()
 
 				// gather data
 				Vector3 pos = ag.GetPos();
+                float rot = ag.GetRot();
 				float cHealth = ch.GetCurrentHealth();
 				float mHealth = ch.GetMaxHealth();
 				int attitude = ch.GetAttitude();
@@ -483,6 +509,7 @@ void ESP()
 					{
 						Float floater;
 						floater.pos = pos;
+                        floater.rot = rot;
 						floater.mHealth = mHealth;
 						floater.prof = prof;
 
@@ -561,6 +588,130 @@ void ESP()
 			stringstream ss;
 			squad->outputPlayerStats(ss);
 			drawElementAt(ss, aLeft);
+		
+		}
+		stringstream ss;
+		StrInfo strInfo;
+
+		if (floatCircles)
+		{
+			float x, y;
+			if (floatAllyNpc && floaters.allyNpc.size() > 0)
+			{
+				for (auto & floater : floaters.allyNpc) {
+					if (WorldToScreen(floater.pos, &x, &y))
+					{
+						stringstream fs;
+						if (floatType)
+							fs << format("%i") % int(Dist(self.pos, floater.pos));
+						else
+							fs << format("%i") % floater.mHealth;
+
+						AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                        Vector3 rotArrow = {
+                            floater.pos.x + cos(floater.rot) * 50.0f,
+                            floater.pos.y + sin(floater.rot) * 50.0f,
+                            floater.pos.z
+                        };
+
+						DWORD color = 0x4433ff00;
+						DrawCircleProjected(floater.pos, 20.0f, color);
+                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
+						DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+					}
+				}
+			}
+
+			if (floatEnemyNpc && floaters.enemyNpc.size() > 0)
+			{
+				for (auto & floater : floaters.enemyNpc) {
+					if (WorldToScreen(floater.pos, &x, &y))
+					{
+						stringstream fs;
+						if (floatType)
+							fs << format("%i") % int(Dist(self.pos, floater.pos));
+						else
+							fs << format("%i") % floater.mHealth;
+
+						AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                        Vector3 rotArrow = {
+                            floater.pos.x + cos(floater.rot) * 50.0f,
+                            floater.pos.y + sin(floater.rot) * 50.0f,
+                            floater.pos.z
+                        };
+
+						DWORD color = 0x44ff3300;
+						DrawCircleProjected(floater.pos, 20.0f, color);
+                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
+						DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+					}
+				}
+			}
+
+			if (floatAllyPlayer && floaters.allyPlayer.size() > 0)
+			{
+				for (auto & floater : floaters.allyPlayer) {
+					if (WorldToScreen(floater.pos, &x, &y))
+					{
+						stringstream fs;
+						if (floatType)
+							fs << format("%i") % int(Dist(self.pos, floater.pos));
+						else
+							fs << format("%i") % floater.mHealth;
+
+						AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                        Vector3 rotArrow = {
+                            floater.pos.x + cos(floater.rot) * 50.0f,
+                            floater.pos.y + sin(floater.rot) * 50.0f,
+                            floater.pos.z
+                        };
+
+						DWORD color = 0x4433ff00;
+						DrawCircleProjected(floater.pos, 20.0f, color);
+                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
+						DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+					}
+				}
+			}
+
+			if (floatEnemyPlayer && floaters.enemyPlayer.size() > 0)
+			{
+				for (auto & floater : floaters.enemyPlayer) {
+					if (WorldToScreen(floater.pos, &x, &y))
+					{
+						stringstream fs;
+						if (floatType)
+							fs << format("%i") % int(Dist(self.pos, floater.pos));
+						else
+							fs << format("%i") % floater.mHealth;
+
+						AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                        Vector3 rotArrow = {
+                            floater.pos.x + cos(floater.rot) * 50.0f,
+                            floater.pos.y + sin(floater.rot) * 50.0f,
+                            floater.pos.z
+                        };
+
+						DWORD color = 0x44ff3300;
+						DrawCircleProjected(floater.pos, 20.0f, color);
+                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
+						DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+					}
+				}
+			}
+
+			if (floatSiege && floaters.siege.size() > 0)
+			{
+				for (auto & floater : floaters.siege) {
+					//DWORD color = 0x44ff3300;
+					//DrawCircleProjected(floater.pos, 20.0f, color);
+					//DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+				}
+			}
 		}
 
 	}
@@ -1219,6 +1370,14 @@ void ESP()
 			}
 		}
 	}
+
+	stringstream timer_ss;
+	timer::cpu_times elapsed2 = timer2.elapsed();
+	double elapsedMs = elapsed2.wall / 1e6;
+	timer_ss << format("time: %f") % elapsedMs;
+	AssistDrawer::get().drawFont(30, 30, AssistDrawer::WHITE, timer_ss.str());
+
+	//icon.Draw(30, 30, 20, 20);
 }
 
 void displayDebug() {
@@ -1382,6 +1541,29 @@ void save_preferences() {
 }
 
 
+/*
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+    switch (fdwReason) {
+    case DLL_PROCESS_ATTACH:
+        break;
+    case DLL_PROCESS_DETACH:
+        break;
+    case DLL_THREAD_ATTACH:
+        break;
+    case DLL_THREAD_DETACH:
+#ifdef STATIC_BUILD
+        FreeLibrary(hl::GetCurrentModule());
+        FreeLibrary(hl::GetCurrentModule());
+        FreeLibrary(hl::GetCurrentModule());
+#endif
+        break;
+    }
+    return true;
+}
+*/
+
+
+
 void chat_log(wchar_t *wtxt) {
     size_t len = wcslen(wtxt) + 1;
 
@@ -1390,10 +1572,50 @@ void chat_log(wchar_t *wtxt) {
     wcstombs(txt, wtxt, len);
 
     //font.Draw(10, 10, 0xffffffff, "%s", txt);
-
+    //HL_LOG_DBG("%s\n", txt);
+    chat = txt;
     delete txt;
 }
 
+
+bool mouse_move(int x, int y, int modkeys) {
+    mouse_x = x;
+    mouse_y = y;
+    mouse_keys = modkeys;
+    return true;
+}
+
+bool mouse_click(bool down, int button, int x, int y, int modkeys) {
+    mouse_down = down;
+    mouse_btn = button;
+    mouse_x = x;
+    mouse_y = y;
+    mouse_keys = modkeys;
+    return true;
+}
+
+bool mouse_wheel(int delta, int modkeys) {
+    mouse_delta = delta;
+    mouse_keys = modkeys;
+    return true;
+}
+
+void dmg_log(uintptr_t* src, uintptr_t* tgt, int hit) {
+    //HL_LOG_DBG("hit: %i\n", hit);
+}
+
+void combat_log(CombatLogType type, int hit) {
+    int dmg = 0;
+    switch (type) {
+    case CL_CONDI_DMG_OUT:
+    case CL_CRIT_DMG_OUT:
+    case CL_GLANCE_DMG_OUT:
+    case CL_PHYS_DMG_OUT:
+        dmg = hit;
+        break;
+    }
+    HL_LOG_DBG("type: %i - hit: %i\n", type, hit);
+}
 
 void GW2LIB::gw2lib_main()
 {
@@ -1405,6 +1627,11 @@ void GW2LIB::gw2lib_main()
 
 	EnableEsp(ESP);
     SetGameHook(ChatHook, chat_log);
+    SetGameHook(MouseMoveHook, mouse_move);
+    SetGameHook(MouseButtonHook, mouse_click);
+    SetGameHook(MouseWheelHook, mouse_wheel);
+    SetGameHook(DamageLogHook, dmg_log);
+    SetGameHook(CombatLogHook, combat_log);
 
 	thread t1(&threadHotKeys);
 	thread t2(&threadDps);
@@ -1416,9 +1643,29 @@ void GW2LIB::gw2lib_main()
 	thread t8(&threadRaidAssist);
 	thread t9(&threadSquadSpeedometer);
 
+    /*HMODULE dll = hl::GetCurrentModule();
+    HRSRC ires = FindResourceA(dll, MAKEINTRESOURCEA(IDB_PNG1), "PNG");
+    if (ires) {
+        HL_LOG_DBG("ires: %p\n", ires);
+        if (!icon.Init(LockResource(LoadResource(dll, ires)), SizeofResource(dll, ires))){
+            return;
+        }
+    }
+    else {
+        HL_LOG_DBG("ires err: %s\n", std::to_string(GetLastError()));
+    }*/
+
+    if (timer2.is_stopped()) {
+        timer2.start();
+    }
+
 	// wait for exit hotkey
 	while (GetAsyncKeyState(VK_F12) >= 0)
 		Sleep(1);
+
+    if (!timer2.is_stopped()) {
+        timer2.stop();
+    }
 
 	close_config();
 
