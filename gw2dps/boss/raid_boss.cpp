@@ -18,6 +18,11 @@ RaidBoss::~RaidBoss() {
 }
 
 void RaidBoss::updateState() {
+	if (agent.m_ptr == nullptr) {
+		if (!tryResetBossAgent()) {
+			return;
+		}
+	}
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		encounterTimer.start();
 		outputHeader += "\n// start raid boss output\n";
@@ -27,7 +32,7 @@ void RaidBoss::updateState() {
 		outputHeader += str(format("// start time: %s\n") % now);
 	}
 
-	if (!encounterTimer.isStopped() && agent.GetCharacter().IsAlive()) {
+	if (!encounterTimer.isStopped() && agent.IsValid() && !isDead()) {
 		int elapsed = encounterTimer.getElapsedMilliseconds();
 		remainingHealthMap.insert(pair<int, float>(elapsed, getCurrentHealth()));
 	}

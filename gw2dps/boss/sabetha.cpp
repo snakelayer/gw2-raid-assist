@@ -167,6 +167,10 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateState();
 	RaidBoss::updateDps(damageBuffer);
 
+	if (agent.m_ptr == nullptr || agent.GetCharacter().m_ptr == nullptr) {
+		return;
+	}
+
 	updateFlamewallState();
 
 	if (phase == SABETHA::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {

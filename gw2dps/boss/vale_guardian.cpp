@@ -37,7 +37,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 
 	updateSeekerState();
 
-	if (phase == VG::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
+	if ((phase == VG::Phase::FIRST) && (getCurrentHealth() > 0.0f) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
 		phase = VG::Phase::FIRST_TRANSITION;
 		agent.m_ptr = nullptr;
 		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getSplitSeconds());
@@ -50,7 +50,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 		phase = VG::Phase::SECOND;
 		outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
-	else if (phase == VG::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
+	else if ((phase == VG::Phase::SECOND) && (getCurrentHealth() > 0.0f) && (getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP)) {
 		phase = VG::Phase::SECOND_TRANSITION;
 		agent.m_ptr = nullptr;
 		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());

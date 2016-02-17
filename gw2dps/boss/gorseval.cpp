@@ -22,6 +22,10 @@ void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
 	RaidBoss::updateState();
 	RaidBoss::updateDps(damageBuffer);
 
+	if (agent.m_ptr == nullptr) {
+		return;
+	}
+
 	// TODO: gorseval specific stuff
 }
 
