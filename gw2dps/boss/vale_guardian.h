@@ -11,6 +11,7 @@
 #include "raid_boss.h"
 #include "skills/magic_storm.h"
 #include "skills/seeker.h"
+#include "skills/unstable_pylon.h"
 
 namespace VG {
 
@@ -58,6 +59,7 @@ class ValeGuardian : public RaidBoss
 
 		std::list<Seeker> seekers;
 		MagicStorm magicStorm;
+		UnstablePylon unstablePylon;
 		VG::Phase phase;
 
 		ValeGuardian(GW2LIB::Agent agent);
@@ -65,9 +67,11 @@ class ValeGuardian : public RaidBoss
 		float getMaxHp() { return MAX_HP; }
 		float getBossHeight() { return 350.0f; }
 		bool isSplit() { return !(phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD); }
+		bool isPylonPhase() { return phase == VG::Phase::SECOND || phase == VG::Phase::THIRD; }
 
 		void updateSeekerState();
 		void updateMagicStormState();
+		void updatePylonState();
 
 		void addEstTimeToSplit(std::stringstream &ss);
 		void drawMagicStormStatus();

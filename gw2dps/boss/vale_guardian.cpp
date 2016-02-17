@@ -37,6 +37,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 
 	updateSeekerState();
+	updatePylonState();
 
 	if ((phase == VG::Phase::FIRST) && (getCurrentHealth() > 0.0f) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
 		phase = VG::Phase::FIRST_TRANSITION;
@@ -49,10 +50,12 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 	else if (phase == VG::Phase::FIRST_SPLIT && tryResetBossAgent()) {
 		phase = VG::Phase::SECOND;
+		unstablePylon.startWith(UP::State::PENDING_MOVE_FIRST);
 		outputHeader += str(format("// first split phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 	else if ((phase == VG::Phase::SECOND) && (getCurrentHealth() > 0.0f) && (getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP)) {
 		phase = VG::Phase::SECOND_TRANSITION;
+		unstablePylon.stop();
 		agent.m_ptr = nullptr;
 		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
@@ -62,6 +65,7 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 	else if (phase == VG::Phase::SECOND_SPLIT && tryResetBossAgent()) {
 		phase = VG::Phase::THIRD;
+		unstablePylon.startWith(UP::State::PENDING_MOVE_SECOND);
 		outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
 }
@@ -123,6 +127,12 @@ void ValeGuardian::updateMagicStormState() {
 	}
 	else if ((magicStorm.getState() == MS::ACTIVE) && (getBreakbarState() == GW2::BREAKBAR_STATE_IMMUNE)) {
 		magicStorm.setState(MS::RECHARGING);
+	}
+}
+
+void ValeGuardian::updatePylonState() {
+	if (isPylonPhase()) {
+		unstablePylon.update();
 	}
 }
 
