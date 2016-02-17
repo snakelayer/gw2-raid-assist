@@ -74,8 +74,9 @@ class ValeGuardian : public RaidBoss
 		void updatePylonState();
 
 		void addEstTimeToSplit(std::stringstream &ss);
-		void drawMagicStormStatus();
 		void drawSeekerStatus();
+		void drawMagicStormStatus();
+		void drawUnstablePylonStatus();
 
 		bool findRedGuardian();
 

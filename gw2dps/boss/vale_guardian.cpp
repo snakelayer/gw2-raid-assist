@@ -75,6 +75,7 @@ void ValeGuardian::drawAssistInfo() {
 
 	drawSeekerStatus();
 	if (!isSplit()) {
+		drawUnstablePylonStatus();
 		RaidBoss::drawAssistInfo();
 		RaidBoss::outputAssistHeader(ss);
 		addEstTimeToSplit(ss);
@@ -152,6 +153,16 @@ void ValeGuardian::addEstTimeToSplit(stringstream &ss) {
 	}
 }
 
+void ValeGuardian::drawSeekerStatus() {
+	stringstream ss;
+
+	for (auto &seeker : seekers) {
+		ss.str("");
+		ss << seeker.getRespawnTime();
+		drawToWindow(ss, seeker.getPosition());
+	}
+}
+
 void ValeGuardian::drawMagicStormStatus() {
 	if (magicStorm.getState() == MS::PENDING) {
 		return;
@@ -166,14 +177,12 @@ void ValeGuardian::drawMagicStormStatus() {
 	}
 }
 
-void ValeGuardian::drawSeekerStatus() {
-	stringstream ss;
-
-	for (auto &seeker : seekers) {
-		ss.str("");
-		ss << seeker.getRespawnTime();
-		drawToWindow(ss, seeker.getPosition());
+void ValeGuardian::drawUnstablePylonStatus() {
+	if (!isPylonPhase()) {
+		return;
 	}
+
+	unstablePylon.draw();
 }
 
 bool ValeGuardian::findRedGuardian() {

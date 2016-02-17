@@ -1,5 +1,21 @@
 #include "unstable_pylon.h"
 
+using namespace boost::assign;
+using namespace GW2LIB;
+using namespace std;
+
+map<UP::State, float> UnstablePylon::COLOR_ANGLE_MAP = map_list_of
+	(UP::State::PENDING_MOVE_FIRST, float(M_PI_2))
+	(UP::State::SAFE_RED_BLUE, float(M_PI_2))
+	(UP::State::SAFE_GREEN_RED, float(M_PI * 11/6))
+	(UP::State::SAFE_BLUE_GREEN, float(M_PI * 7/6))
+	(UP::State::PENDING_MOVE_SECOND, float(M_PI * 11 / 6))
+	(UP::State::SAFE_RED, float(M_PI * 11 / 6))
+	(UP::State::SAFE_GREEN, float(M_PI * 7 / 6))
+	(UP::State::SAFE_BLUE, float(M_PI_2));
+
+const float UnstablePylon::TICK_ANGLE = float(M_PI * 2 / 3);
+
 UnstablePylon::UnstablePylon() : state(UP::State::PENDING_SPLIT) {
 	timer.stop();
 }
@@ -31,6 +47,24 @@ void UnstablePylon::update() {
 void UnstablePylon::stop() {
 	state = UP::State::PENDING_SPLIT;
 	timer.stop();
+}
+
+void UnstablePylon::draw() {
+	float cooldownPercent = 0.0f;
+	if (isFirst()) {
+		cooldownPercent = 1.0f - (getFirstCooldown() / FIRST_COOLDOWN);
+	}
+	else if (isSecond()) {
+		cooldownPercent = 1.0f - (getSecondCooldown() / SECOND_COOLDOWN);
+	}
+	float angle = COLOR_ANGLE_MAP[state] - cooldownPercent * TICK_ANGLE;
+
+	Vector3 edge(
+		CENTER.x + RADIUS * cos(angle),
+		CENTER.y + RADIUS * sin(angle),
+		CENTER.z);
+
+	DrawLineProjected(CENTER, edge, AssistDrawer::RED);
 }
 
 bool UnstablePylon::isFirst() {
