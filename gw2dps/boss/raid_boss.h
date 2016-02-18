@@ -52,6 +52,7 @@ class RaidBoss {
 		virtual float getMaxHp() = 0;
 		virtual float getBossHeight() = 0;
 		GW2LIB::Vector3 getDrawAssistPosition();
+		void startEncounter();
 		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
 		void drawToWindow(std::stringstream &ss, GW2LIB::Vector3 pos);

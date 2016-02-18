@@ -24,12 +24,7 @@ void RaidBoss::updateState() {
 		}
 	}
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
-		encounterTimer.start();
-		outputHeader += "\n// start raid boss output\n";
-		outputHeader += str(format("// Boss: %s\n") % getName());
-
-		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
-		outputHeader += str(format("// start time: %s\n") % now);
+		startEncounter();
 	}
 
 	if (!encounterTimer.isStopped() && agent.IsValid() && !isDead()) {
@@ -91,6 +86,15 @@ Vector3 RaidBoss::getDrawAssistPosition() {
 	Vector3 pos = agent.GetPos();
 	pos.z -= getBossHeight();
 	return pos;
+}
+
+void RaidBoss::startEncounter() {
+	encounterTimer.start();
+	outputHeader += "\n// start raid boss output\n";
+	outputHeader += str(format("// Boss: %s\n") % getName());
+
+	string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
+	outputHeader += str(format("// start time: %s\n") % now);
 }
 
 bool RaidBoss::tryResetBossAgent() {

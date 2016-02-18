@@ -68,13 +68,13 @@ void Sabetha::drawFlamewallStatus() {
 		}
 	}
 	else if (flamewall.getState() == FW::State::ACTIVATING) {
-		flamewall.drawActivatingMarker(SABETHA_START_POSITION);
+		flamewall.drawActivatingMarker(SABETHA_STARTING_POSITION);
 		if (onScreen) {
 			flamewall.drawCooldownMeter(x, y);
 		}
 	}
 	else if (flamewall.getState() == FW::State::ACTIVE) {
-		flamewall.drawActiveMarker(SABETHA_START_POSITION);
+		flamewall.drawActiveMarker(SABETHA_STARTING_POSITION);
 		if (onScreen) {
 			flamewall.drawCooldownMeter(x, y);
 		}

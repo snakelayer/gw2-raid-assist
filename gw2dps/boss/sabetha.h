@@ -47,8 +47,9 @@ class Sabetha : public RaidBoss
 
 		SABETHA::Phase phase;
 		Flamewall flamewall;
+		float startingRotation;
 
-		const GW2LIB::Vector3 SABETHA_START_POSITION = GW2LIB::Vector3(
+		const GW2LIB::Vector3 SABETHA_STARTING_POSITION = GW2LIB::Vector3(
 			-5078.209961f,
 			3356.969971f,
 			-2457.178711f);
@@ -66,9 +67,9 @@ class Sabetha : public RaidBoss
 		float getMaxHp() { return MAX_HP; }
 		float getBossHeight() { return 300.0f; } //TODO: check this
 		bool isAtStartPosition() {
-			return (SABETHA_START_POSITION.x == agent.GetPos().x) &&
-				   (SABETHA_START_POSITION.y == agent.GetPos().y) &&
-				   (SABETHA_START_POSITION.z == agent.GetPos().z);
+			return (SABETHA_STARTING_POSITION.x == agent.GetPos().x) &&
+				   (SABETHA_STARTING_POSITION.y == agent.GetPos().y) &&
+				   (SABETHA_STARTING_POSITION.z == agent.GetPos().z);
 		}
 
 		void updateFlamewallState();
