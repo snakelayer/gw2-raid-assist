@@ -37,11 +37,14 @@ class Sabetha : public RaidBoss
 		static const float MAX_HP;
 		const float FIRST_PHASE_TRANSITION_HP = 25497542;
 		const float SECOND_PHASE_TRANSITION_HP = 16643379;
-		const float THIRD_PHASE_TRANSITION_HP = MAX_HP/4; // TODO verify
+		const float THIRD_PHASE_TRANSITION_HP = 8510406;
 
 		const float KERNAN_MAX_HP = 3440850;
+		const float KERNAN_HP_AT_SABETHA_RETURN = 856528;
 		const float KNUCKLES_MAX_HP = 3440850;
+		const float KNUCKLES_HP_AT_SABETHA_RETURN = 876643;
 		const float KARDE_MAX_HP = 4423950;
+		const float KARDE_HP_AT_SABETHA_RETURN = 935633; // TODO: this is low, can be higher
 
 		/*
 		  this is intended only to trigger on:
