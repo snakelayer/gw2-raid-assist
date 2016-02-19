@@ -173,7 +173,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 
 	updateFlamewallState();
 
-	if (phase == SABETHA::Phase::FIRST && getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
+	if (phase == SABETHA::Phase::FIRST && !isAtStartPosition()) { //getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KERNAN;
 		flamewall.disable();
 		outputHeader += str(format("// first phase: %d\n") % encounterTimer.getSplitSeconds());
@@ -182,7 +182,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 		phase = SABETHA::Phase::SECOND;
 		outputHeader += str(format("// Kernan phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
-	else if(phase == SABETHA::Phase::SECOND && getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
+	else if(phase == SABETHA::Phase::SECOND && !isAtStartPosition()) { //getCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KNUCKLES;
 		flamewall.disable();
 		outputHeader += str(format("// second phase: %d\n") % encounterTimer.getSplitSeconds());
@@ -191,7 +191,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 		phase = SABETHA::Phase::THIRD;
 		outputHeader += str(format("// Knuckles phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
-	else if (phase == SABETHA::Phase::THIRD && getCurrentHealth() <= THIRD_PHASE_TRANSITION_HP) {
+	else if (phase == SABETHA::Phase::THIRD && !isAtStartPosition()) { //getCurrentHealth() <= THIRD_PHASE_TRANSITION_HP) {
 		phase = SABETHA::Phase::KARDE;
 		flamewall.disable();
 		outputHeader += str(format("// third phase: %d\n") % encounterTimer.getSplitSeconds());
