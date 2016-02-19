@@ -27,7 +27,7 @@ void RaidBoss::updateState() {
 		startEncounter();
 	}
 
-	if (!encounterTimer.isStopped() && agent.IsValid() && !isDead()) {
+	if (!encounterTimer.isStopped() && agent.IsValid() && agent.GetCharacter().IsValid() && !isDead()) {
 		int elapsed = encounterTimer.getElapsedMilliseconds();
 		remainingHealthMap.insert(pair<int, float>(elapsed, getCurrentHealth()));
 	}
@@ -49,10 +49,8 @@ void RaidBoss::drawAssistInfo() {
 
 bool RaidBoss::isDead() {
 	Character character = agent.GetCharacter();
-	if (character.m_ptr == nullptr) {
-		string now = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
-		outputHeader += str(format("// DEBUG could not find character object for isDead check at time: %s\n") % now);
-		return false;
+	if (!character.IsValid() || (character.GetMaxHealth() != getMaxHp())) {
+		return false; // this is a (mostly correct) guess when we don't have the character object
 	}
 
 	return !character.IsAlive();
