@@ -65,7 +65,8 @@ ADD_LIBRARY(${PROJ_NAME}_dll SHARED
 	gw2dps/boss/raid_boss_factory.h
 	gw2dps/boss/raid_boss_factory.cpp
 	gw2dps/gw2dps.h
-	gw2dps/gw2dps.cpp)
+	gw2dps/gw2dps.cpp
+	gw2dps/gw2dps_dll.rc)
 
 SET_TARGET_PROPERTIES(${PROJ_NAME}_dll PROPERTIES
 	FOLDER ${PROJ_NAME}_dll
