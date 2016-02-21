@@ -96,9 +96,9 @@ uintptr_t hp_shift4 = 0x1e8;
 uintptr_t hp_shift_cur = 0xc;
 uintptr_t hp_shift_max = 0x10;
 #else
-uintptr_t hp_shift1 = 0x30;
+uintptr_t hp_shift1 = 0x34;
 uintptr_t hp_shift2 = 0x178;
-uintptr_t hp_shift3 = 0x28;
+uintptr_t hp_shift3 = 0x2c;
 uintptr_t hp_shift4 = 0x18c;
 uintptr_t hp_shift_cur = 0x8;
 uintptr_t hp_shift_max = 0xc;
@@ -1253,6 +1253,8 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
 	GW2LIB::Character character = agent.GetCharacter();
 	ss << format(prefix + " agentId: %d ptr: %p\n") % character.GetAgent().GetAgentId() % &character.GetAgent();
 	ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
+	ss << format(prefix + " type: %d\n") % agent.GetType();
+	ss << format(prefix + " gadget: %f / %f\n") % agent.GetGadget().GetCurrentHealth() % agent.GetGadget().GetMaxHealth();
 	ss << format(prefix + " rot: %f\n") % agent.GetRot();
 	ss << format(prefix + " name: %s\n") % character.GetName();
 	ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
