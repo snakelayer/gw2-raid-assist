@@ -5,6 +5,7 @@ using namespace GW2LIB;
 using namespace std;
 
 const float ValeGuardian::MAX_HP = 22021440;
+const float ValeGuardian::HEAVY_HIT_DAMAGE_THRESHOLD = -1800.0f;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
@@ -62,14 +63,6 @@ void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
 	else if (phase == VG::Phase::SECOND_SPLIT && tryResetBossAgent()) {
 		phase = VG::Phase::THIRD;
 		outputHeader += str(format("// second split phase: %d\n") % encounterTimer.getSplitSeconds());
-	}
-}
-
-void ValeGuardian::updateSquadState(SquadMemberMap &members) {
-	for (auto &member : members) {
-		if (member.second.getLastHealthDelta() < HEAVY_HIT_DAMAGE_THRESHOLD) {
-			member.second.takeHeavyHit();
-		}
 	}
 }
 

@@ -36,6 +36,7 @@ class Squad
 		bool disable;
 		static const std::string logFilePrefix;
 
+		void updateHeavyHits(float heavyHitDamageThreshold);
 		void updateRaidState(CharacterMap &characterMap);
 		void writeStatsToFile();
 

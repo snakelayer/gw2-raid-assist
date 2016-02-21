@@ -22,7 +22,7 @@ class UnknownBoss : public RaidBoss
 		static bool matchesTarget(GW2LIB::Agent &agent) { return false; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void updateSquadState(SquadMemberMap &members);
+		float getHeavyHitDamageThreshold() { return 0.0f; }
 		void outputDps(std::stringstream &ss);
 		void drawAssistInfo();
 		int getEncounterTime();

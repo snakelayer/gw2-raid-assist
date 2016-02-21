@@ -43,6 +43,14 @@ class Sabetha : public RaidBoss
 		const float KNUCKLES_MAX_HP = 3440850;
 		const float KARDE_MAX_HP = 4423950;
 
+		/*
+		  this is intended only to trigger on:
+		   - cannon barrage
+		   - hail of bullets (3rd volley),
+		  both of which do about 6k damage
+		 */
+		static const float HEAVY_HIT_DAMAGE_THRESHOLD;
+
 		const float flamewallDisplayOffset = 20.0f;
 
 		SABETHA::Phase phase;
@@ -89,7 +97,7 @@ class Sabetha : public RaidBoss
 		std::string getName() { return "Sabetha"; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void updateSquadState(SquadMemberMap &members);
+		float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
 		void drawAssistInfo();
 
 		void outputDebug(std::stringstream &ss);

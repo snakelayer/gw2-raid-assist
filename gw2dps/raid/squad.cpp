@@ -61,7 +61,7 @@ void Squad::updateState() {
 	}
 
 	if (raidBoss != nullptr) {
-		raidBoss->updateSquadState(members);
+		updateHeavyHits(raidBoss->getHeavyHitDamageThreshold());
 	}
 
 	updateRaidState(characterMap);
@@ -91,6 +91,14 @@ void Squad::outputPlayerStats(ostream &stream) {
 string Squad::getLogFileName() {
 	string localNow = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
 	return logFilePrefix + localNow + ".txt";
+}
+
+void Squad::updateHeavyHits(float heavyHitDamageThreshold) {
+	for (auto &member : members) {
+		if (member.second.getLastHealthDelta() < heavyHitDamageThreshold) {
+			member.second.takeHeavyHit();
+		}
+	}
 }
 
 void Squad::updateRaidState(CharacterMap &characterMap) {

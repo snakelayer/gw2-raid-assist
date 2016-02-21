@@ -48,11 +48,11 @@ class ValeGuardian : public RaidBoss
 		  (green) distributed magic (<4 players): 13+K
 		  red orb:
 		  unstable pylon: 2k
-		  magic storm:
+		  magic storm: same as magic aura?
 		  punch: 4k+
 		  bullet storm: 3k+
 		*/
-		static const int HEAVY_HIT_DAMAGE_THRESHOLD = -1800;
+		static const float HEAVY_HIT_DAMAGE_THRESHOLD;
 
 		const float magicStormDisplayOffset = 40.0f;
 
@@ -84,7 +84,7 @@ class ValeGuardian : public RaidBoss
 		std::string getName() { return "Vale Guardian"; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void updateSquadState(SquadMemberMap &members);
+		float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
 		void drawAssistInfo();
 
 

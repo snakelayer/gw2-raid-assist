@@ -4,6 +4,7 @@ using namespace GW2LIB;
 using namespace std;
 
 const float Gorseval::MAX_HP = 21628200;
+const float Gorseval::HEAVY_HIT_DAMAGE_THRESHOLD = -1500.0f;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
@@ -27,14 +28,6 @@ void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
 	}
 
 	// TODO: gorseval specific stuff
-}
-
-void Gorseval::updateSquadState(SquadMemberMap &members) {
-	for (auto &member : members) {
-		if (member.second.getLastHealthDelta() < HEAVY_HIT_DAMAGE_THRESHOLD) {
-			member.second.takeHeavyHit();
-		}
-	}
 }
 
 void Gorseval::drawAssistInfo() {

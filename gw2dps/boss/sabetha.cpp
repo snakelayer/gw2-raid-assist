@@ -6,6 +6,7 @@ using namespace GW2LIB;
 using namespace std;
 
 const float Sabetha::MAX_HP = 34015256;
+const float Sabetha::HEAVY_HIT_DAMAGE_THRESHOLD = -4000.0f;
 
 map<SABETHA::COMPASS, Vector3> Sabetha::launchPositionMap = map_list_of
 	(SABETHA::COMPASS::NORTH, Vector3(-4980, 4390, -2480))
@@ -200,10 +201,6 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 		phase = SABETHA::Phase::FOURTH;
 		outputHeader += str(format("// Karde phase: %d\n") % encounterTimer.getSplitSeconds());
 	}
-}
-
-void Sabetha::updateSquadState(SquadMemberMap &members) {
-
 }
 
 void Sabetha::drawAssistInfo() {

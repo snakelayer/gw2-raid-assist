@@ -19,10 +19,10 @@ class Gorseval : public RaidBoss
 		  at 1600 toughness:
 		   swipe is 2.4k - 2.6k
 		   spectral impact is 3.0k - 4.5k
-		*/
 
-		// anything below this (higher in damage) is considered a dodgeable hit the player took
-		static const int HEAVY_HIT_DAMAGE_THRESHOLD = -1500;
+		  this is intended to ignore haunting aura, but trigger on swipe and spectral impact
+		*/
+		static const float HEAVY_HIT_DAMAGE_THRESHOLD;
 
 		Gorseval(GW2LIB::Agent agent);
 
@@ -36,7 +36,7 @@ class Gorseval : public RaidBoss
 		static bool matchesTarget(GW2LIB::Agent &agent);
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
-		void updateSquadState(SquadMemberMap &members);
+		float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
 		void drawAssistInfo();
 
 		void outputDebug(std::stringstream &ss);

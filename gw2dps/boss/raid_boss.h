@@ -25,7 +25,7 @@ class RaidBoss {
 
 		virtual std::string getName() = 0;
 		virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
-		virtual void updateSquadState(SquadMemberMap &members) = 0;
+		virtual float getHeavyHitDamageThreshold() = 0;
 		virtual void drawAssistInfo();
 
 		virtual bool isDead();
