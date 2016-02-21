@@ -1,13 +1,11 @@
 #pragma once
 
-#include <map>
-
-#include <boost/assign.hpp>
 #include <boost/circular_buffer.hpp>
 
 #include "gw2lib.h"
 
 #include "raid_boss.h"
+#include "skills/cannon.h"
 #include "skills/flamewall.h"
 
 #include "../assist_drawer.h"
@@ -21,13 +19,6 @@ namespace SABETHA {
 		THIRD,
 		KARDE,
 		FOURTH
-	};
-
-	enum COMPASS {
-		NORTH = 0,
-		EAST,
-		SOUTH,
-		WEST
 	};
 }
 
@@ -57,6 +48,7 @@ class Sabetha : public RaidBoss
 		const float flamewallDisplayOffset = 20.0f;
 
 		SABETHA::Phase phase;
+		Cannon cannon;
 		Flamewall flamewall;
 		float startingRotation;
 
@@ -65,13 +57,6 @@ class Sabetha : public RaidBoss
 			3356.969971f,
 			-2457.178711f);
 		const GW2LIB::Vector3 SABETHA_PHASE_POSITION;
-
-		static std::map<SABETHA::COMPASS, GW2LIB::Vector3> launchPositionMap;
-
-		const float COMPASS_RADIUS = 240.0f;
-		const float COMPASS_DIRECTION_LENGTH = 250.0f;
-		const float CANNON_LINE_FRACTION = 0.4f;
-		static std::map<int, SABETHA::COMPASS> cannonRotationMap;
 
 		Sabetha(GW2LIB::Agent agent);
 
@@ -85,12 +70,6 @@ class Sabetha : public RaidBoss
 
 		void updateFlamewallState();
 		void drawFlamewallStatus();
-
-		SABETHA::COMPASS getNextCannonDirection();
-		GW2LIB::Vector3 getDirectionPosition(GW2LIB::Vector3 origin, SABETHA::COMPASS direction);
-		void drawCompass();
-		void drawLineToNextCannon();
-		GW2LIB::Vector3 getCannonLaunchPosition(SABETHA::COMPASS direction);
 
 	public:
 
