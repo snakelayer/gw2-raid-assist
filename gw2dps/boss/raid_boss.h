@@ -56,6 +56,7 @@ class RaidBoss {
 		bool tryResetBossAgent();
 		bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
 		void drawToWindow(std::stringstream &ss, GW2LIB::Vector3 pos);
+		void drawAtPosition(std::stringstream &ss, GW2LIB::Vector3 pos);
 		void outputAssistHeader(std::stringstream &ss);
 
 		void updateDps(boost::circular_buffer<float> &damageBuffer);

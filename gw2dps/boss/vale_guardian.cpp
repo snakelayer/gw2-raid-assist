@@ -159,9 +159,8 @@ void ValeGuardian::drawMagicStormStatus() {
 void ValeGuardian::drawSeekerStatus() {
 	stringstream ss;
 
-	int i = 0;
 	for (auto &seeker : seekers) {
-		ss.str(to_string(i++) + ":");
+		ss.str("");
 		ss << seeker.getRespawnTime();
 		drawToWindow(ss, seeker.getPosition());
 	}

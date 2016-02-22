@@ -118,6 +118,13 @@ void RaidBoss::drawToWindow(stringstream &ss, Vector3 pos) {
 	}
 }
 
+void RaidBoss::drawAtPosition(stringstream &ss, Vector3 pos) {
+	float x, y;
+	if (getScreenLocation(&x, &y, pos)) {
+		AssistDrawer::get().drawStreamToWindow(ss, x, y);
+	}
+}
+
 void RaidBoss::outputAssistHeader(stringstream &ss) {
 	ss << format("Name: %s\n") % getName();
 }
