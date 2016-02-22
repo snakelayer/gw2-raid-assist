@@ -1319,7 +1319,7 @@ void displayDebug() {
     ss << format("mousePos: %f %f %f\n") % GetMouseInWorld().x % GetMouseInWorld().y % GetMouseInWorld().z;
 
     displayAgent("target", GetLockedSelection(), ss);
-    displayAgent("self", GetOwnAgent(), ss);
+    //displayAgent("self", GetOwnAgent(), ss);
 
     if (squad != nullptr) {
         ss << format("raid state: %d\n") % squad->getRaidState();
@@ -1334,14 +1334,15 @@ void displayDebug() {
 }
 
 void displayAgent(string prefix, Agent &agent, stringstream &ss) {
-    GW2LIB::Character character = agent.GetCharacter();
-    ss << format(prefix + " agentId: %d ptr: %p\n") % character.GetAgent().GetAgentId() % &character.GetAgent();
+    Character character = agent.GetCharacter();
+    ss << format(prefix + " agentId: %d\n") % character.GetAgent().GetAgentId();
     ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
     ss << format(prefix + " type: %d\n") % agent.GetType();
     ss << format(prefix + " gadget: %f / %f\n") % agent.GetGadget().GetCurrentHealth() % agent.GetGadget().GetMaxHealth();
     ss << format(prefix + " rot: %f\n") % agent.GetRot();
     ss << format(prefix + " token: %" PRIu64 "\n") % agent.GetToken();
     ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
+    ss << format(prefix + " speed: %.40f\n") % agent.GetSpeed();
     ss << format(prefix + " name: %s\n") % agent.GetPlayer().GetName();
     ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
@@ -1356,6 +1357,8 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " breakbar state: %d\n") % character.GetBreakbarState();
     ss << format(prefix + " breakbar percent: %f\n") % character.GetBreakbarPercent();
     ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();
+    AttackTarget at = agent.GetAttackTarget();
+    ss << format(prefix + " at hp: %f/%f\n") % at.GetCurrentHealth() % at.GetMaxHealth();
     ss << format(prefix + " endurance: %f/%f\n") % character.GetCurrentEndurance() % character.GetMaxEndurance();
     ss << format(prefix + " glide: %d\n") % character.GetGliderPercent();
     ss << format(prefix + " attitude: %d\n") % character.GetAttitude();

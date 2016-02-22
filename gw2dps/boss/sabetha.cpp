@@ -87,6 +87,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
         return;
     }
 
+    cannon.updateState(encounterTimer.getElapsedSeconds());
     updateFlamewallState();
 
     if (phase == SABETHA::Phase::FIRST && !isAtStartPosition()) { //getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP) {
@@ -121,7 +122,7 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 void Sabetha::drawAssistInfo() {
     RaidBoss::drawAssistInfo();
 
-    cannon.draw(encounterTimer.getElapsedSeconds());
+    cannon.draw();
 
     if (isAtStartPosition()) {
         drawFlamewallStatus();
@@ -137,8 +138,5 @@ void Sabetha::outputDebug(stringstream &ss) {
     ss << format("agent ptr: %p\n") % &agent;
     ss << format("boss dead: %s\n") % (isDead() ? "yes" : "no");
     ss << format("elapsed: %d\n") % encounterTimer.getElapsedSeconds();
-    ss << format("fw cooldown: %f\n") % flamewall.getCooldown();
-    ss << format("fw state: %d\n") % flamewall.getState();
-    ss << format("is centered: %s\n") % (isAtStartPosition() ? "yes" : "no");
     ss << outputHeader;
 }
