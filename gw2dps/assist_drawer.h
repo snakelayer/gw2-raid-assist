@@ -38,6 +38,7 @@ class AssistDrawer
 		static const int PADY = 2;
 		static const int lineHeight = 16;
 
+        static const DWORD FLOAT_MASK = 0x30000000;
 		static const DWORD BORDER_COLOR = 0xff444444;
 		static const DWORD WHITE = 0xffffffff;
 		static const DWORD CYAN = 0xff66ffff;

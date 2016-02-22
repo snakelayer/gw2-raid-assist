@@ -77,6 +77,7 @@ struct Allies {
 struct Float {
     Vector3 pos;
     float rot = 0;
+    float cHealth;
     float mHealth;
     int prof;
 };

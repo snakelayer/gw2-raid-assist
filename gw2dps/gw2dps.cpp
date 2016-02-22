@@ -136,6 +136,8 @@ CompassOverlay *compOverlay = new CompassOverlay();
 
 void ESP()
 {
+    if (IsInterfaceHidden()) return;
+
     // Element Anchors
     Anchor aLeft, aTopLeft, aTop, aTopRight, aRight, aCenter, aBottom;
     Anchor bossDpsAnchor;
@@ -257,24 +259,20 @@ void ESP()
 
     if (selfFloat && GetOwnAgent().IsValid())
     {
+        float rot = GetOwnAgent().GetRot();
+        auto Char = GetOwnCharacter();
         Vector3 rotArrow = {
-            self.pos.x + cos(GetOwnAgent().GetRot()) * 50.0f,
-            self.pos.y + sin(GetOwnAgent().GetRot()) * 50.0f,
+            self.pos.x + cos(rot) * 50.0f,
+            self.pos.y + sin(rot) * 50.0f,
             self.pos.z
         };
 
         DWORD color = 0x4433ff00;
+        float w = Char.GetCurrentHealth() / Char.GetMaxHealth() * 20;
         DrawCircleProjected(self.pos, 20.0f, color);
-        DrawRectFilledProjected(rotArrow, 20, 5, GetOwnAgent().GetRot(), color);
-        DrawCircleFilledProjected(self.pos, 20.0f, color - 0x30000000);
-        
-        /*float x, y;
-        if (WorldToScreen(self.pos, &x, &y)) {
-            stringstream fs;
-            fs << format("%.4f") % GetOwnAgent().GetRot();
-            StrInfo fsInfo = StringInfo(fs.str());
-            font.Draw(x - fsInfo.x / 2, y - 15, fontColor, fs.str());
-        }*/
+        DrawRectProjected(rotArrow, 20, 5, rot, color);
+        DrawRectFilledProjected(rotArrow, w, 5, rot, color);
+        DrawCircleFilledProjected(self.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
     }
 
     Agent agLocked = GetLockedSelection();
@@ -515,6 +513,7 @@ void ESP()
                         floater.pos = pos;
                         floater.rot = rot;
                         floater.mHealth = mHealth;
+                        floater.cHealth = cHealth;
                         floater.prof = prof;
 
                         // player vs npc
@@ -620,9 +619,11 @@ void ESP()
                         };
 
                         DWORD color = 0x4433ff00;
+                        float w = floater.cHealth / floater.mHealth * 20;
                         DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                     }
                 }
             }
@@ -647,9 +648,11 @@ void ESP()
                         };
 
                         DWORD color = 0x44ff3300;
+                        float w = floater.cHealth / floater.mHealth * 20;
                         DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                     }
                 }
             }
@@ -674,9 +677,11 @@ void ESP()
                         };
 
                         DWORD color = 0x4433ff00;
+                        float w = floater.cHealth / floater.mHealth * 20;
                         DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                     }
                 }
             }
@@ -701,9 +706,11 @@ void ESP()
                         };
 
                         DWORD color = 0x44ff3300;
+                        float w = floater.cHealth / floater.mHealth * 20;
                         DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectFilledProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                     }
                 }
             }
@@ -1390,7 +1397,10 @@ void ESP()
     if (elapsedMs) timer_ss << format("dps: %i") % int(totaldmg / elapsedMs);
     AssistDrawer::get().drawFont(10, 45, AssistDrawer::WHITE, timer_ss.str());
 
-    //icon.Draw(30, 30, 20, 20);
+    if (!(locked.valid && locked.id == pAgentId2)) {
+        pAgentId2 = 0;
+        if (!timer2.is_stopped()) timer2.stop();
+    }
 }
 
 void displayDebug() {
