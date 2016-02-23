@@ -10,6 +10,7 @@ SquadMember::SquadMember(GW2LIB::Character character) :
 	heavyHitsTaken(0),
 	heavyDamageTaken(0.0f),
 	totalDamageTaken(0.0f),
+	downedCount(0),
 	speedState(SM::SPEED_STATE::BASIC),
 	isAlive(character.IsAlive()),
 	lastEndurance(character.GetCurrentEndurance()),
@@ -22,6 +23,11 @@ void SquadMember::updateStats(GW2LIB::Character &character) {
 	updateLastHealthDelta(character);
 	updateDamageTaken();
 	//updateDodgeCount(character);
+
+	if (isAlive && character.IsDowned()) {
+		++downedCount;
+	}
+
 	isAlive = character.IsAlive();
 }
 

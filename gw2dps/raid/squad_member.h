@@ -25,6 +25,7 @@ class SquadMember {
 		int heavyHitsTaken;
 		float heavyDamageTaken;
 		float totalDamageTaken;
+		int downedCount;
 
 		SM::SPEED_STATE speedState;
 		boost::timer::cpu_timer dodgeTimer;
@@ -51,6 +52,7 @@ class SquadMember {
 		int getHeavyHitsTaken() { return heavyHitsTaken; }
 		float getHeavyDamageTaken() { return heavyDamageTaken; }
 		float getTotalDamageTaken() { return totalDamageTaken; }
+		int getDownedCount() { return downedCount; }
 
 		void takeHeavyHit();
 

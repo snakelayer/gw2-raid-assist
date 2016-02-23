@@ -1256,6 +1256,7 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
 	ss << format(prefix + " rot: %f\n") % agent.GetRot();
 	ss << format(prefix + " name: %s\n") % character.GetName();
 	ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
+	ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
 	ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
 	ss << format(prefix + " valid: " + string(character.IsValid() ? "yes" : "no") + "\n");
 	ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
