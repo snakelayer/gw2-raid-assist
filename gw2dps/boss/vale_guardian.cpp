@@ -115,7 +115,7 @@ void ValeGuardian::updateSeekerState() {
 }
 
 void ValeGuardian::updateMagicStormState() {
-	if ((magicStorm.getState() == MS::PENDING) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
+	if ((magicStorm.getState() == MS::PENDING) && (getCurrentHealth() != 0.0f) && (getCurrentHealth() <= FIRST_PHASE_TRANSITION_HP)) {
 		magicStorm.setState(MS::READY);
 	}
 	else if ((magicStorm.getState() == MS::READY) && (getBreakbarState() == GW2::BREAKBAR_STATE_READY) && (getBreakbar() == 1.0f)) { // transition to active
