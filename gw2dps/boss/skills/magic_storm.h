@@ -5,6 +5,7 @@
 
 #include "gw2lib.h"
 
+#include "draw/meter.h"
 #include "../../assist_drawer.h"
 
 namespace MS {
@@ -23,7 +24,7 @@ class MagicStorm
 		MagicStorm();
 		MS::State getState();
 		void setState(MS::State state);
-		void drawStatusMeter(float x, float y, float breakbar);
+		void drawStatusMeter(float x, float y, float percent);
 
 	private:
 		const float COOLDOWN = 30.0f;
@@ -31,8 +32,7 @@ class MagicStorm
 		MS::State state;
 		boost::timer::cpu_timer timer;
 
-		const float meterWidth = 150.0f;
-		const float meterHeight = 18.0f;
+		Meter meter;
 
 		float getCooldown();
 };

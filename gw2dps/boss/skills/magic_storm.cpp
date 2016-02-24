@@ -26,20 +26,17 @@ void MagicStorm::setState(MS::State state) {
 	}
 }
 
-void MagicStorm::drawStatusMeter(float x, float y, float breakbar) {
+void MagicStorm::drawStatusMeter(float x, float y, float percent) {
 	if (getState() == MS::READY) {
-		DrawRectFilled(x - meterWidth / 2, y, meterWidth, meterHeight, AssistDrawer::BREAKBAR_FULL);
-		AssistDrawer::get().drawFont(x - 20.0f, y + AssistDrawer::PADY, AssistDrawer::WHITE, "READY");
+		meter.draw(x, y, AssistDrawer::BREAKBAR_FULL, "READY");
 	}
 	else if (getState() == MS::ACTIVE) {
-		float breakbarMeterLength = meterWidth * breakbar;
-
-		DrawRectFilled(x - meterWidth / 2, y, breakbarMeterLength, meterHeight, AssistDrawer::BREAKBAR_DEPLETING);
-		AssistDrawer::get().drawFont(x - 10.0f, y + AssistDrawer::PADY, AssistDrawer::WHITE, str(format("%d") % int(breakbar * 100)));
+		string text = str(format("%d") % int(percent * 100));
+		meter.drawAtPercent(x, y, AssistDrawer::BREAKBAR_DEPLETING, text, percent);
 	}
 	else if (getState() == MS::RECHARGING) {
-
 		float remainingCooldown = getCooldown();
+
 		string cooldownStr;
 		if (remainingCooldown < 5.0f) {
 			cooldownStr = str(format("%.1f") % remainingCooldown);
@@ -48,12 +45,9 @@ void MagicStorm::drawStatusMeter(float x, float y, float breakbar) {
 			cooldownStr = str(format("%d") % int(remainingCooldown));
 		}
 
-		float rechargeMeterWidth = meterWidth * (1.0f - (remainingCooldown / COOLDOWN));
-		DrawRectFilled(x - meterWidth / 2, y, rechargeMeterWidth, meterHeight, AssistDrawer::BREAKBAR_RECHARGING);
-		AssistDrawer::get().drawFont(x - 10.0f, y + AssistDrawer::PADY, AssistDrawer::WHITE, cooldownStr);
+		float percent = (1.0f - (remainingCooldown / COOLDOWN));
+		meter.drawAtPercent(x, y, AssistDrawer::BREAKBAR_RECHARGING, cooldownStr, percent);
 	}
-
-	DrawRect(x - meterWidth / 2, y, meterWidth, meterHeight, AssistDrawer::BORDER_COLOR);
 }
 
 float MagicStorm::getCooldown() {
