@@ -88,7 +88,7 @@ StrInfo AssistDrawer::StringInfo(string str) {
 }
 
 void AssistDrawer::drawBackground(float x, float y, StrInfo strInfo) {
-	DrawRectFilled(x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BACKGROUND_COLOR); //black background
+	DrawRectFilled(x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BACKGROUND_COLOR - BG_COLOR_MASK); //black background
 	DrawRect(x - PADX, y - PADY, strInfo.x + PADX * 2, strInfo.y + PADY * 2, BORDER_COLOR); // white border
 }
 

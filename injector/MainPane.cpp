@@ -143,7 +143,9 @@ string MainPane::getDescriptionTextBlock()
     ss << format("Distance for Self/Enemy (%s)\n") % get_key_description("Hotkeys.LOG_DISPLACEMENT_ENEMY");
     ss << format("Toggle Compass Overlay (%s)\n") % get_key_description("Hotkeys.COMP_OVERLAY");
     ss << format("Toggle Compass Overlay Z Fade (%s)\n") % get_key_description("Hotkeys.COMP_OVERLAY_ZFADE");
+    ss << format("Show Ping Meter (%s)\n") % get_key_description("Hotkeys.SHOW_PING");
     ss << format("Toggle Raid Boss Assist (%s)\n") % get_key_description("Hotkeys.RAID_BOSS_ASSIST");
+
     return ss.str();
 }
 

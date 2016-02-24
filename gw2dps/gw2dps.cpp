@@ -22,6 +22,7 @@ bool selfFloat = false;
 bool selfHealthPercent = true;
 bool loopLimiter = true;
 
+bool showPing = false;
 bool woldBosses = false;
 bool compDotsFade = false;
 bool compDots = false;
@@ -724,7 +725,26 @@ void ESP()
                 }
             }
         }
+    }
 
+    if (showPing) {
+        float ww = GetWindowWidth();
+        float wh = GetWindowHeight();
+        int ping = GetPing();
+        int fps = GetFPS();
+        int glide = (int)(me.GetGliderPercent()*100.0f);
+        int rows = 3;
+
+        stringstream ss;
+        StrInfo strInfo;
+        ss << format("%i\n%i\n%i") % fps % ping % glide;
+
+        strInfo = AssistDrawer::StringInfo(ss.str());
+        float x = round(ww - strInfo.x - 2);
+        float y = round(wh - AssistDrawer::lineHeight * rows - 4);
+
+        AssistDrawer::get().drawBackground(x, y, strInfo);
+        AssistDrawer::get().drawFont(x, y, (floatCircles ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
     }
 
     // Bottom Element //
@@ -1385,22 +1405,6 @@ void ESP()
             }
         }
     }
-
-    if (!(locked.valid && locked.id == pAgentId2)) {
-        pAgentId2 = 0;
-        if (!timer2.is_stopped()) timer2.stop();
-    }
-
-    stringstream timer_ss;
-    timer::cpu_times elapsed2 = timer2.elapsed();
-    double elapsedMs = elapsed2.wall / 1e9;
-    if (elapsedMs) timer_ss << format("dps: %i") % int(totaldmg / elapsedMs);
-    AssistDrawer::get().drawFont(10, 45, AssistDrawer::WHITE, timer_ss.str());
-
-    if (!(locked.valid && locked.id == pAgentId2)) {
-        pAgentId2 = 0;
-        if (!timer2.is_stopped()) timer2.stop();
-    }
 }
 
 void displayDebug() {
@@ -1520,6 +1524,7 @@ void load_preferences() {
     logCritsSample = Str2Int(read_config_value("Preferences.LOG_CRITS_SAMPLE"));
     compDotsFade = Str2Bool(read_config_value("Preferences.COMP_OVERLAY_ZFADE"));
     compDots = Str2Bool(read_config_value("Preferences.COMP_OVERLAY"));
+    showPing = Str2Bool(read_config_value("Preferences.SHOW_PING"));
 }
 
 void save_preferences() {
@@ -1564,6 +1569,7 @@ void save_preferences() {
     write_config_value("Preferences.LOG_CRITS_SAMPLE", Int2Str(logCritsSample));
     write_config_value("Preferences.COMP_OVERLAY_ZFADE", Bool2Str(compDotsFade));
     write_config_value("Preferences.COMP_OVERLAY", Bool2Str(compDots));
+    write_config_value("Preferences.SHOW_PING", Bool2Str(showPing));
     save_config();
 }
 
@@ -1826,10 +1832,6 @@ void GW2LIB::gw2lib_main()
     // wait for exit hotkey
     while (GetAsyncKeyState(VK_F12) >= 0)
         Sleep(1);
-
-    if (!timer2.is_stopped()) {
-        timer2.stop();
-    }
 
     close_config();
 
