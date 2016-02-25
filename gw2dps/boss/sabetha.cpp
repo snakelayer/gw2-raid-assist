@@ -41,26 +41,23 @@ void Sabetha::updateFlamewallState() {
 }
 
 void Sabetha::drawFlamewallStatus() {
-	Vector3 pos = getDrawAssistPosition();
-	float x, y;
-	bool onScreen = getScreenLocation(&x, &y, pos);
-	y += flamewallDisplayOffset;
+	if ((flamewall.getState() == FW::State::FIRST_CHARGE) ||
+		(flamewall.getState() == FW::State::RECHARGING) ||
+		(flamewall.getState() == FW::State::ACTIVATING) ||
+		(flamewall.getState() == FW::State::ACTIVE)) {
 
-	if ((flamewall.getState() == FW::State::FIRST_CHARGE) || (flamewall.getState() == FW::State::RECHARGING)) {
-		if (onScreen) {
+		Vector3 pos = getDrawAssistPosition();
+		float x, y;
+		if (getScreenLocation(&x, &y, pos)) {
+			y += flamewallDisplayOffset;
 			flamewall.drawCooldownMeter(x, y);
 		}
-	}
-	else if (flamewall.getState() == FW::State::ACTIVATING) {
-		flamewall.drawActivatingMarker(SABETHA_STARTING_POSITION);
-		if (onScreen) {
-			flamewall.drawCooldownMeter(x, y);
+
+		if (flamewall.getState() == FW::State::ACTIVATING) {
+			flamewall.drawActivatingMarker(SABETHA_STARTING_POSITION);
 		}
-	}
-	else if (flamewall.getState() == FW::State::ACTIVE) {
-		flamewall.drawActiveMarker(SABETHA_STARTING_POSITION);
-		if (onScreen) {
-			flamewall.drawCooldownMeter(x, y);
+		else if (flamewall.getState() == FW::State::ACTIVE) {
+			flamewall.drawActiveMarker(SABETHA_STARTING_POSITION);
 		}
 	}
 }

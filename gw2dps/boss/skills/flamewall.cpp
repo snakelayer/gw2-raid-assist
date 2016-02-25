@@ -89,27 +89,18 @@ void Flamewall::drawCooldownMeter(float x, float y) {
 	if (state == FW::State::FIRST_CHARGE) {
 		cooldownPercent = remainingCooldown / (FIRST_COOLDOWN + ACTIVATING_DURATION);
 	}
-	else if (state == FW::State::RECHARGING) {
+	else if (state == FW::State::RECHARGING || state == FW::State::ACTIVATING) {
 		cooldownPercent = remainingCooldown / (COOLDOWN + ACTIVATING_DURATION);
-	}
-	else if (state == FW::State::ACTIVATING) {
-		cooldownPercent = remainingCooldown / (COOLDOWN + ACTIVATING_DURATION); // TODO: merge some of these
 	}
 	else if (state == FW::State::ACTIVE) {
 		cooldownPercent = remainingCooldown / ACTIVE_DURATION;
 	}
 
-	float rechargeMeterWidth = 0.0f;
 	if (state == FW::State::FIRST_CHARGE || state == FW::State::RECHARGING || state == FW::State::ACTIVATING) {
-		rechargeMeterWidth = meterWidth * (1.0f - cooldownPercent);
-	}
-	else if (state == FW::State::ACTIVE) {
-		rechargeMeterWidth = meterWidth * cooldownPercent;
+		cooldownPercent = (1.0f - cooldownPercent);
 	}
 
-	DrawRectFilled(x - meterWidth / 2, y, rechargeMeterWidth, meterHeight, (state == FW::State::ACTIVE) ? ACTIVE : AssistDrawer::BREAKBAR_RECHARGING); // TODO: change color
-	DrawRect(x - meterWidth / 2, y, meterWidth, meterHeight, AssistDrawer::WHITE);
-	AssistDrawer::get().drawFont(x - 10.0f, y + AssistDrawer::PADY, AssistDrawer::WHITE, cooldownStr);
+	meter.drawAtPercent(x, y, (state == FW::State::ACTIVE) ? ACTIVE : AssistDrawer::BREAKBAR_RECHARGING, cooldownStr, cooldownPercent); // TODO: change color
 }
 
 void Flamewall::drawActivatingMarker(Vector3 position) {

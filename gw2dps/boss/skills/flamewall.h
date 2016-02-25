@@ -5,6 +5,7 @@
 
 #include "gw2lib.h"
 
+#include "draw/meter.h"
 #include "../../assist_drawer.h"
 
 namespace FW {
@@ -41,8 +42,6 @@ class Flamewall
 		const float ACTIVATING_DURATION = 2.5f;
 		const float ACTIVE_DURATION = 10.0f;
 
-		const float meterWidth = 150.0f;
-		const float meterHeight = 18.0f;
 		const float flamewallWidth = 30.0f;
 		const float flamewallLength = 500.0f;
 
@@ -53,6 +52,8 @@ class Flamewall
 		FW::State state;
 		boost::timer::cpu_timer timer;
 		float startingRotation;
+
+		Meter meter;
 
 		void startRecharge();
 
