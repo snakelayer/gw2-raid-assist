@@ -3,7 +3,7 @@ Raid Assist is a tool to help players perform better at GW2 raids. It is based o
 
 # How to Use
 - Be inside a raid instance with all squad members
-- Target the raid boss and activate Raid Assist (default: Alt-B)
+- Before the fight starts, target the raid boss and activate Raid Assist (default: Alt-B). If activated mid-fight, overlay information may be incorrect or missing.
 - After an attempt ends (boss dies or squad wipes), stats will be output to your Gw2.exe folder. Raid Assist will automatically turn off.
 
 # Features
