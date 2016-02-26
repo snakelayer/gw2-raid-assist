@@ -1,8 +1,11 @@
 #pragma once
 
+#include <boost/format.hpp>
+
 #include "gw2lib.h"
 
 #include "raid_boss.h"
+#include "skills/ghastly_rampage.h"
 
 class Gorseval : public RaidBoss
 {
@@ -24,12 +27,19 @@ class Gorseval : public RaidBoss
         */
         static const float HEAVY_HIT_DAMAGE_THRESHOLD;
 
+        const float ghastlyRampageDisplayOffset = 40.0f;
+
+        GhastlyRampage ghastlyRampage;
+
         Gorseval(GW2LIB::Agent agent);
 
         float getMaxHp() { return MAX_HP; }
         float getBossHeight() { return 300.0f; } //TODO: check this
 
+        void updateGhastlyRampage();
+
         void drawHealthTicks();
+        void drawGhastlyRampageStatus();
 
     public:
         static RaidBoss* instance(GW2LIB::Agent agent) { return new Gorseval(agent); }
