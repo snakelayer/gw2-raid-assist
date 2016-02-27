@@ -80,6 +80,7 @@ struct Float {
     float cHealth;
     float mHealth;
     int prof;
+    string name;
 };
 struct Siege {
     int type;
