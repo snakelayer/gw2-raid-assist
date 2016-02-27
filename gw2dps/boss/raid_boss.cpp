@@ -18,7 +18,7 @@ RaidBoss::~RaidBoss() {
 }
 
 void RaidBoss::updateState() {
-	if (agent.m_ptr == nullptr) {
+	if (!agent.IsValid()) {
 		if (!tryResetBossAgent()) {
 			return;
 		}
