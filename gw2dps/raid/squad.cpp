@@ -1,6 +1,7 @@
 #include "squad.h"
 
 using namespace boost;
+using namespace GW2LIB;
 using namespace std;
 
 const std::string Squad::logFilePrefix = "gw2dpsLog-RaidAssist-";
@@ -9,7 +10,9 @@ Squad::Squad()
 	: disable(false), raidState(RAID::ACTIVE) {
 	debugStr = "";
 
-	GW2LIB::Character character;
+	addPlayer(GetOwnCharacter());
+
+	Character character;
 	while (character.BeNext()) {
 		if (members.size() == MAX_SQUAD_SIZE) {
 			break;
@@ -27,7 +30,7 @@ void Squad::setBoss(RaidBoss *raidBoss) {
 	this->raidBoss = raidBoss;
 }
 
-void Squad::addPlayer(GW2LIB::Character character) {
+void Squad::addPlayer(Character character) {
 	if (!character.IsPlayer()) {
 		return;
 	}
@@ -37,7 +40,7 @@ void Squad::addPlayer(GW2LIB::Character character) {
 }
 
 CharacterMap Squad::getCharacterMap() {
-	GW2LIB::Character character;
+	Character character;
 	CharacterMap characterMap;
 
 	while (character.BeNext()) {
