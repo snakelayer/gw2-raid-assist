@@ -17,22 +17,18 @@ void RaidBossFactory::addBossEntry(raidBossMatcher matcher, raidBossSupplier sup
 }
 
 RaidBoss* RaidBossFactory::getNextBoss() {
-	GW2LIB::Agent agent;
-
-	/*agent = GetLockedSelection();
-	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
+	GW2LIB::Agent agent = GetLockedSelection();
+	
+	/*if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
 		return ValeGuardian::instance(agent);
 	}*/
 
-	while (agent.BeNext()) {
-		for (raidBossMatcherMap::iterator it = matcherMap.begin(); it != matcherMap.end(); ++it) {
-			if (it->first(agent)) {
-				return it->second(agent);
-			}
+	for (raidBossMatcherMap::iterator it = matcherMap.begin(); it != matcherMap.end(); ++it) {
+		if (it->first(agent)) {
+			return it->second(agent);
 		}
 	}
 
-	agent = GetLockedSelection();
 	if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
 		return new UnknownBoss(agent);
 	}
