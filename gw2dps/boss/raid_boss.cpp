@@ -126,7 +126,7 @@ void RaidBoss::drawAtPosition(stringstream &ss, Vector3 pos) {
 }
 
 void RaidBoss::outputAssistHeader(stringstream &ss) {
-	ss << format("Name: %s\n") % getName();
+	ss << format("%s\n") % getName();
 }
 
 void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {

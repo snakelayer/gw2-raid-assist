@@ -18,7 +18,7 @@ class UnknownBoss : public RaidBoss
 		float getMaxHp() { return agent.GetCharacter().GetMaxHealth(); }
 		float getBossHeight() { return 200.0f; }
 
-		std::string getName() { return "Unknown"; }
+		std::string getName() { return "Unknown Boss"; }
 		static bool matchesTarget(GW2LIB::Agent &agent) { return false; }
 
 		void updateState(boost::circular_buffer<float> &damageBuffer);
