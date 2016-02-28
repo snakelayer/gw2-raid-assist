@@ -1,5 +1,8 @@
 #include "raid_boss.h"
 
+// for bug fixing...
+#include "hacklib/Logging.h"
+
 using namespace boost;
 using namespace GW2LIB;
 using namespace std;
@@ -11,6 +14,8 @@ const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
 
 RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
 	dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
+
+	HL_LOG_DBG("initialize raid boss, agentPtr=%p, characterPtr=%p\n", agent.m_ptr, agent.GetCharacter().m_ptr);
 }
 
 RaidBoss::~RaidBoss() {
@@ -23,11 +28,17 @@ void RaidBoss::updateState() {
 			return;
 		}
 	}
+
+	if (!agent.GetCharacter().IsValid()) {
+		HL_LOG_DBG("no character, skip update state, agentId=%d, agentPtr=%p, characterPtr=%p\n", agent.GetAgentId(), agent.m_ptr, agent.GetCharacter().m_ptr);
+		return;
+	}
+
 	if (encounterTimer.isStopped() && hasTakenDamage()) {
 		startEncounter();
 	}
 
-	if (!encounterTimer.isStopped() && agent.IsValid() && agent.GetCharacter().IsValid() && !isDead()) {
+	if (!encounterTimer.isStopped() && agent.IsValid() && !isDead()) {
 		int elapsed = encounterTimer.getElapsedMilliseconds();
 		remainingHealthMap.insert(pair<int, float>(elapsed, getCurrentHealth()));
 	}
@@ -50,6 +61,7 @@ void RaidBoss::drawAssistInfo() {
 bool RaidBoss::isDead() {
 	Character character = agent.GetCharacter();
 	if (!character.IsValid() || (character.GetMaxHealth() != getMaxHp())) {
+		HL_LOG_DBG("invalid character at isDead check, agentId=%d, agentPtr=%p, characterPtr=%p\n", agent.GetAgentId(), agent.m_ptr, character.m_ptr);
 		return false; // this is a (mostly correct) guess when we don't have the character object
 	}
 
@@ -97,10 +109,12 @@ void RaidBoss::startEncounter() {
 
 bool RaidBoss::tryResetBossAgent() {
 	Agent nextAgent;
+	HL_LOG_DBG("tryResetBoss, agentId=%d, agentPtr=%p, characterPtr=%p\n", agent.GetAgentId(), agent.m_ptr, agent.GetCharacter().m_ptr);
 
 	while (nextAgent.BeNext()) {
 		if (nextAgent.GetCharacter().GetMaxHealth() == getMaxHp()) {
 			agent.m_ptr = nextAgent.m_ptr;
+			HL_LOG_DBG(" new agent: agentId=%d, agentPtr=%p\n", agent.GetAgentId(), agent.m_ptr);
 			return true;
 		}
 	}

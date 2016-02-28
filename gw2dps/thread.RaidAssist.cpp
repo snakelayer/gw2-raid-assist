@@ -1,3 +1,6 @@
+// for bug fixing...
+#include "hacklib/Logging.h"
+
 int disableRaidAssist() {
 	if (squad != nullptr) {
 		delete squad;
@@ -86,6 +89,7 @@ void threadRaidAssist() {
 
 				if ((squad != nullptr && squad->turnOff()) ||
 					(boss != nullptr && boss->isDead())) {
+					HL_LOG_DBG("squad off or boss dead: turnOff:%s, isDead:%s\n", squad->turnOff() ? "yes" : "no", boss->isDead() ? "yes" : "no");
 					mapId = disableRaidAssist();
 				}
 			}

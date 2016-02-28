@@ -55,6 +55,9 @@ CharacterMap Squad::getCharacterMap() {
 
 void Squad::updateState() {
 	CharacterMap characterMap = getCharacterMap();
+	if (characterMap.empty()) {
+		return; // sometimes hacklib_gw2 doesn't return any character objects for some reason...
+	}
 
 	for (auto &member : members) {
 		CharacterMap::iterator it = characterMap.find(member.first);
