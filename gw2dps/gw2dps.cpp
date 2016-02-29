@@ -555,149 +555,6 @@ void ESP()
             drawElementAt(ss, aLeft);
         
         }
-        stringstream ss;
-        StrInfo strInfo;
-
-        if (floatCircles)
-        {
-            float x, y;
-            if (floatAllyNpc && floaters.allyNpc.size() > 0)
-            {
-                for (auto & floater : floaters.allyNpc) {
-                    if (WorldToScreen(floater.pos, &x, &y))
-                    {
-                        stringstream fs;
-                        //fs << floater.name << "\n";
-                        if (floatType)
-                            fs << format("%i") % int(Dist(self.pos, floater.pos));
-                        else
-                            fs << format("%i") % floater.mHealth;
-
-                        AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
-
-                        Vector3 rotArrow = {
-                            floater.pos.x + cos(floater.rot) * 50.0f,
-                            floater.pos.y + sin(floater.rot) * 50.0f,
-                            floater.pos.z
-                        };
-
-                        DWORD color = 0x4433ff00;
-                        float w = floater.cHealth / floater.mHealth * 20;
-                        DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
-                    }
-                }
-            }
-
-            if (floatEnemyNpc && floaters.enemyNpc.size() > 0)
-            {
-                for (auto & floater : floaters.enemyNpc) {
-                    if (WorldToScreen(floater.pos, &x, &y))
-                    {
-                        stringstream fs;
-                        //fs << floater.name << "\n";
-                        if (floatType)
-                            fs << format("%i") % int(Dist(self.pos, floater.pos));
-                        else
-                            fs << format("%i") % floater.mHealth;
-
-                        AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
-
-                        Vector3 rotArrow = {
-                            floater.pos.x + cos(floater.rot) * 50.0f,
-                            floater.pos.y + sin(floater.rot) * 50.0f,
-                            floater.pos.z
-                        };
-
-                        DWORD color = 0x44ff3300;
-                        float w = floater.cHealth / floater.mHealth * 20;
-                        DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
-                    }
-                }
-            }
-
-            if (floatAllyPlayer && floaters.allyPlayer.size() > 0)
-            {
-                for (auto & floater : floaters.allyPlayer) {
-                    if (WorldToScreen(floater.pos, &x, &y))
-                    {
-                        float ww = GetWindowWidth() - 25;
-                        float wh = GetWindowHeight() - 10;
-
-                        if (x < 50) x = 50;
-                        if (x > ww) x = ww;
-                        if (y < 20) y = 20;
-                        if (y > wh) y = wh;
-
-                        stringstream fs;
-                        //fs << floater.name << "\n";
-                        if (floatType)
-                            fs << format("%i") % int(Dist(self.pos, floater.pos));
-                        else
-                            fs << format("%i") % floater.mHealth;
-
-                        AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
-
-                        Vector3 rotArrow = {
-                            floater.pos.x + cos(floater.rot) * 50.0f,
-                            floater.pos.y + sin(floater.rot) * 50.0f,
-                            floater.pos.z
-                        };
-
-                        DWORD color = 0x4433ff00;
-                        float w = floater.cHealth / floater.mHealth * 20;
-                        DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
-                    }
-                }
-            }
-
-            if (floatEnemyPlayer && floaters.enemyPlayer.size() > 0)
-            {
-                for (auto & floater : floaters.enemyPlayer) {
-                    if (WorldToScreen(floater.pos, &x, &y))
-                    {
-                        stringstream fs;
-                        //fs << floater.name << "\n";
-                        if (floatType)
-                            fs << format("%i") % int(Dist(self.pos, floater.pos));
-                        else
-                            fs << format("%i") % floater.mHealth;
-
-                        AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
-
-                        Vector3 rotArrow = {
-                            floater.pos.x + cos(floater.rot) * 50.0f,
-                            floater.pos.y + sin(floater.rot) * 50.0f,
-                            floater.pos.z
-                        };
-
-                        DWORD color = 0x44ff3300;
-                        float w = floater.cHealth / floater.mHealth * 20;
-                        DrawCircleProjected(floater.pos, 20.0f, color);
-                        DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
-                        DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
-                        DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
-                    }
-                }
-            }
-
-            if (floatSiege && floaters.siege.size() > 0)
-            {
-                for (auto & floater : floaters.siege) {
-                    //DWORD color = 0x44ff3300;
-                    //DrawCircleProjected(floater.pos, 20.0f, color);
-                    //DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
-                }
-            }
-        }
     }
 
     if (showPing) {
@@ -866,7 +723,6 @@ void ESP()
                 aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
             }
 
-
             if (floatCircles)
             {
                 float x, y;
@@ -876,17 +732,26 @@ void ESP()
                         if (WorldToScreen(floater.pos, &x, &y))
                         {
                             stringstream fs;
+                            //fs << floater.name << "\n";
                             if (floatType)
                                 fs << format("%i") % int(Dist(self.pos, floater.pos));
                             else
                                 fs << format("%i") % floater.mHealth;
 
-                            StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-                            AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
+                            AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                            Vector3 rotArrow = {
+                                floater.pos.x + cos(floater.rot) * 50.0f,
+                                floater.pos.y + sin(floater.rot) * 50.0f,
+                                floater.pos.z
+                            };
 
                             DWORD color = 0x4433ff00;
+                            float w = floater.cHealth / floater.mHealth * 20;
                             DrawCircleProjected(floater.pos, 20.0f, color);
-                            DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                            DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                            DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                            DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                         }
                     }
                 }
@@ -897,17 +762,26 @@ void ESP()
                         if (WorldToScreen(floater.pos, &x, &y))
                         {
                             stringstream fs;
+                            //fs << floater.name << "\n";
                             if (floatType)
                                 fs << format("%i") % int(Dist(self.pos, floater.pos));
                             else
                                 fs << format("%i") % floater.mHealth;
 
-                            StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-                            AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
+                            AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                            Vector3 rotArrow = {
+                                floater.pos.x + cos(floater.rot) * 50.0f,
+                                floater.pos.y + sin(floater.rot) * 50.0f,
+                                floater.pos.z
+                            };
 
                             DWORD color = 0x44ff3300;
+                            float w = floater.cHealth / floater.mHealth * 20;
                             DrawCircleProjected(floater.pos, 20.0f, color);
-                            DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                            DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                            DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                            DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                         }
                     }
                 }
@@ -917,18 +791,35 @@ void ESP()
                     for (auto & floater : floaters.allyPlayer) {
                         if (WorldToScreen(floater.pos, &x, &y))
                         {
+                            float ww = GetWindowWidth() - 25;
+                            float wh = GetWindowHeight() - 10;
+
+                            if (x < 50) x = 50;
+                            if (x > ww) x = ww;
+                            if (y < 20) y = 20;
+                            if (y > wh) y = wh;
+
                             stringstream fs;
+                            //fs << floater.name << "\n";
                             if (floatType)
                                 fs << format("%i") % int(Dist(self.pos, floater.pos));
                             else
                                 fs << format("%i") % floater.mHealth;
 
-                            StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-                            AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
+                            AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                            Vector3 rotArrow = {
+                                floater.pos.x + cos(floater.rot) * 50.0f,
+                                floater.pos.y + sin(floater.rot) * 50.0f,
+                                floater.pos.z
+                            };
 
                             DWORD color = 0x4433ff00;
+                            float w = floater.cHealth / floater.mHealth * 20;
                             DrawCircleProjected(floater.pos, 20.0f, color);
-                            DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                            DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                            DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                            DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                         }
                     }
                 }
@@ -939,17 +830,26 @@ void ESP()
                         if (WorldToScreen(floater.pos, &x, &y))
                         {
                             stringstream fs;
+                            //fs << floater.name << "\n";
                             if (floatType)
                                 fs << format("%i") % int(Dist(self.pos, floater.pos));
                             else
                                 fs << format("%i") % floater.mHealth;
 
-                            StrInfo fsInfo = AssistDrawer::StringInfo(fs.str());
-                            AssistDrawer::get().drawFont(x - fsInfo.x / 2, y - 15, AssistDrawer::WHITE, fs.str());
+                            AssistDrawer::get().drawFont(x, y, AssistDrawer::WHITE, fs.str());
+
+                            Vector3 rotArrow = {
+                                floater.pos.x + cos(floater.rot) * 50.0f,
+                                floater.pos.y + sin(floater.rot) * 50.0f,
+                                floater.pos.z
+                            };
 
                             DWORD color = 0x44ff3300;
+                            float w = floater.cHealth / floater.mHealth * 20;
                             DrawCircleProjected(floater.pos, 20.0f, color);
-                            DrawCircleFilledProjected(floater.pos, 20.0f, color - 0x30000000);
+                            DrawRectProjected(rotArrow, 20, 5, floater.rot, color);
+                            DrawRectFilledProjected(rotArrow, w, 5, floater.rot, color);
+                            DrawCircleFilledProjected(floater.pos, 20.0f, color - AssistDrawer::FLOAT_MASK);
                         }
                     }
                 }
