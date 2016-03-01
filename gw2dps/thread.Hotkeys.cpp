@@ -128,6 +128,10 @@ void threadHotKeys()
     registerHotKeyWrapper(LOG_DISPLACEMENT, read_config_value("Hotkeys.LOG_DISPLACEMENT")); // logDisplacement
     registerHotKeyWrapper(LOG_DISPLACEMENT_ENEMY, read_config_value("Hotkeys.LOG_DISPLACEMENT_ENEMY")); // logDisplacementEnemy
 
+    registerHotKeyWrapper(RAID_DEBUG, read_config_value("Hotkeys.RAID_DEBUG"));
+    registerHotKeyWrapper(RAID_BOSS_ASSIST, read_config_value("Hotkeys.RAID_BOSS_ASSIST"));
+    registerHotKeyWrapper(RECORD_RAIDS, read_config_value("Hotkeys.RECORD_RAIDS"));
+
     registerHotKeyWrapper(COMP_OVERLAY, read_config_value("Hotkeys.COMP_OVERLAY"));
     registerHotKeyWrapper(COMP_OVERLAY_ZFADE, read_config_value("Hotkeys.COMP_OVERLAY_ZFADE"));
     registerHotKeyWrapper(SHOW_PING, read_config_value("Hotkeys.SHOW_PING"));
@@ -202,6 +206,10 @@ void threadHotKeys()
             if (msg.wParam == LOG_SPEEDOMETER_ENEMY) logSpeedometerEnemy = !logSpeedometerEnemy;
             if (msg.wParam == LOG_DISPLACEMENT) logDisplacement = !logDisplacement;
             if (msg.wParam == LOG_DISPLACEMENT_ENEMY) logDisplacementEnemy = !logDisplacementEnemy;
+
+            if (msg.wParam == RAID_DEBUG) raid_debug = !raid_debug;
+            if (msg.wParam == RAID_BOSS_ASSIST) raid_boss_assist = !raid_boss_assist;
+            if (msg.wParam == RECORD_RAIDS) logRaidAssistToFile = !logRaidAssistToFile;
 
             if (msg.wParam == COMP_OVERLAY) compDots = !compDots;
             if (msg.wParam == COMP_OVERLAY_ZFADE) compDotsFade = !compDotsFade;
