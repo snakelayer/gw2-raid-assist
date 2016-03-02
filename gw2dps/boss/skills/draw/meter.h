@@ -12,7 +12,8 @@ class Meter
         Meter();
         Meter(float width, float height);
 
-        void draw(float x, float y, DWORD color, std::string text);
+        //void draw(float x, float y, DWORD color, std::string text);
+        void drawAtPercent(float x, float y, DWORD color, float percent);
         void drawAtPercent(float x, float y, DWORD color, std::string text, float percent);
 
     private:

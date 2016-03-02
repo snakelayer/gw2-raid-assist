@@ -28,7 +28,7 @@ void MagicStorm::setState(MS::State state) {
 
 void MagicStorm::drawStatusMeter(float x, float y, float percent) {
     if (getState() == MS::READY) {
-        meter.draw(x, y, AssistDrawer::BREAKBAR_FULL, "READY");
+        meter.drawAtPercent(x, y, AssistDrawer::BREAKBAR_FULL, 1.0f);
     }
     else if (getState() == MS::ACTIVE) {
         string text = str(format("%d") % int(percent * 100));
