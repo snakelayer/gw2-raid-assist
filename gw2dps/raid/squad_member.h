@@ -6,55 +6,55 @@
 
 namespace SM {
 
-	enum SPEED_STATE {
-		BASIC = 0, // up to 200
-		SWIFTNESS, // up to 266
-		DODGE, // set to 366
-		SUPERSPEED // up to 400
-	};
+    enum SPEED_STATE {
+        BASIC = 0, // up to 200
+        SWIFTNESS, // up to 266
+        DODGE, // set to 366
+        SUPERSPEED // up to 400
+    };
 }
 
 class SquadMember {
-	private:
-		static const float SWIFTNESS_THRESHOLD;
-		static const float DODGE_THRESHOLD;
-		static const float SUPERSPEED_THRESHOLD;
+    private:
+        static const float SWIFTNESS_THRESHOLD;
+        static const float DODGE_THRESHOLD;
+        static const float SUPERSPEED_THRESHOLD;
 
-		std::string name;
-		int dodgeCount;
-		int heavyHitsTaken;
-		float heavyDamageTaken;
-		float totalDamageTaken;
-		int downedCount;
+        std::string name;
+        int dodgeCount;
+        int heavyHitsTaken;
+        float heavyDamageTaken;
+        float totalDamageTaken;
+        int downedCount;
 
-		SM::SPEED_STATE speedState;
-		boost::timer::cpu_timer dodgeTimer;
-		bool isAlive;
-		float lastEndurance;
-		float lastHealth;
-		float lastHealthDelta;
+        SM::SPEED_STATE speedState;
+        boost::timer::cpu_timer dodgeTimer;
+        bool isAlive;
+        float lastEndurance;
+        float lastHealth;
+        float lastHealthDelta;
 
-		void updateLastHealthDelta(GW2LIB::Character &character);
-		void updateDamageTaken();
-		void updateDodgeCount(GW2LIB::Character &character);
-		void tryUpdateDodgeCount();
+        void updateLastHealthDelta(GW2LIB::Character &character);
+        void updateDamageTaken();
+        void updateDodgeCount(GW2LIB::Character &character);
+        void tryUpdateDodgeCount();
 
-		SquadMember() = delete;
+        SquadMember() = delete;
 
-	public:
-		SquadMember(GW2LIB::Character character);
-		void updateStats(GW2LIB::Character &character);
-		void inferDodgeStateWithSpeed(float speed);
+    public:
+        SquadMember(GW2LIB::Character character);
+        void updateStats(GW2LIB::Character &character);
+        void inferDodgeStateWithSpeed(float speed);
 
-		std::string getName() { return name; }
-		int getDodgeCount() { return dodgeCount; }
-		float getLastHealthDelta() { return lastHealthDelta; }
-		int getHeavyHitsTaken() { return heavyHitsTaken; }
-		float getHeavyDamageTaken() { return heavyDamageTaken; }
-		float getTotalDamageTaken() { return totalDamageTaken; }
-		int getDownedCount() { return downedCount; }
+        std::string getName() { return name; }
+        int getDodgeCount() { return dodgeCount; }
+        float getLastHealthDelta() { return lastHealthDelta; }
+        int getHeavyHitsTaken() { return heavyHitsTaken; }
+        float getHeavyDamageTaken() { return heavyDamageTaken; }
+        float getTotalDamageTaken() { return totalDamageTaken; }
+        int getDownedCount() { return downedCount; }
 
-		void takeHeavyHit();
+        void takeHeavyHit();
 
-		SM::SPEED_STATE getSpeedState() { return speedState; }
+        SM::SPEED_STATE getSpeedState() { return speedState; }
 };

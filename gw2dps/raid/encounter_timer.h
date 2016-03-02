@@ -4,19 +4,19 @@
 
 class EncounterTimer
 {
-	private:
-		boost::timer::cpu_timer timer;
-		double lastElapsed;
+    private:
+        boost::timer::cpu_timer timer;
+        double lastElapsed;
 
 
-	public:
-		EncounterTimer();
+    public:
+        EncounterTimer();
 
-		void start();
-		void stop();
-		bool isStopped();
-		int getElapsedMilliseconds();
-		int getElapsedSeconds();
-		int getSplitSeconds();
+        void start();
+        void stop();
+        bool isStopped();
+        int getElapsedMilliseconds();
+        int getElapsedSeconds();
+        int getSplitSeconds();
 
 };

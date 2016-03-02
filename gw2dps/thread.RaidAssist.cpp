@@ -2,114 +2,114 @@
 #include "hacklib/Logging.h"
 
 int disableRaidAssist() {
-	if (squad != nullptr) {
-		delete squad;
-	}
-	squad = nullptr;
+    if (squad != nullptr) {
+        delete squad;
+    }
+    squad = nullptr;
 
-	if (boss != nullptr) {
-		delete boss;
-	}
-	boss = nullptr;
+    if (boss != nullptr) {
+        delete boss;
+    }
+    boss = nullptr;
 
-	raid_boss_assist = false;
-	return 0;
+    raid_boss_assist = false;
+    return 0;
 }
 
 void threadRaidAssist() {
-	int mapId = 0;
-	float pBossHealth = 0;
-	double pollingRate = 250; // ms
+    int mapId = 0;
+    float pBossHealth = 0;
+    double pollingRate = 250; // ms
 
-	timer::cpu_timer timer;
-	while (true)
-	{
-		this_thread::interruption_point();
+    timer::cpu_timer timer;
+    while (true)
+    {
+        this_thread::interruption_point();
 
-		if (raid_boss_assist) {
-			if (mapId == 0) {
-				mapId = GetCurrentMapId();
-			}
-			else if (mapId != GetCurrentMapId()) {
-				mapId = disableRaidAssist();
-				continue;
-			}
+        if (raid_boss_assist) {
+            if (mapId == 0) {
+                mapId = GetCurrentMapId();
+            }
+            else if (mapId != GetCurrentMapId()) {
+                mapId = disableRaidAssist();
+                continue;
+            }
 
-			if (timer.is_stopped()) {
-				timer.start();
-			}
+            if (timer.is_stopped()) {
+                timer.start();
+            }
 
-			timer::cpu_times elapsed = timer.elapsed();
-			double elapsedMs = elapsed.wall / 1e6;
-			if (elapsedMs > pollingRate) {
-				timer.start();
-				
-				//squad&boss creation/update scope
-				{
-					if (squad == nullptr) {
-						squad = new Squad();
-					}
-					else {
-						squad->updateState();
-					}
+            timer::cpu_times elapsed = timer.elapsed();
+            double elapsedMs = elapsed.wall / 1e6;
+            if (elapsedMs > pollingRate) {
+                timer.start();
+                
+                //squad&boss creation/update scope
+                {
+                    if (squad == nullptr) {
+                        squad = new Squad();
+                    }
+                    else {
+                        squad->updateState();
+                    }
 
-					if (boss == nullptr) {
-						boss = RaidBossFactory::get().getNextBoss();
-						if (boss != nullptr) {
-							squad->setBoss(boss);
-						}
-						else {
-							mapId = disableRaidAssist();
-						}
-					}
-					else {
-						boss->updateState(bufferBossDps);
-					}
-				}
+                    if (boss == nullptr) {
+                        boss = RaidBossFactory::get().getNextBoss();
+                        if (boss != nullptr) {
+                            squad->setBoss(boss);
+                        }
+                        else {
+                            mapId = disableRaidAssist();
+                        }
+                    }
+                    else {
+                        boss->updateState(bufferBossDps);
+                    }
+                }
 
-				// boss damage buffer scope
-				if (boss != nullptr) {
-					float cHealth = boss->getCurrentHealth();
+                // boss damage buffer scope
+                if (boss != nullptr) {
+                    float cHealth = boss->getCurrentHealth();
 
-					if (pBossHealth == 0)
-						pBossHealth = cHealth;
+                    if (pBossHealth == 0)
+                        pBossHealth = cHealth;
 
-					float dmg = pBossHealth - cHealth;
-					pBossHealth = cHealth;
+                    float dmg = pBossHealth - cHealth;
+                    pBossHealth = cHealth;
 
-					if (!dpsAllowNegative && dmg < 0)
-						dmg = 0;
+                    if (!dpsAllowNegative && dmg < 0)
+                        dmg = 0;
 
-					bufferBossDps.push_front(dmg);
-				}
+                    bufferBossDps.push_front(dmg);
+                }
 
-				if (squad != nullptr && boss != nullptr) {
-					mapId = GetCurrentMapId();
-				}
+                if (squad != nullptr && boss != nullptr) {
+                    mapId = GetCurrentMapId();
+                }
 
-				if ((squad != nullptr && squad->turnOff()) ||
-					(boss != nullptr && boss->isDead())) {
-					HL_LOG_DBG("squad off or boss dead: turnOff:%s, isDead:%s\n", squad->turnOff() ? "yes" : "no", boss->isDead() ? "yes" : "no");
-					mapId = disableRaidAssist();
-				}
-			}
-		}
-		else {
-			if (!timer.is_stopped()) {
-				timer.stop();
-				pBossHealth = 0;
-			}
+                if ((squad != nullptr && squad->turnOff()) ||
+                    (boss != nullptr && boss->isDead())) {
+                    HL_LOG_DBG("squad off or boss dead: turnOff:%s, isDead:%s\n", squad->turnOff() ? "yes" : "no", boss->isDead() ? "yes" : "no");
+                    mapId = disableRaidAssist();
+                }
+            }
+        }
+        else {
+            if (!timer.is_stopped()) {
+                timer.stop();
+                pBossHealth = 0;
+            }
 
-			if (!bufferBossDps.empty())
-				bufferBossDps.clear();
+            if (!bufferBossDps.empty())
+                bufferBossDps.clear();
 
-			mapId = disableRaidAssist();
+            mapId = disableRaidAssist();
 
-			if (!raid_boss_assist)
-				Sleep(100); // Thread not needed, sleep
-		}
+            if (!raid_boss_assist)
+                Sleep(100); // Thread not needed, sleep
+        }
 
-		if (loopLimiter)
-			Sleep(1);
-	}
+        if (loopLimiter)
+            Sleep(1);
+    }
 }

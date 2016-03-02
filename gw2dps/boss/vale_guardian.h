@@ -15,85 +15,85 @@
 
 namespace VG {
 
-	enum Phase {
-		FIRST = 0,
-		FIRST_TRANSITION,
-		FIRST_SPLIT,
-		SECOND,
-		SECOND_TRANSITION,
-		SECOND_SPLIT,
-		THIRD
-	};
+    enum Phase {
+        FIRST = 0,
+        FIRST_TRANSITION,
+        FIRST_SPLIT,
+        SECOND,
+        SECOND_TRANSITION,
+        SECOND_SPLIT,
+        THIRD
+    };
 }
 
 class ValeGuardian : public RaidBoss
 {
-	private:
-		static const float MAX_HP;
-		const float FIRST_PHASE_TRANSITION_HP = 14553669;
-		const float SECOND_PHASE_TRANSITION_HP = 7255058;
+    private:
+        static const float MAX_HP;
+        const float FIRST_PHASE_TRANSITION_HP = 14553669;
+        const float SECOND_PHASE_TRANSITION_HP = 7255058;
 
-		// for reference, HP of each guardian at the entrance:
-		// red:   2457750
-		// green: 3440850
-		// blue:  3539160
-		const float RED_GUARDIAN_MAX_HP = 540705;
-		const float GREEN_GUARDIAN_MAX_HP = 722579;
-		const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
+        // for reference, HP of each guardian at the entrance:
+        // red:   2457750
+        // green: 3440850
+        // blue:  3539160
+        const float RED_GUARDIAN_MAX_HP = 540705;
+        const float GREEN_GUARDIAN_MAX_HP = 722579;
+        const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
-		/*
-		  based on 1000 toughness:
+        /*
+          based on 1000 toughness:
 
-		  magic aura: <1.8k
-		  (blue) unstable magic spike: 4K+
-		  (green) distributed magic (<4 players): 13+K
-		  red orb:
-		  unstable pylon: 2k
-		  magic storm: same as magic aura?
-		  punch: 4k+
-		  bullet storm: 3k+
-		*/
-		static const float HEAVY_HIT_DAMAGE_THRESHOLD;
+          magic aura: <1.8k
+          (blue) unstable magic spike: 4K+
+          (green) distributed magic (<4 players): 13+K
+          red orb:
+          unstable pylon: 2k
+          magic storm: same as magic aura?
+          punch: 4k+
+          bullet storm: 3k+
+        */
+        static const float HEAVY_HIT_DAMAGE_THRESHOLD;
 
-		const float magicStormDisplayOffset = 40.0f;
+        const float magicStormDisplayOffset = 40.0f;
 
-		std::list<Seeker> seekers;
-		MagicStorm magicStorm;
-		UnstablePylon unstablePylon;
-		VG::Phase phase;
+        std::list<Seeker> seekers;
+        MagicStorm magicStorm;
+        UnstablePylon unstablePylon;
+        VG::Phase phase;
 
-		ValeGuardian(GW2LIB::Agent agent);
+        ValeGuardian(GW2LIB::Agent agent);
 
-		float getMaxHp() { return MAX_HP; }
-		float getBossHeight() { return 350.0f; }
-		bool isSplit() { return !(phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD); }
-		bool isPylonPhase() { return phase == VG::Phase::SECOND || phase == VG::Phase::THIRD; }
+        float getMaxHp() { return MAX_HP; }
+        float getBossHeight() { return 350.0f; }
+        bool isSplit() { return !(phase == VG::Phase::FIRST || phase == VG::Phase::SECOND || phase == VG::Phase::THIRD); }
+        bool isPylonPhase() { return phase == VG::Phase::SECOND || phase == VG::Phase::THIRD; }
 
-		void updateSeekerState();
-		void updateMagicStormState();
-		void updatePylonState();
+        void updateSeekerState();
+        void updateMagicStormState();
+        void updatePylonState();
 
-		void addEstTimeToSplit(std::stringstream &ss);
-		void drawSeekerStatus();
-		void drawMagicStormStatus();
-		void drawUnstablePylonStatus();
+        void addEstTimeToSplit(std::stringstream &ss);
+        void drawSeekerStatus();
+        void drawMagicStormStatus();
+        void drawUnstablePylonStatus();
 
-		bool findRedGuardian();
+        bool findRedGuardian();
 
-	public:
-		~ValeGuardian();
+    public:
+        ~ValeGuardian();
 
-		static RaidBoss* instance(GW2LIB::Agent agent) { return new ValeGuardian(agent); }
-		static bool matchesTarget(GW2LIB::Agent &agent);
+        static RaidBoss* instance(GW2LIB::Agent agent) { return new ValeGuardian(agent); }
+        static bool matchesTarget(GW2LIB::Agent &agent);
 
-		std::string getName() { return "Vale Guardian"; }
+        std::string getName() { return "Vale Guardian"; }
 
-		void updateState(boost::circular_buffer<float> &damageBuffer);
-		float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
-		void drawAssistInfo();
+        void updateState(boost::circular_buffer<float> &damageBuffer);
+        float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
+        void drawAssistInfo();
 
 
-		bool isDead() { return !isSplit() && RaidBoss::isDead(); }
+        bool isDead() { return !isSplit() && RaidBoss::isDead(); }
 
-		void outputDebug(std::stringstream &ss);
+        void outputDebug(std::stringstream &ss);
 };

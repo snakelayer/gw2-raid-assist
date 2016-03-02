@@ -9,30 +9,30 @@
 #include "../../assist_drawer.h"
 
 namespace MS {
-	enum State
-	{
-		PENDING = 0,
-		READY,
-		ACTIVE,
-		RECHARGING
-	};
+    enum State
+    {
+        PENDING = 0,
+        READY,
+        ACTIVE,
+        RECHARGING
+    };
 }
 
 class MagicStorm
 {
-	public:
-		MagicStorm();
-		MS::State getState();
-		void setState(MS::State state);
-		void drawStatusMeter(float x, float y, float percent);
+    public:
+        MagicStorm();
+        MS::State getState();
+        void setState(MS::State state);
+        void drawStatusMeter(float x, float y, float percent);
 
-	private:
-		const float COOLDOWN = 30.0f;
+    private:
+        const float COOLDOWN = 30.0f;
 
-		MS::State state;
-		boost::timer::cpu_timer timer;
+        MS::State state;
+        boost::timer::cpu_timer timer;
 
-		Meter meter;
+        Meter meter;
 
-		float getCooldown();
+        float getCooldown();
 };

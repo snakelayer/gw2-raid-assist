@@ -18,44 +18,44 @@
 class RaidBoss;
 
 namespace RAID {
-	enum RaidState {
-		ACTIVE = 0, // at least one player is alive
-		DOWNED, // everyone is downed or dead
-		DEAD // everyone is dead
-	};
+    enum RaidState {
+        ACTIVE = 0, // at least one player is alive
+        DOWNED, // everyone is downed or dead
+        DEAD // everyone is dead
+    };
 }
 
 class Squad
 {
-	private:
-		static const int MAX_SQUAD_SIZE = 10;
-		SquadMemberMap members;
-		RaidBoss *raidBoss;
+    private:
+        static const int MAX_SQUAD_SIZE = 10;
+        SquadMemberMap members;
+        RaidBoss *raidBoss;
 
-		RAID::RaidState raidState;
-		bool disable;
-		static const std::string logFilePrefix;
+        RAID::RaidState raidState;
+        bool disable;
+        static const std::string logFilePrefix;
 
-		void updateHeavyHits(float heavyHitDamageThreshold);
-		void updateRaidState(CharacterMap &characterMap);
-		void writeStatsToFile();
+        void updateHeavyHits(float heavyHitDamageThreshold);
+        void updateRaidState(CharacterMap &characterMap);
+        void writeStatsToFile();
 
-		std::string debugStr;
+        std::string debugStr;
 
-	public:
-		std::string getDebugStr() { return debugStr; }
-		Squad();
-		~Squad();
-		
-		void setBoss(RaidBoss *raidBoss);
-		void addPlayer(GW2LIB::Character character);
-		CharacterMap getCharacterMap();
-		void updateState();
-		void updateDodgeState(CharacterSpeeds &characterSpeeds);
+    public:
+        std::string getDebugStr() { return debugStr; }
+        Squad();
+        ~Squad();
+        
+        void setBoss(RaidBoss *raidBoss);
+        void addPlayer(GW2LIB::Character character);
+        CharacterMap getCharacterMap();
+        void updateState();
+        void updateDodgeState(CharacterSpeeds &characterSpeeds);
 
-		void outputPlayerStats(std::ostream &stream);
+        void outputPlayerStats(std::ostream &stream);
 
-		RAID::RaidState getRaidState() { return raidState; }
-		bool turnOff() { return disable; }
-		std::string getLogFileName();
+        RAID::RaidState getRaidState() { return raidState; }
+        bool turnOff() { return disable; }
+        std::string getLogFileName();
 };

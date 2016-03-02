@@ -8,8 +8,8 @@ UnknownBoss::UnknownBoss(GW2LIB::Agent agent) : RaidBoss(agent) {
 }
 
 void UnknownBoss::updateState(boost::circular_buffer<float> &damageBuffer) {
-	RaidBoss::updateState();
-	RaidBoss::updateDps(damageBuffer);
+    RaidBoss::updateState();
+    RaidBoss::updateDps(damageBuffer);
 }
 
 void UnknownBoss::outputDps(stringstream &ss) {
@@ -17,18 +17,18 @@ void UnknownBoss::outputDps(stringstream &ss) {
 }
 
 void UnknownBoss::drawAssistInfo() {
-	RaidBoss::drawAssistInfo();
+    RaidBoss::drawAssistInfo();
 
-	stringstream ss;
-	RaidBoss::outputAssistHeader(ss);
+    stringstream ss;
+    RaidBoss::outputAssistHeader(ss);
 
-	drawToWindow(ss, getDrawAssistPosition());
+    drawToWindow(ss, getDrawAssistPosition());
 }
 
 int UnknownBoss::getEncounterTime() {
-	return 0;
+    return 0;
 }
 
 void UnknownBoss::outputDebug(stringstream &ss) {
-	//ss << outputHeader;
+    //ss << outputHeader;
 }

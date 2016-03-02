@@ -8,39 +8,39 @@ const float Gorseval::HEAVY_HIT_DAMAGE_THRESHOLD = -1500.0f;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
-	// TODO
+    // TODO
 }
 
 bool Gorseval::matchesTarget(Agent &agent) {
-	if ((GetCurrentMapId() == 1062) && (agent.GetCharacter().GetMaxHealth() == MAX_HP)) {
-		return true;
-	}
+    if ((GetCurrentMapId() == 1062) && (agent.GetCharacter().GetMaxHealth() == MAX_HP)) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 void Gorseval::updateState(boost::circular_buffer<float> &damageBuffer) {
-	RaidBoss::updateState();
-	RaidBoss::updateDps(damageBuffer);
+    RaidBoss::updateState();
+    RaidBoss::updateDps(damageBuffer);
 
-	if (agent.m_ptr == nullptr) {
-		return;
-	}
+    if (agent.m_ptr == nullptr) {
+        return;
+    }
 
-	// TODO: gorseval specific stuff
+    // TODO: gorseval specific stuff
 }
 
 void Gorseval::drawAssistInfo() {
-	RaidBoss::drawAssistInfo();
+    RaidBoss::drawAssistInfo();
 
-	stringstream ss;
-	RaidBoss::outputAssistHeader(ss);
-	// TODO
+    stringstream ss;
+    RaidBoss::outputAssistHeader(ss);
+    // TODO
 
-	drawToWindow(ss, getDrawAssistPosition());
+    drawToWindow(ss, getDrawAssistPosition());
 }
 
 void Gorseval::outputDebug(stringstream &ss) {
-	ss << outputHeader;
-	//outputHeader = "";
+    ss << outputHeader;
+    //outputHeader = "";
 }
