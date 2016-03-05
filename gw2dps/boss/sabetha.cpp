@@ -9,6 +9,7 @@ const float Sabetha::HEAVY_HIT_DAMAGE_THRESHOLD = -4000.0f;
 
 Sabetha::Sabetha(Agent agent) : RaidBoss(agent), phase(SABETHA::Phase::FIRST)
 {
+    healthMarker = RB::HEALTH_MARKER::QUARTER;
 }
 
 void Sabetha::updateFlamewallState() {

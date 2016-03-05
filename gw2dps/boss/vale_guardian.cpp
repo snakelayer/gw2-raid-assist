@@ -9,6 +9,7 @@ const float ValeGuardian::HEAVY_HIT_DAMAGE_THRESHOLD = -1800.0f;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
+    healthMarker = RB::HEALTH_MARKER::THIRD;
     if (agent.GetCharacter().GetCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
         phase = VG::Phase::SECOND_SPLIT;
     }

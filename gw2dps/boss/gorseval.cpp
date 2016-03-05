@@ -8,7 +8,7 @@ const float Gorseval::HEAVY_HIT_DAMAGE_THRESHOLD = -1500.0f;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
-    // TODO
+    healthMarker = RB::HEALTH_MARKER::THIRD;
 }
 
 bool Gorseval::matchesTarget(Agent &agent) {

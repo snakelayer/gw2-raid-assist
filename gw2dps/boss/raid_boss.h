@@ -14,6 +14,14 @@
 #include "../common_typedefs.h"
 #include "../raid/encounter_timer.h"
 
+namespace RB {
+    enum HEALTH_MARKER {
+        NONE = 0,
+        THIRD,
+        QUARTER
+    };
+}
+
 class RaidBoss {
     public:
         RaidBoss(GW2LIB::Agent agent);
@@ -41,6 +49,8 @@ class RaidBoss {
     protected:
         GW2LIB::Agent agent;
 
+        RB::HEALTH_MARKER healthMarker;
+
         static int DPS_DURATIONS[3];
         float dps[3];
 
@@ -64,6 +74,9 @@ class RaidBoss {
     private:
         static const std::string logFilePrefix;
 
+        const float HEALTHBAR_TICK_WIDTH = 14.0f;
+        const float HEALTHBAR_TICK_LENGTH = 252.0f;
+
         std::map<int, float> remainingHealthMap;
         float secondsToDeath;
 
@@ -73,6 +86,8 @@ class RaidBoss {
         const float Y_BUFFER = 50.0f;
         float lastX;
         float lastY;
+
+        void drawHealthTicks();
 
         void writeDataToFile();
         void writeHealthData(std::ostream &stream);
