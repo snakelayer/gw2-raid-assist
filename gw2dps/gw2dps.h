@@ -18,7 +18,7 @@ using namespace GW2LIB;
 using namespace boost;
 using namespace std;
 
-Texture profIcon[GW2::PROFESSION_NONE];
+Texture profIcon[GW2::PROFESSION_END];
 float icon_w = 20;
 float icon_h = 20;
 
