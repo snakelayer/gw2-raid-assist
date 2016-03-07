@@ -53,9 +53,12 @@ void RaidBoss::outputDps(stringstream &ss) {
 
 void RaidBoss::drawAssistInfo() {
     drawHealthTicks();
-    if (GetOwnCharacter().GetProfession() == GW2::Profession::PROFESSION_ENGINEER) {
-        Vector3 pos = agent.GetPos();
-        DrawCircleProjected(pos, BOMB_KIT_RANGE, AssistDrawer::WHITE);
+
+    if (GetLockedSelection() == agent) {
+        if (GetOwnCharacter().GetProfession() == GW2::Profession::PROFESSION_ENGINEER) {
+            Vector3 pos = agent.GetPos();
+            DrawCircleProjected(pos, BOMB_KIT_RANGE, AssistDrawer::WHITE);
+        }
     }
 }
 
