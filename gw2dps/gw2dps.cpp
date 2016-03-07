@@ -152,7 +152,7 @@ void ESP()
     aBottom.x = round(GetWindowWidth() * float(0.5));
     aBottom.y = round(GetWindowHeight() - float(85));
 
-    AssistDrawer::get().drawFont(10, 10, AssistDrawer::WHITE, "delta: %i  down: %i  keys: %i  x: %i  y: %i  btn: %i\n%s", mouse_delta, mouse_down, mouse_keys, mouse_x, mouse_y, mouse_btn, chat.c_str());
+    //AssistDrawer::get().drawFont(10, 10, AssistDrawer::WHITE, "delta: %i  down: %i  keys: %i  x: %i  y: %i  btn: %i\n%s", mouse_delta, mouse_down, mouse_keys, mouse_x, mouse_y, mouse_btn, chat.c_str());
 
     if (help)
     {
