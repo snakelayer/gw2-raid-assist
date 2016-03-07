@@ -13,4 +13,4 @@ Debug/
 *.opensdf
 *.suo
 *.aps
-proxy64/gw2dps_exe.dir/*
+proxy64/*
