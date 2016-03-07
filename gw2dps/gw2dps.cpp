@@ -4,6 +4,7 @@
 #include "keymap.h"
 #include "hotkey.h"
 #include "preferences.h"
+#include "combat/personal_combat.h"
 #include "assist_drawer.h"
 #include "raid/squad.h"
 #include "boss/unknown_boss.h"
@@ -95,8 +96,11 @@ timer::cpu_timer timer2;
 uint64_t totaldmg = 0;
 int pAgentId2 = 0;
 
+PersonalCombat pc;
+
 bool raid_debug = false;
 bool raid_boss_assist = false;
+bool raid_boss_assist_was_on = false;
 
 Squad *squad;
 RaidBoss *boss;
@@ -1005,6 +1009,7 @@ void ESP()
                 averageDps[2] = computeAverage(60, bufferDps);
 
                 if (boss == nullptr) {
+                    ss << format("pDps: %d\n") % pc.getTotalDps();
                     ss << format("DPS(10s): %0.0f\n") % averageDps[0];
                     ss << format("DPS(30s): %0.0f\n") % averageDps[1];
                     ss << format("DPS(60s): %0.0f\n") % averageDps[2];
@@ -1033,6 +1038,9 @@ void ESP()
             //ss.str("");
             //aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
             aTopRight.x -= aAdjustX / 2 + AssistDrawer::PADX + 2;
+        }
+        else {
+            pc.reset();
         }
 
         if (logKillTimer)
@@ -1267,11 +1275,14 @@ void ESP()
         }
 
         if (raid_boss_assist) {
+            raid_boss_assist_was_on = true;
+
             if (boss != nullptr) {
                 boss->drawAssistInfo();
 
                 if (logDps) {					
                     stringstream ssDps;
+                    ssDps << format("pDps: %d\n") % pc.getTotalDps();
                     boss->outputDps(ssDps);
                     drawElementAt(ssDps, bossDpsAnchor);
                 }
@@ -1669,6 +1680,7 @@ void combat_log(CombatLogType type, int hit) {
         break;
     }
 
+    pc.record(type, hit);
     HL_LOG_DBG("type: %i - hit: %i\n", type, hit);
 }
 

@@ -13,6 +13,11 @@ int disableRaidAssist() {
     boss = nullptr;
 
     raid_boss_assist = false;
+    if (raid_boss_assist_was_on) {
+        raid_boss_assist_was_on = false;
+        pc.reset();
+    }
+
     return 0;
 }
 
