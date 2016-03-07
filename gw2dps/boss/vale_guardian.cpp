@@ -5,11 +5,12 @@ using namespace GW2LIB;
 using namespace std;
 
 const float ValeGuardian::MAX_HP = 22021440;
-const float ValeGuardian::HEAVY_HIT_DAMAGE_THRESHOLD = -1800.0f;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
     healthMarker = RB::HEALTH_MARKER::THIRD;
+    heavyHitDamageThreshold = -1800.0f;
+
     if (agent.GetCharacter().GetCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
         phase = VG::Phase::SECOND_SPLIT;
     }

@@ -4,11 +4,11 @@ using namespace GW2LIB;
 using namespace std;
 
 const float Gorseval::MAX_HP = 21628200;
-const float Gorseval::HEAVY_HIT_DAMAGE_THRESHOLD = -1500.0f;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
     healthMarker = RB::HEALTH_MARKER::THIRD;
+    heavyHitDamageThreshold = -1500.0f;
 }
 
 bool Gorseval::matchesTarget(Agent &agent) {

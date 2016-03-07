@@ -5,11 +5,11 @@ using namespace GW2LIB;
 using namespace std;
 
 const float Sabetha::MAX_HP = 34015256;
-const float Sabetha::HEAVY_HIT_DAMAGE_THRESHOLD = -4000.0f;
 
 Sabetha::Sabetha(Agent agent) : RaidBoss(agent), phase(SABETHA::Phase::FIRST)
 {
     healthMarker = RB::HEALTH_MARKER::QUARTER;
+    heavyHitDamageThreshold = -4000.0f;
 }
 
 void Sabetha::updateFlamewallState() {

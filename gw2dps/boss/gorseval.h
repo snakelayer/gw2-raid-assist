@@ -36,7 +36,6 @@ class Gorseval : public RaidBoss
         static bool matchesTarget(GW2LIB::Agent &agent);
 
         void updateState(boost::circular_buffer<float> &damageBuffer);
-        float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
         void drawAssistInfo();
 
         void outputDebug(std::stringstream &ss);

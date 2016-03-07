@@ -12,7 +12,7 @@ int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
 const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
 
-RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), healthMarker(RB::HEALTH_MARKER::NONE), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), healthMarker(RB::HEALTH_MARKER::NONE), heavyHitDamageThreshold(-0.0f), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
     dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 
     HL_LOG_DBG("initialize raid boss, agentPtr=%p, characterPtr=%p\n", agent.m_ptr, agent.GetCharacter().m_ptr);
@@ -147,6 +147,10 @@ void RaidBoss::outputAssistHeader(stringstream &ss) {
     ss << format("%s\n") % getName();
 }
 
+void RaidBoss::writeHeavyHitsInfo(ostream &stream) {
+    stream << format("// heavy hit threshold: %d\n") % -heavyHitDamageThreshold;
+}
+
 void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
     for (size_t i = 0; i < 3; ++i) {
         int seconds = DPS_DURATIONS[i];
@@ -194,6 +198,7 @@ void RaidBoss::writeDataToFile() {
         file << format("//   end time: %s\n") % universalNow;
         file << format("// remaining health: %d\n") % (int)getCurrentHealth();
         file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
+        writeHeavyHitsInfo(file);
         writeHealthData(file);
 
         file << format("// end raid boss output\n");

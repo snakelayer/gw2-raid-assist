@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <ostream>
 #include <sstream>
 #include <string>
 
@@ -33,7 +34,6 @@ class RaidBoss {
 
         virtual std::string getName() = 0;
         virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
-        virtual float getHeavyHitDamageThreshold() = 0;
         virtual void drawAssistInfo();
 
         virtual bool isDead();
@@ -41,6 +41,7 @@ class RaidBoss {
         float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
         float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }
         GW2LIB::GW2::BreakbarState getBreakbarState() { return agent.GetCharacter().GetBreakbarState(); }
+        float getHeavyHitDamageThreshold() { return heavyHitDamageThreshold; }
 
         bool getScreenLocation(float *x, float *y, GW2LIB::Vector3 pos);
 
@@ -50,6 +51,7 @@ class RaidBoss {
         GW2LIB::Agent agent;
 
         RB::HEALTH_MARKER healthMarker;
+        float heavyHitDamageThreshold;
 
         static int DPS_DURATIONS[3];
         float dps[3];
@@ -68,6 +70,7 @@ class RaidBoss {
         void drawToWindow(std::stringstream &ss, GW2LIB::Vector3 pos);
         void drawAtPosition(std::stringstream &ss, GW2LIB::Vector3 pos);
         void outputAssistHeader(std::stringstream &ss);
+        virtual void writeHeavyHitsInfo(std::ostream &stream);
 
         void updateDps(boost::circular_buffer<float> &damageBuffer);
 

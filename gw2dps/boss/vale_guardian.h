@@ -41,20 +41,6 @@ class ValeGuardian : public RaidBoss
         const float GREEN_GUARDIAN_MAX_HP = 722579;
         const float BLUE_GUARDIAN_MAX_HP = 540705; // TODO: verify
 
-        /*
-          based on 1000 toughness:
-
-          magic aura: <1.8k
-          (blue) unstable magic spike: 4K+
-          (green) distributed magic (<4 players): 13+K
-          red orb:
-          unstable pylon: 2k
-          magic storm: same as magic aura?
-          punch: 4k+
-          bullet storm: 3k+
-        */
-        static const float HEAVY_HIT_DAMAGE_THRESHOLD;
-
         const float magicStormDisplayOffset = 40.0f;
 
         std::list<Seeker> seekers;
@@ -89,7 +75,6 @@ class ValeGuardian : public RaidBoss
         std::string getName() { return "Vale Guardian"; }
 
         void updateState(boost::circular_buffer<float> &damageBuffer);
-        float getHeavyHitDamageThreshold() { return HEAVY_HIT_DAMAGE_THRESHOLD; }
         void drawAssistInfo();
 
 
