@@ -2,6 +2,7 @@
 #include "vale_guardian.h"
 #include "gorseval.h"
 #include "sabetha.h"
+#include "salvation_pass/slothasor.h"
 #include "unknown_boss.h"
 
 using namespace GW2LIB;
@@ -10,6 +11,8 @@ RaidBossFactory::RaidBossFactory() {
     addBossEntry(&ValeGuardian::matchesTarget, &ValeGuardian::instance);
     addBossEntry(&Gorseval::matchesTarget, &Gorseval::instance);
     addBossEntry(&Sabetha::matchesTarget, &Sabetha::instance);
+
+    addBossEntry(&Slothasor::matchesTarget, &Slothasor::instance);
 }
 
 void RaidBossFactory::addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier) {
@@ -20,7 +23,7 @@ RaidBoss* RaidBossFactory::getNextBoss() {
     GW2LIB::Agent agent = GetLockedSelection();
     
     /*if (agent.IsValid() && agent.GetCharacter().IsMonster()) {
-        return ValeGuardian::instance(agent);
+        return Slothasor::instance(agent);
     }*/
 
     for (raidBossMatcherMap::iterator it = matcherMap.begin(); it != matcherMap.end(); ++it) {
