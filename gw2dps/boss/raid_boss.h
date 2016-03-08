@@ -13,6 +13,7 @@
 
 #include "../assist_drawer.h"
 #include "../common_typedefs.h"
+#include "../recordable_stats.h"
 #include "../raid/encounter_timer.h"
 
 namespace RB {
@@ -23,7 +24,8 @@ namespace RB {
     };
 }
 
-class RaidBoss {
+class RaidBoss : public RecordableStats
+{
     public:
         RaidBoss(GW2LIB::Agent agent);
         virtual ~RaidBoss();
@@ -75,8 +77,6 @@ class RaidBoss {
         void updateDps(boost::circular_buffer<float> &damageBuffer);
 
     private:
-        static const std::string logFilePrefix;
-
         const float HEALTHBAR_TICK_WIDTH = 14.0f;
         const float HEALTHBAR_TICK_LENGTH = 252.0f;
 
@@ -92,7 +92,6 @@ class RaidBoss {
 
         void drawHealthTicks();
 
-        void writeDataToFile();
+        void writeToFile();
         void writeHealthData(std::ostream &stream);
-        std::string getLogFileName();
 };

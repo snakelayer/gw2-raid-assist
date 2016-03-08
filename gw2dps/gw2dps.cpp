@@ -1311,7 +1311,6 @@ void displayDebug() {
 
     if (squad != nullptr) {
         ss << format("raid state: %d\n") % squad->getRaidState();
-        ss << format("raid log file: %s\n") % squad->getLogFileName();
         ss << format("squad debugStr %s\n") % squad->getDebugStr();
     }
 

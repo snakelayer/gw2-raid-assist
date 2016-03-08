@@ -7,7 +7,6 @@ using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 
-const string RaidBoss::logFilePrefix = "gw2dpsLog-RaidAssist-";
 int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
 const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
@@ -19,7 +18,7 @@ RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), healthMarker(RB::HEALTH_
 }
 
 RaidBoss::~RaidBoss() {
-    writeDataToFile();
+    writeToFile();
 }
 
 void RaidBoss::updateState() {
@@ -188,9 +187,9 @@ void RaidBoss::drawHealthTicks() {
     }
 }
 
-void RaidBoss::writeDataToFile() {
-    std::ofstream file;
-    file.open(getLogFileName(), std::ofstream::out | std::ofstream::app);
+void RaidBoss::writeToFile() {
+    ofstream file;
+    file.open(getOutputFileName(), ofstream::out | ofstream::app);
 
     if (file.is_open()) {
         file << getOutputHeader();
@@ -212,9 +211,4 @@ void RaidBoss::writeHealthData(ostream &stream) {
     for (auto health : remainingHealthMap) {
         stream << format("[%s, %s],\n") % to_string(health.first) % to_string(int(health.second));
     }
-}
-
-string RaidBoss::getLogFileName() {
-    string localNow = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
-    return logFilePrefix + localNow + ".txt";
 }

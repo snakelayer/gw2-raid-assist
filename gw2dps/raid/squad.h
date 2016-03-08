@@ -5,13 +5,13 @@
 #include <ostream>
 #include <sstream>
 
-#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 
 #include "GameData.h"
 #include "gw2lib.h"
 
 #include "../common_typedefs.h"
+#include "../recordable_stats.h"
 #include "../boss/raid_boss.h"
 #include "squad_member.h"
 
@@ -25,7 +25,7 @@ namespace RAID {
     };
 }
 
-class Squad
+class Squad : public RecordableStats
 {
     private:
         static const int MAX_SQUAD_SIZE = 10;
@@ -34,11 +34,11 @@ class Squad
 
         RAID::RaidState raidState;
         bool disable;
-        static const std::string logFilePrefix;
 
         void updateHeavyHits(float heavyHitDamageThreshold);
         void updateRaidState(CharacterMap &characterMap);
-        void writeStatsToFile();
+
+        void writeToFile();
 
         std::string debugStr;
 
@@ -57,5 +57,4 @@ class Squad
 
         RAID::RaidState getRaidState() { return raidState; }
         bool turnOff() { return disable; }
-        std::string getLogFileName();
 };

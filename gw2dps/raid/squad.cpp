@@ -4,8 +4,6 @@ using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 
-const std::string Squad::logFilePrefix = "gw2dpsLog-RaidAssist-";
-
 Squad::Squad()
     : disable(false), raidState(RAID::ACTIVE) {
     debugStr = "";
@@ -23,7 +21,7 @@ Squad::Squad()
 }
 
 Squad::~Squad() {
-    writeStatsToFile();
+    writeToFile();
 }
 
 void Squad::setBoss(RaidBoss *raidBoss) {
@@ -94,11 +92,6 @@ void Squad::outputPlayerStats(ostream &stream) {
     }
 }
 
-string Squad::getLogFileName() {
-    string localNow = boost::posix_time::to_iso_string(boost::posix_time::second_clock::local_time());
-    return logFilePrefix + localNow + ".txt";
-}
-
 void Squad::updateHeavyHits(float heavyHitDamageThreshold) {
     for (auto &member : members) {
         if (member.second.getLastHealthDelta() < heavyHitDamageThreshold) {
@@ -135,9 +128,9 @@ void Squad::updateRaidState(CharacterMap &characterMap) {
     }
 }
 
-void Squad::writeStatsToFile() {
-    std::ofstream file;
-    file.open(getLogFileName(), std::ofstream::out | std::ofstream::app);
+void Squad::writeToFile() {
+    ofstream file;
+    file.open(getOutputFileName(), ofstream::out | ofstream::app);
 
     if (file.is_open()) {
         file << "\n// start squad output\n";
