@@ -8,6 +8,7 @@ const float Slothasor::MAX_HP = 18973828;
 
 Slothasor::Slothasor(Agent agent) : RaidBoss(agent)
 {
+    healthMarker = RB::HEALTH_MARKER::FIFTHS;
     heavyHitDamageThreshold = -3000.0f; // TODO: adjust
 }
 

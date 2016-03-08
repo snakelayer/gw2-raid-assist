@@ -185,6 +185,12 @@ void RaidBoss::drawHealthTicks() {
         DrawLine(x + HEALTHBAR_TICK_LENGTH/2, y, x + HEALTHBAR_TICK_LENGTH/2, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
         DrawLine(x + HEALTHBAR_TICK_LENGTH*3/4, y, x + HEALTHBAR_TICK_LENGTH*3/4, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
     }
+    else if (healthMarker == RB::HEALTH_MARKER::FIFTHS) {
+        DrawLine(x + HEALTHBAR_TICK_LENGTH/5, y, x + HEALTHBAR_TICK_LENGTH/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+        DrawLine(x + HEALTHBAR_TICK_LENGTH*2/5, y, x + HEALTHBAR_TICK_LENGTH*2/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+        DrawLine(x + HEALTHBAR_TICK_LENGTH*3/5, y, x + HEALTHBAR_TICK_LENGTH*3/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+        DrawLine(x + HEALTHBAR_TICK_LENGTH*4/5, y, x + HEALTHBAR_TICK_LENGTH*4/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    }
 }
 
 void RaidBoss::writeToFile() {

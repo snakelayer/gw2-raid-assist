@@ -20,7 +20,8 @@ namespace RB {
     enum HEALTH_MARKER {
         NONE = 0,
         THIRD,
-        QUARTER
+        QUARTER,
+        FIFTHS
     };
 }
 
