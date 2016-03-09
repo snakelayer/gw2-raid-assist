@@ -1343,10 +1343,13 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
     ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
+    ss << format(prefix + " monster player clone: " + string(character.IsMonsterPlayerClone() ? "yes" : "no") + "\n");
     ss << format(prefix + " valid: " + string(character.IsValid() ? "yes" : "no") + "\n");
     ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
     ss << format(prefix + " player: " + string(character.IsPlayer() ? "yes" : "no") + "\n");
+    ss << format(prefix + " pet: " + string(character.IsRangerPet() ? "yes" : "no") + "\n");
+    ss << format(prefix + " gender: %d\n") % character.GetGender();
     ss << format(prefix + " breakbar state: %d\n") % character.GetBreakbarState();
     ss << format(prefix + " breakbar percent: %f\n") % character.GetBreakbarPercent();
     ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();

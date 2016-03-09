@@ -49,6 +49,7 @@ class AssistDrawer
         static const DWORD BREAKBAR_FULL = 0xff418278;
         static const DWORD BREAKBAR_DEPLETING = 0xff418278;
         static const DWORD BREAKBAR_RECHARGING = 0Xffa06841;
+        static const DWORD SKILL_RECHARGING = BREAKBAR_RECHARGING; // TODO: use something else
 
         static AssistDrawer& get()
         {

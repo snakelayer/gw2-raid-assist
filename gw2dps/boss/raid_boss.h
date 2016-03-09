@@ -11,10 +11,13 @@
 
 #include "gw2lib.h"
 
+#include "../raid/squad.h"
 #include "../assist_drawer.h"
 #include "../common_typedefs.h"
 #include "../recordable_stats.h"
 #include "../raid/encounter_timer.h"
+
+class Squad;
 
 namespace RB {
     enum HEALTH_MARKER {
@@ -30,6 +33,8 @@ class RaidBoss : public RecordableStats
     public:
         RaidBoss(GW2LIB::Agent agent);
         virtual ~RaidBoss();
+
+        void setSquad(Squad *squad);
 
         void updateState();
         void outputDps(std::stringstream &ss);
@@ -52,6 +57,7 @@ class RaidBoss : public RecordableStats
 
     protected:
         GW2LIB::Agent agent;
+        Squad *squad;
 
         RB::HEALTH_MARKER healthMarker;
         float heavyHitDamageThreshold;

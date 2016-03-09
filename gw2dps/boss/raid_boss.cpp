@@ -21,6 +21,10 @@ RaidBoss::~RaidBoss() {
     writeToFile();
 }
 
+void RaidBoss::setSquad(Squad *squad) {
+    this->squad = squad;
+}
+
 void RaidBoss::updateState() {
     if (!agent.IsValid()) {
         if (!tryResetBossAgent()) {

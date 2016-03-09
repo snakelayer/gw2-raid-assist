@@ -60,7 +60,8 @@ void threadRaidAssist() {
 
                     if (boss == nullptr) {
                         boss = RaidBossFactory::get().getNextBoss();
-                        if (boss != nullptr) {
+                        if (squad != nullptr && boss != nullptr) {
+                            boss->setSquad(squad);
                             squad->setBoss(boss);
                         }
                         else {
