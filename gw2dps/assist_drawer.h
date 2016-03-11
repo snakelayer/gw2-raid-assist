@@ -46,6 +46,7 @@ class AssistDrawer
         static const DWORD CYAN = 0xff66ffff;
 
         static const DWORD HEALTHBAR_TICK = 0xff60e0e0;
+        static const DWORD HEALTHBAR_TICK2 = 0xff1010a0;
         static const DWORD BREAKBAR_FULL = 0xff418278;
         static const DWORD BREAKBAR_DEPLETING = 0xff418278;
         static const DWORD BREAKBAR_RECHARGING = 0Xffa06841;

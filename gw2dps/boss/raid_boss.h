@@ -24,7 +24,7 @@ namespace RB {
         NONE = 0,
         THIRD,
         QUARTER,
-        FIFTHS
+        FIFTHS_SLOTHASOR
     };
 }
 
