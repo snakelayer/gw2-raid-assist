@@ -95,7 +95,7 @@ void AssistDrawer::drawBackground(float x, float y, StrInfo strInfo) {
 void AssistDrawer::drawFont(float x, float y, DWORD color, string format, ...) {
     va_list vl;
     va_start(vl, format);
-    font.vDraw(x, y, color, format, vl);
+    font.Draw(x, y, color, format, vl);
     va_end(vl);
 }
 
