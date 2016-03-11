@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include "gw2lib.h"
 #include "gw2dps.h"
 #include "config.h"
@@ -1312,6 +1313,7 @@ void displayDebug() {
     stringstream ss;
     ss << "Debug: \n";
     ss << format("mapId: %d\n") % GetCurrentMapId();
+    ss << format("mapOpen: %s\n") % (IsMapOpen() ? "yes" : "no");
     ss << format("cameraPos: %f %f %f\n") % GetCameraPosition().x % GetCameraPosition().y % GetCameraPosition().z;
     ss << format("viewVec: %f %f %f\n") % GetViewVector().x % GetViewVector().y % GetViewVector().z;
     ss << format("FOV: %f\n") % GetFieldOfViewY();
@@ -1339,6 +1341,8 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " type: %d\n") % agent.GetType();
     ss << format(prefix + " gadget: %f / %f\n") % agent.GetGadget().GetCurrentHealth() % agent.GetGadget().GetMaxHealth();
     ss << format(prefix + " rot: %f\n") % agent.GetRot();
+    ss << format(prefix + " token: %" PRIu64 "\n") % agent.GetToken();
+    ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
     ss << format(prefix + " name: %s\n") % character.GetName();
     ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
@@ -1355,8 +1359,7 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();
     ss << format(prefix + " endurance: %f/%f\n") % character.GetCurrentEndurance() % character.GetMaxEndurance();
     ss << format(prefix + " glide: %d\n") % character.GetGliderPercent();
-    GW2LIB::GW2::CharacterStats stats = character.GetStats();
-    ss << format(prefix + " pow:%d, prec:%d, fero:%d, cond:%d, tough:%d, vit:%d, heal:%d\n") % stats.power % stats.precision % stats.ferocity % stats.condition % stats.toughness % stats.vitality % stats.healing;
+    ss << format(prefix + " attitude: %d\n") % character.GetAttitude();
 }
 
 float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
