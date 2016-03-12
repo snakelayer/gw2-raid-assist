@@ -17,6 +17,7 @@ Meter::Meter(float width, float height) : width(width), height(height) {
 }*/
 
 void Meter::drawAtPercent(float x, float y, DWORD color, float percent) {
+    DrawRectFilled(x - width / 2, y, width, height, AssistDrawer::METER_BACKGROUND);
     DrawRectFilled(x - width / 2, y, width * percent, height, color);
     DrawRect(x - width / 2, y, width, height, AssistDrawer::BORDER_COLOR);
 }
