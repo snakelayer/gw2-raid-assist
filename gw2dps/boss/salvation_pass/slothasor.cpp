@@ -29,6 +29,7 @@ void Slothasor::updateState(circular_buffer<float> &damageBuffer) {
         startEncounter();
     }
 
+    updateImbuedMushroom();
     updateVolatilePoison();
 }
 
@@ -37,6 +38,7 @@ void Slothasor::drawAssistInfo() {
 
     RaidBoss::drawAssistInfo();
     RaidBoss::outputAssistHeader(ss);
+    drawImbuedMushroomStatus();
     drawVolatilePoisonStatus();
 
     drawToWindow(ss, getDrawAssistPosition());
@@ -56,6 +58,14 @@ bool Slothasor::hasPlayerSlubling() {
     }
 
     return false;
+}
+
+void Slothasor::updateImbuedMushroom() {
+    im.updateState(encounterTimer.getElapsedMilliseconds());
+}
+
+void Slothasor::drawImbuedMushroomStatus() {
+    im.draw();
 }
 
 void Slothasor::updateVolatilePoison() {

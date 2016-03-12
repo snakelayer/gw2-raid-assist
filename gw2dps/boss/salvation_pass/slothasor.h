@@ -3,6 +3,7 @@
 #include "gw2lib.h"
 
 #include "../raid_boss.h"
+#include "skills/imbued_mushroom.h"
 #include "skills/volatile_poison.h"
 
 class Slothasor : public RaidBoss
@@ -21,12 +22,16 @@ class Slothasor : public RaidBoss
     private:
         static const float MAX_HP;
 
+        ImbuedMushroom im;
         VolatilePoison vp;
 
         Slothasor(GW2LIB::Agent agent);
 
         float getMaxHp() { return MAX_HP; }
         bool hasPlayerSlubling();
+
+        void updateImbuedMushroom();
+        void drawImbuedMushroomStatus();
 
         const float volatilePoisonDisplayOffset = 40.0f;
         void updateVolatilePoison();
