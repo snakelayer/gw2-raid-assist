@@ -38,6 +38,7 @@ void Slothasor::drawAssistInfo() {
 
     RaidBoss::drawAssistInfo();
     RaidBoss::outputAssistHeader(ss);
+    outputSlublingCounts(ss);
     drawImbuedMushroomStatus();
     drawVolatilePoisonStatus();
 
@@ -66,6 +67,10 @@ void Slothasor::updateImbuedMushroom() {
 
 void Slothasor::drawImbuedMushroomStatus() {
     im.draw();
+}
+
+void Slothasor::outputSlublingCounts(stringstream &ss) {
+    slubling.drawSlublingCounts(ss);
 }
 
 void Slothasor::updateVolatilePoison() {

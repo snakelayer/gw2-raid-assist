@@ -4,6 +4,7 @@
 
 #include "../raid_boss.h"
 #include "skills/imbued_mushroom.h"
+#include "skills/slubling.h"
 #include "skills/volatile_poison.h"
 
 class Slothasor : public RaidBoss
@@ -23,6 +24,7 @@ class Slothasor : public RaidBoss
         static const float MAX_HP;
 
         ImbuedMushroom im;
+        Slubling slubling;
         VolatilePoison vp;
 
         Slothasor(GW2LIB::Agent agent);
@@ -32,6 +34,8 @@ class Slothasor : public RaidBoss
 
         void updateImbuedMushroom();
         void drawImbuedMushroomStatus();
+
+        void outputSlublingCounts(std::stringstream &ss);
 
         const float volatilePoisonDisplayOffset = 40.0f;
         void updateVolatilePoison();
