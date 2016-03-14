@@ -9,8 +9,9 @@ const float Slothasor::MAX_HP = 18973828;
 Slothasor::Slothasor(Agent agent) : RaidBoss(agent)
 {
     healthMarker = RB::HEALTH_MARKER::FIFTHS_SLOTHASOR;
-    heavyHitDamageThreshold = -3000.0f; // TODO: adjust
-    //encounterTimer.start();
+    // ignores Volatile Aura
+    // records Volatile Poison, Tantrum, Halitosis, Poison Mushroom, Spore Release
+    heavyHitDamageThreshold = -2000.0f;
 }
 
 bool Slothasor::matchesTarget(Agent &agent) {
