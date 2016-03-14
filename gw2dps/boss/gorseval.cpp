@@ -7,8 +7,19 @@ const float Gorseval::MAX_HP = 21628200;
 
 Gorseval::Gorseval(Agent agent) : RaidBoss(agent)
 {
-    healthMarker = RB::HEALTH_MARKER::THIRD;
     heavyHitDamageThreshold = -1500.0f;
+}
+
+void Gorseval::drawHealthTicks() {
+    if (GetLockedSelection() != agent) {
+        return;
+    }
+
+    float x = getHealthMeterX();
+    float y = getHealthMeterY();
+
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 3, y, x + HEALTHBAR_TICK_LENGTH / 3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 2 / 3, y, x + HEALTHBAR_TICK_LENGTH * 2 / 3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
 }
 
 bool Gorseval::matchesTarget(Agent &agent) {

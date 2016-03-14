@@ -60,6 +60,8 @@ class Sabetha : public RaidBoss
                    (SABETHA_STARTING_POSITION.z == agent.GetPos().z);
         }
 
+        void drawHealthTicks();
+
         void updateFlamewallState();
         void drawFlamewallStatus();
 

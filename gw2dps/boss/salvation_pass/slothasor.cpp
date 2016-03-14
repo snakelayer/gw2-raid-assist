@@ -8,7 +8,6 @@ const float Slothasor::MAX_HP = 18973828;
 
 Slothasor::Slothasor(Agent agent) : RaidBoss(agent)
 {
-    healthMarker = RB::HEALTH_MARKER::FIFTHS_SLOTHASOR;
     // ignores Volatile Aura
     // records Volatile Poison, Tantrum, Halitosis, Poison Mushroom, Spore Release
     heavyHitDamageThreshold = -2000.0f;
@@ -56,6 +55,22 @@ bool Slothasor::hasPlayerSlubling() {
     }
 
     return false;
+}
+
+void Slothasor::drawHealthTicks() {
+    if (GetLockedSelection() != agent) {
+        return;
+    }
+
+    float x = getHealthMeterX();
+    float y = getHealthMeterY();
+
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 10, y, x + HEALTHBAR_TICK_LENGTH / 10, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 5, y, x + HEALTHBAR_TICK_LENGTH / 5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 2 / 5, y, x + HEALTHBAR_TICK_LENGTH * 2 / 5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 2, y, x + HEALTHBAR_TICK_LENGTH / 2, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK2);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 3 / 5, y, x + HEALTHBAR_TICK_LENGTH * 3 / 5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 4 / 5, y, x + HEALTHBAR_TICK_LENGTH * 4 / 5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
 }
 
 void Slothasor::updateImbuedMushroom() {

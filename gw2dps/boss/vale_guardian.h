@@ -59,6 +59,7 @@ class ValeGuardian : public RaidBoss
         void updateMagicStormState();
         void updatePylonState();
 
+        void drawHealthTicks();
         void addEstTimeToSplit(std::stringstream &ss);
         void drawSeekerStatus();
         void drawMagicStormStatus();

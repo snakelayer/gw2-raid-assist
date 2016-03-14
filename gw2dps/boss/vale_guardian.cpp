@@ -8,7 +8,6 @@ const float ValeGuardian::MAX_HP = 22021440;
 
 ValeGuardian::ValeGuardian(Agent agent) : RaidBoss(agent), phase(VG::Phase::FIRST)
 {
-    healthMarker = RB::HEALTH_MARKER::THIRD;
     heavyHitDamageThreshold = -1800.0f;
 
     if (agent.GetCharacter().GetCurrentHealth() <= SECOND_PHASE_TRANSITION_HP) {
@@ -133,6 +132,18 @@ void ValeGuardian::updatePylonState() {
     if (isPylonPhase()) {
         unstablePylon.update();
     }
+}
+
+void ValeGuardian::drawHealthTicks() {
+    if (GetLockedSelection() != agent) {
+        return;
+    }
+
+    float x = getHealthMeterX();
+    float y = getHealthMeterY();
+
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 3, y, x + HEALTHBAR_TICK_LENGTH / 3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 2 / 3, y, x + HEALTHBAR_TICK_LENGTH * 2 / 3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
 }
 
 void ValeGuardian::addEstTimeToSplit(stringstream &ss) {

@@ -19,15 +19,6 @@
 
 class Squad;
 
-namespace RB {
-    enum HEALTH_MARKER {
-        NONE = 0,
-        THIRD,
-        QUARTER,
-        FIFTHS_SLOTHASOR
-    };
-}
-
 class RaidBoss : public RecordableStats
 {
     public:
@@ -56,10 +47,12 @@ class RaidBoss : public RecordableStats
         virtual void outputDebug(std::stringstream &ss) = 0;
 
     protected:
+        const float HEALTHBAR_TICK_WIDTH = 14.0f;
+        const float HEALTHBAR_TICK_LENGTH = 252.0f;
+
         GW2LIB::Agent agent;
         Squad *squad;
 
-        RB::HEALTH_MARKER healthMarker;
         float heavyHitDamageThreshold;
 
         static int DPS_DURATIONS[3];
@@ -70,23 +63,26 @@ class RaidBoss : public RecordableStats
 
         std::string outputHeader;
 
+        float getHealthMeterX() { return (GW2LIB::GetWindowWidth() / 2) - 178.0f; }
+        float getHealthMeterY() { return 86.0f; }
+
         virtual float getMaxHp() = 0;
         virtual float getBossHeight() = 0;
         GW2LIB::Vector3 getDrawAssistPosition();
         void startEncounter();
         bool tryResetBossAgent();
         bool hasTakenDamage() { return agent.GetCharacter().GetCurrentHealth() != agent.GetCharacter().GetMaxHealth(); }
+
+        virtual void drawHealthTicks() {};
         void drawToWindow(std::stringstream &ss, GW2LIB::Vector3 pos);
         void drawAtPosition(std::stringstream &ss, GW2LIB::Vector3 pos);
+
         void outputAssistHeader(std::stringstream &ss);
         virtual void writeHeavyHitsInfo(std::ostream &stream);
 
         void updateDps(boost::circular_buffer<float> &damageBuffer);
 
     private:
-        const float HEALTHBAR_TICK_WIDTH = 14.0f;
-        const float HEALTHBAR_TICK_LENGTH = 252.0f;
-
         std::map<int, float> remainingHealthMap;
         float secondsToDeath;
 
@@ -96,8 +92,6 @@ class RaidBoss : public RecordableStats
         const float Y_BUFFER = 50.0f;
         float lastX;
         float lastY;
-
-        void drawHealthTicks();
 
         void writeToFile();
         void writeHealthData(std::ostream &stream);

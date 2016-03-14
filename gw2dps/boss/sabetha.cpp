@@ -8,8 +8,20 @@ const float Sabetha::MAX_HP = 34015256;
 
 Sabetha::Sabetha(Agent agent) : RaidBoss(agent), phase(SABETHA::Phase::FIRST)
 {
-    healthMarker = RB::HEALTH_MARKER::QUARTER;
     heavyHitDamageThreshold = -4000.0f;
+}
+
+void Sabetha::drawHealthTicks() {
+    if (GetLockedSelection() != agent) {
+        return;
+    }
+
+    float x = getHealthMeterX();
+    float y = getHealthMeterY();
+
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 4, y, x + HEALTHBAR_TICK_LENGTH / 4, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH / 2, y, x + HEALTHBAR_TICK_LENGTH / 2, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
+    DrawLine(x + HEALTHBAR_TICK_LENGTH * 3 / 4, y, x + HEALTHBAR_TICK_LENGTH * 3 / 4, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
 }
 
 void Sabetha::updateFlamewallState() {
@@ -107,6 +119,8 @@ void Sabetha::updateState(boost::circular_buffer<float> &damageBuffer) {
 }
 
 void Sabetha::drawAssistInfo() {
+    RaidBoss::drawAssistInfo();
+
     cannon.draw(encounterTimer.getElapsedSeconds());
 
     if (isAtStartPosition()) {

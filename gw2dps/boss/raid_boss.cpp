@@ -11,7 +11,7 @@ int RaidBoss::DPS_DURATIONS[3] = { 10, 30, 60 };
 
 const float RaidBoss::BOMB_KIT_RANGE = 240.0f;
 
-RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), healthMarker(RB::HEALTH_MARKER::NONE), heavyHitDamageThreshold(-0.0f), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
+RaidBoss::RaidBoss(GW2LIB::Agent agent) : agent(agent), heavyHitDamageThreshold(-0.0f), secondsToDeath(0.0f), lastX(-1), lastY(-1) {
     dps[0] = 0.0f; dps[1] = 0.0f; dps[2] = 0.0f;
 
     HL_LOG_DBG("initialize raid boss, agentPtr=%p, characterPtr=%p\n", agent.m_ptr, agent.GetCharacter().m_ptr);
@@ -170,33 +170,6 @@ void RaidBoss::updateDps(boost::circular_buffer<float> &damageBuffer) {
     }
 
     secondsToDeath = (dps[1] == 0.0f ? 0 : getCurrentHealth() / dps[1]);
-}
-
-void RaidBoss::drawHealthTicks() {
-    if (GetLockedSelection() != agent) {
-        return;
-    }
-
-    float x = (GetWindowWidth() / 2) - 178.0f;
-    float y = 86.0f;
-
-    if (healthMarker == RB::HEALTH_MARKER::THIRD) {
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/3, y, x + HEALTHBAR_TICK_LENGTH/3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH*2/3, y, x + HEALTHBAR_TICK_LENGTH*2/3, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-    }
-    else if (healthMarker == RB::HEALTH_MARKER::QUARTER) {
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/4, y, x + HEALTHBAR_TICK_LENGTH/4, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/2, y, x + HEALTHBAR_TICK_LENGTH/2, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH*3/4, y, x + HEALTHBAR_TICK_LENGTH*3/4, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-    }
-    else if (healthMarker == RB::HEALTH_MARKER::FIFTHS_SLOTHASOR) {
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/10, y, x + HEALTHBAR_TICK_LENGTH/10 , y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/5, y, x + HEALTHBAR_TICK_LENGTH/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH*2/5, y, x + HEALTHBAR_TICK_LENGTH*2/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH/2, y, x + HEALTHBAR_TICK_LENGTH/2, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK2);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH*3/5, y, x + HEALTHBAR_TICK_LENGTH*3/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-        DrawLine(x + HEALTHBAR_TICK_LENGTH*4/5, y, x + HEALTHBAR_TICK_LENGTH*4/5, y + HEALTHBAR_TICK_WIDTH, AssistDrawer::HEALTHBAR_TICK);
-    }
 }
 
 void RaidBoss::writeToFile() {

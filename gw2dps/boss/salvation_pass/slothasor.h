@@ -32,6 +32,8 @@ class Slothasor : public RaidBoss
         float getMaxHp() { return MAX_HP; }
         bool hasPlayerSlubling();
 
+        void drawHealthTicks();
+
         void updateImbuedMushroom();
         void drawImbuedMushroomStatus();
 
