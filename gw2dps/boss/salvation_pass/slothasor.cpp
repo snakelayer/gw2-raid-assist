@@ -15,11 +15,7 @@ Slothasor::Slothasor(Agent agent) : RaidBoss(agent)
 }
 
 bool Slothasor::matchesTarget(Agent &agent) {
-    if ((GetCurrentMapId() == 1149) && (agent.GetCharacter().GetMaxHealth() == MAX_HP)) {
-        return true;
-    }
-
-    return false;
+    return (GetCurrentMapId() == 1149) && (agent.GetCharacter().GetMaxHealth() == MAX_HP);
 }
 
 void Slothasor::updateState(circular_buffer<float> &damageBuffer) {

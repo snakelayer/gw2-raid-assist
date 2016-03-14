@@ -24,11 +24,7 @@ ValeGuardian::~ValeGuardian() {
 }
 
 bool ValeGuardian::matchesTarget(Agent &agent) {
-    if ((GetCurrentMapId() == 1062) && (agent.GetCharacter().GetMaxHealth() == MAX_HP)) {
-        return true;
-    }
-
-    return false;
+    return (GetCurrentMapId() == 1062) && (agent.GetCharacter().GetMaxHealth() == MAX_HP);
 }
 
 void ValeGuardian::updateState(boost::circular_buffer<float> &damageBuffer) {
