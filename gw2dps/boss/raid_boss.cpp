@@ -47,11 +47,11 @@ void RaidBoss::updateState() {
     }
 }
 
-void RaidBoss::outputDps(stringstream &ss) {
-    ss << format("Est. Seconds To Death: %d\n") % (int)secondsToDeath;
-    ss << format("DPS(10s): %0.0f\n") % dps[0];
-    ss << format("DPS(30s): %0.0f\n") % dps[1];
-    ss << format("DPS(60s): %0.0f\n") % dps[2];
+void RaidBoss::outputDps(ostream &stream) {
+    stream << format("Est. Seconds To Death: %d\n") % (int)secondsToDeath;
+    stream << format("DPS(10s): %0.0f\n") % dps[0];
+    stream << format("DPS(30s): %0.0f\n") % dps[1];
+    stream << format("DPS(60s): %0.0f\n") % dps[2];
 }
 
 void RaidBoss::drawAssistInfo() {
@@ -182,6 +182,7 @@ void RaidBoss::writeToFile() {
         file << format("//   end time: %s\n") % universalNow;
         file << format("// remaining health: %d\n") % (int)getCurrentHealth();
         file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
+        outputDps(file);
         writeHeavyHitsInfo(file);
         writeHealthData(file);
 

@@ -78,7 +78,7 @@ void PersonalCombat::writeToFile() {
         file << format("Total Duration(sec): %d\n") % int(timer.elapsed().wall / 1e9);
         file << format("Total Damage Given:  %d\n") % getTotalDamageGiven();
         file << format("Total DPS:           %d\n") % getTotalDps();
-        file << format("// personal combat output\n");
+        file << format("// end personal combat output\n");
         file.close();
     }
 }

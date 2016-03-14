@@ -28,7 +28,7 @@ class RaidBoss : public RecordableStats
         void setSquad(Squad *squad);
 
         void updateState();
-        void outputDps(std::stringstream &ss);
+        void outputDps(std::ostream &stream);
         std::string getOutputHeader() { return outputHeader; }
 
         virtual std::string getName() = 0;
