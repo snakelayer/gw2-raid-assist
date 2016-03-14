@@ -1,6 +1,5 @@
 #pragma once
 
-#include <boost/format.hpp>
 #include <boost/timer/timer.hpp>
 
 #include "gw2lib.h"

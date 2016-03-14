@@ -1,5 +1,6 @@
 #include "meter.h"
 
+using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 
@@ -12,10 +13,6 @@ Meter::Meter() : width(DEFAULT_WIDTH), height(DEFAULT_HEIGHT) {
 Meter::Meter(float width, float height) : width(width), height(height) {
 }
 
-/*void Meter::draw(float x, float y, DWORD color, string text) {
-    drawAtPercent(x, y, color, text, 1.0f);
-}*/
-
 void Meter::drawAtPercent(float x, float y, DWORD color, float percent) {
     DrawRectFilled(x - width / 2, y, width, height, AssistDrawer::METER_BACKGROUND);
     DrawRectFilled(x - width / 2, y, width * percent, height, color);
@@ -27,4 +24,16 @@ void Meter::drawAtPercent(float x, float y, DWORD color, string text, float perc
     if (!text.empty()) {
         AssistDrawer::get().drawFont(x - AssistDrawer::PADX * 2, y, AssistDrawer::WHITE, text);
     }
+}
+
+void Meter::drawAtPercent(float x, float y, DWORD color, float cooldown, float percent) {
+    string cooldownStr;
+    if (cooldown < 5.0f) {
+        cooldownStr = str(format("%.1f") % cooldown);
+    }
+    else {
+        cooldownStr = str(format("%d") % int(cooldown));
+    }
+
+    drawAtPercent(x, y, color, cooldownStr, percent);
 }

@@ -2,8 +2,6 @@
 
 #include <string>
 
-#include <boost/format.hpp>
-
 #include "gw2lib.h"
 
 #include "../../skills/draw/meter.h"

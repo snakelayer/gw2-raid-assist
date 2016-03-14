@@ -36,17 +36,9 @@ void MagicStorm::drawStatusMeter(float x, float y, float percent) {
     }
     else if (getState() == MS::RECHARGING) {
         float remainingCooldown = getCooldown();
-
-        string cooldownStr;
-        if (remainingCooldown < 5.0f) {
-            cooldownStr = str(format("%.1f") % remainingCooldown);
-        }
-        else {
-            cooldownStr = str(format("%d") % int(remainingCooldown));
-        }
-
         float percent = (1.0f - (remainingCooldown / COOLDOWN));
-        meter.drawAtPercent(x, y, AssistDrawer::BREAKBAR_RECHARGING, cooldownStr, percent);
+
+        meter.drawAtPercent(x, y, AssistDrawer::BREAKBAR_RECHARGING, remainingCooldown, percent);
     }
 }
 

@@ -1,6 +1,5 @@
 #include "flamewall.h"
 
-using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 
@@ -77,14 +76,6 @@ void Flamewall::drawCooldownMeter(float x, float y) {
         return;
     }
 
-    string cooldownStr;
-    if (remainingCooldown < 5.0f) {
-        cooldownStr = str(format("%.1f") % remainingCooldown);
-    }
-    else {
-        cooldownStr = str(format("%d") % int(remainingCooldown));
-    }
-
     float cooldownPercent = 0.0f;
     if (state == FW::State::FIRST_CHARGE) {
         cooldownPercent = remainingCooldown / (FIRST_COOLDOWN + ACTIVATING_DURATION);
@@ -100,7 +91,7 @@ void Flamewall::drawCooldownMeter(float x, float y) {
         cooldownPercent = (1.0f - cooldownPercent);
     }
 
-    meter.drawAtPercent(x, y, (state == FW::State::ACTIVE) ? ACTIVE : AssistDrawer::BREAKBAR_RECHARGING, cooldownStr, cooldownPercent); // TODO: change color
+    meter.drawAtPercent(x, y, (state == FW::State::ACTIVE) ? ACTIVE : AssistDrawer::BREAKBAR_RECHARGING, remainingCooldown, cooldownPercent); // TODO: change color
 }
 
 void Flamewall::drawActivatingMarker(Vector3 position) {
