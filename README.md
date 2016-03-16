@@ -13,7 +13,8 @@ Raid Assist is a tool to help players perform better at GW2 raids. It is based o
  - Sabetha: compass and cannon timer
 - Outputs stats for each raid attempt, which is intended to help players understand what went wrong, where/when errors occurred, and possible ways to improve.
 - Explanation of stat output columns:
- - DodgeSpeedAttainedCount: The number of times the player's movement speed suggested they were dodging. Clients are not sent endurance values of other agents, so dodges can't be directly counted (except for yourself). This is an attempted *estimate* at the number of times a player has dodged. As such, this number can both overestimate (eg: Superspeed) and underestimate (eg: dodging into a horizontal barrier).
+ - DodgeCount: The number of times a player dodged.
+ - SuperspeedCount: The number of times a player had superspeed.
  - HeavyHitsTaken: The number of times a player took a **heavy** hit. A heavy hit is any single instance of damage above a specific boss-dependent threshold. Usually, (at the time of this writing) damage values above this threshold can be avoided. Values lower than this are generally unavoidable periodic damage.
  - HeavyDamageTaken: The total damage a player has taken from heavy hits.
  - TotalDamageTaken: The total damage a player has taken in a single raid attempt.
