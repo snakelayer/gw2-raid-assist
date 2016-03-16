@@ -51,7 +51,6 @@ class Squad : public RecordableStats
         void addPlayer(GW2LIB::Character character);
         CharacterMap getCharacterMap();
         void updateState();
-        void updateDodgeState(CharacterSpeeds &characterSpeeds);
 
         void outputPlayerStats(std::ostream &stream);
 

@@ -117,7 +117,6 @@ DWORD thread_id_hotkey = 0;
 #include "thread.Crits.cpp"
 #include "thread.Speedometer.cpp"
 #include "thread.RaidAssist.cpp"
-#include "thread.SquadSpeedometer.cpp"
 
 // Self
 Character me;
@@ -1714,7 +1713,6 @@ void GW2LIB::gw2lib_main()
     thread t6(&threadCrits);
     thread t7(&threadSpeedometer);
     thread t8(&threadRaidAssist);
-    thread t9(&threadSquadSpeedometer);
 
     HMODULE dll = hl::GetCurrentModule();
 
@@ -1749,7 +1747,6 @@ void GW2LIB::gw2lib_main()
     t6.interrupt(); //t6.join();
     t7.interrupt(); //t7.join();
     t8.interrupt();
-    t9.interrupt();
 
     Sleep(1000);
     return;

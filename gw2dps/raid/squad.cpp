@@ -71,24 +71,11 @@ void Squad::updateState() {
     updateRaidState(characterMap);
 }
 
-void Squad::updateDodgeState(CharacterSpeeds &characterSpeeds) {
-    for (auto &characterSpeedEntry : characterSpeeds) {
-        string characterName = characterSpeedEntry.first;
-        circular_buffer<int> speedBuffer = characterSpeedEntry.second;
-
-        float totalSpeed = 0.0f;
-        for (auto &speed : speedBuffer) {
-            totalSpeed += speed;
-        }
-
-        (members.find(characterName)->second).inferDodgeStateWithSpeed(totalSpeed / speedBuffer.size());
-    }
-}
-
 void Squad::outputPlayerStats(ostream &stream) {
-    stream << "Player\tDodgeSpeedAttainedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDownedCount\n";
+    stream << "Player\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDownedCount\n";
     for (auto &member : members) {
-        stream << format("%-20s\t%d\t%d\t%d\t%d\t%d\n") % member.second.getName() % member.second.getDodgeCount() % member.second.getHeavyHitsTaken() % member.second.getHeavyDamageTaken() % member.second.getTotalDamageTaken() % member.second.getDownedCount();
+        SquadMember m = member.second;
+        stream << format("%-20s\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % m.getHeavyDamageTaken() % m.getTotalDamageTaken() % m.getDownedCount();
     }
 }
 

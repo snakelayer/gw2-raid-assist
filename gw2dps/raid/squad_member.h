@@ -1,53 +1,45 @@
 #pragma once
 
-#include <boost/timer/timer.hpp>
-
 #include "GameData.h"
-
-namespace SM {
-
-    enum SPEED_STATE {
-        BASIC = 0, // up to 200
-        SWIFTNESS, // up to 266
-        DODGE, // set to 366
-        SUPERSPEED // up to 400
-    };
-}
 
 class SquadMember {
     private:
-        static const float SWIFTNESS_THRESHOLD;
-        static const float DODGE_THRESHOLD;
-        static const float SUPERSPEED_THRESHOLD;
+        static const float WALK_SPEED;
+        static const float RUN_SPEED;
+        static const float COMBAT_RUN_SPEED;
+        static const float DODGE_SPEED;
+        static const float GLIDE_SPEED;
+        static const float SWIFTNESS_SPEED;
+        static const float COMBAT_SWIFTNESS_SPEED;
+        static const float SUPERSPEED;
 
         std::string name;
         int dodgeCount;
+        int superspeedCount;
         int heavyHitsTaken;
         float heavyDamageTaken;
         float totalDamageTaken;
         int downedCount;
 
-        SM::SPEED_STATE speedState;
-        boost::timer::cpu_timer dodgeTimer;
+        float lastSpeed;
+        float secondLastSpeed;
         bool isAlive;
-        float lastEndurance;
         float lastHealth;
         float lastHealthDelta;
 
         void updateLastHealthDelta(GW2LIB::Character &character);
         void updateDamageTaken();
-        void updateDodgeCount(GW2LIB::Character &character);
-        void tryUpdateDodgeCount();
+        void updateMovementStats(GW2LIB::Character &character);
 
         SquadMember() = delete;
 
     public:
         SquadMember(GW2LIB::Character character);
         void updateStats(GW2LIB::Character &character);
-        void inferDodgeStateWithSpeed(float speed);
 
         std::string getName() { return name; }
         int getDodgeCount() { return dodgeCount; }
+        int getSuperspeedCount() { return superspeedCount; }
         float getLastHealthDelta() { return lastHealthDelta; }
         int getHeavyHitsTaken() { return heavyHitsTaken; }
         float getHeavyDamageTaken() { return heavyDamageTaken; }
@@ -55,6 +47,4 @@ class SquadMember {
         int getDownedCount() { return downedCount; }
 
         void takeHeavyHit();
-
-        SM::SPEED_STATE getSpeedState() { return speedState; }
 };
