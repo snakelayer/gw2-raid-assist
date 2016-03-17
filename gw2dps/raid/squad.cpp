@@ -8,15 +8,15 @@ Squad::Squad()
     : disable(false), raidState(RAID::ACTIVE) {
     debugStr = "";
 
-    addPlayer(GetOwnCharacter());
+    addPlayer(GetOwnAgent().GetPlayer());
 
-    Character character;
-    while (character.BeNext()) {
+    Player player;
+    while (player.BeNext()) {
         if (members.size() == MAX_SQUAD_SIZE) {
             break;
         }
 
-        addPlayer(character);
+        addPlayer(player);
     }
 }
 
@@ -28,23 +28,23 @@ void Squad::setBoss(RaidBoss *raidBoss) {
     this->raidBoss = raidBoss;
 }
 
-void Squad::addPlayer(Character character) {
-    if (!character.IsPlayer()) {
+void Squad::addPlayer(Player player) {
+    if (!player.IsValid()) {
         return;
     }
 
-    SquadMember member(character);
-    members.insert(SquadMemberEntry(character.GetName(), member));
+    SquadMember member(player);
+    members.insert(SquadMemberEntry(player.GetName(), member));
 }
 
 CharacterMap Squad::getCharacterMap() {
-    Character character;
+    Player player;
     CharacterMap characterMap;
 
-    while (character.BeNext()) {
-        SquadMemberMap::iterator it = members.find(character.GetName());
+    while (player.BeNext()) {
+        SquadMemberMap::iterator it = members.find(player.GetName());
         if (it != members.end()) {
-            characterMap.insert(CharacterEntry(character.GetName(), character));
+            characterMap.insert(CharacterEntry(player.GetName(), player.GetCharacter()));
         }
     }
 

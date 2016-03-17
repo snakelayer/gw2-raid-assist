@@ -1342,7 +1342,7 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " rot: %f\n") % agent.GetRot();
     ss << format(prefix + " token: %" PRIu64 "\n") % agent.GetToken();
     ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
-    ss << format(prefix + " name: %s\n") % character.GetName();
+    ss << format(prefix + " name: %s\n") % agent.GetPlayer().GetName();
     ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
     ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");

@@ -48,7 +48,7 @@ class Squad : public RecordableStats
         ~Squad();
         
         void setBoss(RaidBoss *raidBoss);
-        void addPlayer(GW2LIB::Character character);
+        void addPlayer(GW2LIB::Player player);
         CharacterMap getCharacterMap();
         void updateState();
 
