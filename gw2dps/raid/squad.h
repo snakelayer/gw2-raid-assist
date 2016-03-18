@@ -35,6 +35,8 @@ class Squad : public RecordableStats
         RAID::RaidState raidState;
         bool disable;
 
+        void addPlayer(GW2LIB::Player player);
+
         void updateHeavyHits(float heavyHitDamageThreshold);
         void updateRaidState(CharacterMap &characterMap);
 
@@ -48,9 +50,9 @@ class Squad : public RecordableStats
         ~Squad();
         
         void setBoss(RaidBoss *raidBoss);
-        void addPlayer(GW2LIB::Player player);
         CharacterMap getCharacterMap();
         void updateState();
+        void updateDamage(GW2LIB::Agent agent, int damage);
 
         void outputPlayerStats(std::ostream &stream);
 

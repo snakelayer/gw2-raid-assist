@@ -1319,7 +1319,7 @@ void displayDebug() {
     ss << format("mousePos: %f %f %f\n") % GetMouseInWorld().x % GetMouseInWorld().y % GetMouseInWorld().z;
 
     displayAgent("target", GetLockedSelection(), ss);
-    //displayAgent("self", GetOwnAgent(), ss);
+    displayAgent("self", GetOwnAgent(), ss);
 
     if (squad != nullptr) {
         ss << format("raid state: %d\n") % squad->getRaidState();
@@ -1667,11 +1667,19 @@ bool mouse_wheel(int delta, int modkeys) {
     return true;
 }
 
-void dmg_log(uintptr_t* src, uintptr_t* tgt, int hit) {
-    //HL_LOG_DBG("hit: %i\n", hit);
+void dmg_log(Agent src, Agent tgt, int hit) {
+    HL_LOG_DBG("srcId: %d, tgtId: %d, hit: %i\n", src.GetAgentId(), tgt.GetAgentId(), hit);
+    // tgt isn't actually a valid Agent
+    // if at some point it is, we can filter damage for the raid boss
+    /*if ((squad != nullptr) && (boss != nullptr) && tgt.GetAgentId() == (boss->getAgentId())) {
+        squad->updateDamage(src, hit);
+    }*/
+    if (squad != nullptr) {
+        squad->updateDamage(src, hit);
+    }
 }
 
-void combat_log(CombatLogType type, int hit) {
+void combat_log(CombatLogType type, int hit, Agent agent) {
     int dmg = 0;
     switch (type) {
     case CL_CONDI_DMG_OUT:
@@ -1689,7 +1697,7 @@ void combat_log(CombatLogType type, int hit) {
     }
 
     pc.record(type, hit);
-    HL_LOG_DBG("type: %i - hit: %i\n", type, hit);
+    HL_LOG_DBG("type: %i - hit: %i, agentId: %d\n", type, hit, agent.GetAgentId());
 }
 
 void GW2LIB::gw2lib_main()

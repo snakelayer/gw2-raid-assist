@@ -36,6 +36,7 @@ class RaidBoss : public RecordableStats
         virtual void drawAssistInfo();
 
         virtual bool isDead();
+
         int getAgentId() { return agent.GetAgentId(); }
         float getCurrentHealth() { return agent.GetCharacter().GetCurrentHealth(); }
         float getBreakbar() { return agent.GetCharacter().GetBreakbarPercent(); }

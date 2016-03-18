@@ -19,6 +19,7 @@ class SquadMember {
         int heavyHitsTaken;
         float heavyDamageTaken;
         float totalDamageTaken;
+        int directDamage;
         int downedCount;
 
         float lastSpeed;
@@ -44,7 +45,9 @@ class SquadMember {
         int getHeavyHitsTaken() { return heavyHitsTaken; }
         float getHeavyDamageTaken() { return heavyDamageTaken; }
         float getTotalDamageTaken() { return totalDamageTaken; }
+        int getDirectDamage() { return directDamage; }
         int getDownedCount() { return downedCount; }
 
         void takeHeavyHit();
+        void addDirectDamage(int damage) { directDamage += damage; }
 };

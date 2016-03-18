@@ -1,5 +1,6 @@
 #include "unknown_boss.h"
 
+using namespace boost;
 using namespace GW2LIB;
 using namespace std;
 

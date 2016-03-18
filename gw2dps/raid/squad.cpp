@@ -28,15 +28,6 @@ void Squad::setBoss(RaidBoss *raidBoss) {
     this->raidBoss = raidBoss;
 }
 
-void Squad::addPlayer(Player player) {
-    if (!player.IsValid()) {
-        return;
-    }
-
-    SquadMember member(player);
-    members.insert(SquadMemberEntry(player.GetName(), member));
-}
-
 CharacterMap Squad::getCharacterMap() {
     Player player;
     CharacterMap characterMap;
@@ -71,12 +62,34 @@ void Squad::updateState() {
     updateRaidState(characterMap);
 }
 
+void Squad::updateDamage(Agent src, int damage) {
+    Character character = src.GetCharacter();
+    if (!src.IsValid() || !character.IsValid()) {
+        return;
+    }
+
+    SquadMemberMap::iterator it = members.find(character.GetName());
+    if (it == members.end()) {
+        return;
+    }
+    it->second.addDirectDamage(damage);
+}
+
 void Squad::outputPlayerStats(ostream &stream) {
-    stream << "Player\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDownedCount\n";
+    stream << "Player\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\n";
     for (auto &member : members) {
         SquadMember m = member.second;
-        stream << format("%-20s\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % m.getHeavyDamageTaken() % m.getTotalDamageTaken() % m.getDownedCount();
+        stream << format("%-20s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % int(m.getHeavyDamageTaken()) % int(m.getTotalDamageTaken()) % m.getDirectDamage() % m.getDownedCount();
     }
+}
+
+void Squad::addPlayer(Player player) {
+    if (!player.IsValid()) {
+        return;
+    }
+
+    SquadMember member(player);
+    members.insert(SquadMemberEntry(player.GetName(), member));
 }
 
 void Squad::updateHeavyHits(float heavyHitDamageThreshold) {
