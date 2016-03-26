@@ -3,6 +3,7 @@
 #include "gorseval.h"
 #include "sabetha.h"
 #include "salvation_pass/slothasor.h"
+#include "salvation_pass/matthias.h"
 #include "unknown_boss.h"
 
 using namespace GW2LIB;
@@ -13,6 +14,7 @@ RaidBossFactory::RaidBossFactory() {
     addBossEntry(&Sabetha::matchesTarget, &Sabetha::instance);
 
     addBossEntry(&Slothasor::matchesTarget, &Slothasor::instance);
+    addBossEntry(&Matthias::matchesTarget, &Matthias::instance);
 }
 
 void RaidBossFactory::addBossEntry(raidBossMatcher matcher, raidBossSupplier supplier) {
