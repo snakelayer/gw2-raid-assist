@@ -18,7 +18,7 @@ void Matthias::updateState(boost::circular_buffer<float> &damageBuffer) {
     RaidBoss::updateState();
     RaidBoss::updateDps(damageBuffer);
 
-    // TODO
+    corruption.updateState(encounterTimer.getElapsedMilliseconds());
 }
 
 void Matthias::drawAssistInfo() {
@@ -27,6 +27,20 @@ void Matthias::drawAssistInfo() {
     stringstream ss;
     RaidBoss::outputAssistHeader(ss);
     drawToWindow(ss, getDrawAssistPosition());
+
+    drawCorruptionStatus();
+}
+
+void Matthias::drawCorruptionStatus() {
+    Vector3 pos = getDrawAssistPosition();
+    float x, y;
+
+    if (getScreenLocation(&x, &y, pos)) {
+        y += corruptionDisplayOffset;
+        corruption.drawMeter(x, y);
+    }
+
+    corruption.drawCleansingFonts();
 }
 
 void Matthias::outputDebug(stringstream &ss) {

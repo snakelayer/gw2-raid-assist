@@ -5,6 +5,7 @@
 #include "gw2lib.h"
 
 #include "../raid_boss.h"
+#include "skills/corruption.h"
 
 class Matthias : public RaidBoss
 {
@@ -16,10 +17,15 @@ class Matthias : public RaidBoss
         void updateState(boost::circular_buffer<float> &damageBuffer);
         void drawAssistInfo();
 
+        void drawCorruptionStatus();
+
         void outputDebug(std::stringstream &ss);
 
     private:
         static const float MAX_HP;
+
+        Corruption corruption;
+        const float corruptionDisplayOffset = 20.0f;
 
         Matthias(GW2LIB::Agent agent);
 
