@@ -41,6 +41,7 @@ class AssistDrawer
         static const DWORD FLOAT_MASK = 0x30000000;
         static const DWORD BG_COLOR_MASK = 0x33000000;
         static const DWORD BORDER_COLOR = 0xff444444;
+        static const DWORD BLACK = 0xff000000;
         static const DWORD WHITE = 0xffffffff;
         static const DWORD RED = 0xffff0000;
         static const DWORD CYAN = 0xff66ffff;

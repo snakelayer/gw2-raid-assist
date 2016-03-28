@@ -6,6 +6,16 @@
 
 #include "../raid_boss.h"
 #include "skills/corruption.h"
+#include "skills/sacrifice.h"
+
+namespace MATTHIAS {
+    enum Phase {
+        FIRST = 0,
+        SECOND,
+        THIRD,
+        LAST
+    };
+}
 
 class Matthias : public RaidBoss
 {
@@ -18,14 +28,19 @@ class Matthias : public RaidBoss
         void drawAssistInfo();
 
         void drawCorruptionStatus();
+        void drawSacrificeStatus();
 
         void outputDebug(std::stringstream &ss);
 
     private:
         static const float MAX_HP;
 
+        MATTHIAS::Phase phase;
+
         Corruption corruption;
         const float corruptionDisplayOffset = 20.0f;
+
+        Sacrifice sacrifice;
 
         Matthias(GW2LIB::Agent agent);
 

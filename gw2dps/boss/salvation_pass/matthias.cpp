@@ -5,7 +5,7 @@ using namespace std;
 
 const float Matthias::MAX_HP = 25953840.0f;
 
-Matthias::Matthias(Agent agent) : RaidBoss(agent)
+Matthias::Matthias(Agent agent) : RaidBoss(agent), phase(MATTHIAS::Phase::FIRST)
 {
     heavyHitDamageThreshold = -0.0f; // TODO
 }
@@ -19,6 +19,7 @@ void Matthias::updateState(boost::circular_buffer<float> &damageBuffer) {
     RaidBoss::updateDps(damageBuffer);
 
     corruption.updateState(encounterTimer.getElapsedMilliseconds());
+    sacrifice.updateState(agent);
 }
 
 void Matthias::drawAssistInfo() {
@@ -29,6 +30,7 @@ void Matthias::drawAssistInfo() {
     drawToWindow(ss, getDrawAssistPosition());
 
     drawCorruptionStatus();
+    drawSacrificeStatus();
 }
 
 void Matthias::drawCorruptionStatus() {
@@ -41,6 +43,10 @@ void Matthias::drawCorruptionStatus() {
     }
 
     corruption.drawCleansingFonts();
+}
+
+void Matthias::drawSacrificeStatus() {
+    sacrifice.draw();
 }
 
 void Matthias::outputDebug(stringstream &ss) {
