@@ -1,6 +1,7 @@
 #include "squad_member.h"
 
 using namespace GW2LIB;
+using namespace std;
 
 const float SquadMember::WALK_SPEED = 2.5f;
 const float SquadMember::RUN_SPEED = 10.56562519073486328125f;
@@ -13,6 +14,7 @@ const float SquadMember::SUPERSPEED = 12.5f;
 
 SquadMember::SquadMember(Player player) :
     name(player.GetName()),
+    profession(player.GetCharacter().GetProfession()),
     dodgeCount(0),
     superspeedCount(0),
     heavyHitsTaken(0),
@@ -37,6 +39,31 @@ void SquadMember::updateStats(Character &character) {
     }
 
     isAlive = character.IsAlive();
+}
+
+string SquadMember::getProfession() {
+    switch (profession) {
+    case GW2::Profession::PROFESSION_GUARDIAN:
+        return "Guardian";
+    case GW2::Profession::PROFESSION_WARRIOR:
+        return "Warrior";
+    case GW2::Profession::PROFESSION_ENGINEER:
+        return "Engineer";
+    case GW2::Profession::PROFESSION_RANGER:
+        return "Ranger";
+    case GW2::Profession::PROFESSION_THIEF:
+        return "Thief";
+    case GW2::Profession::PROFESSION_ELEMENTALIST:
+        return "Elementalist";
+    case GW2::Profession::PROFESSION_MESMER:
+        return "Mesmer";
+    case GW2::Profession::PROFESSION_NECROMANCER:
+        return "Necromancer";
+    case GW2::Profession::PROFESSION_REVENANT:
+        return "Revenant";
+    }
+
+    return "Unknown";
 }
 
 void SquadMember::takeHeavyHit() {

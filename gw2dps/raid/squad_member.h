@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "GameData.h"
 
 class SquadMember {
@@ -14,6 +16,7 @@ class SquadMember {
         static const float SUPERSPEED;
 
         std::string name;
+        GW2LIB::GW2::Profession profession;
         int dodgeCount;
         int superspeedCount;
         int heavyHitsTaken;
@@ -39,6 +42,7 @@ class SquadMember {
         void updateStats(GW2LIB::Character &character);
 
         std::string getName() { return name; }
+        std::string getProfession();
         int getDodgeCount() { return dodgeCount; }
         int getSuperspeedCount() { return superspeedCount; }
         float getLastHealthDelta() { return lastHealthDelta; }

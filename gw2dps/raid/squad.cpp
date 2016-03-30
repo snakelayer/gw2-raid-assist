@@ -76,10 +76,10 @@ void Squad::updateDamage(Agent src, int damage) {
 }
 
 void Squad::outputPlayerStats(ostream &stream) {
-    stream << "Player\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\n";
+    stream << "Player\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\n";
     for (auto &member : members) {
         SquadMember m = member.second;
-        stream << format("%-20s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % int(m.getHeavyDamageTaken()) % int(m.getTotalDamageTaken()) % m.getDirectDamage() % m.getDownedCount();
+        stream << format("%-19s\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getProfession() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % int(m.getHeavyDamageTaken()) % int(m.getTotalDamageTaken()) % m.getDirectDamage() % m.getDownedCount();
     }
 }
 
