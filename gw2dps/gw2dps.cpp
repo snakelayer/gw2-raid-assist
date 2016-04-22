@@ -1711,12 +1711,13 @@ void GW2LIB::gw2lib_main()
     load_preferences();
 
     EnableEsp(ESP);
-    SetGameHook(ChatHook, chat_log);
-    SetGameHook(MouseMoveHook, mouse_move);
-    SetGameHook(MouseButtonHook, mouse_click);
-    SetGameHook(MouseWheelHook, mouse_wheel);
-    SetGameHook(DamageLogHook, dmg_log);
-    SetGameHook(CombatLogHook, combat_log);
+    SetGameHook(HOOK_CHAT, chat_log);
+    SetGameHook(HOOK_MOUSE_MOVE, mouse_move);
+    SetGameHook(HOOK_MOUSE_BUTTON, mouse_click);
+    SetGameHook(HOOK_MOUSE_WHEEL, mouse_wheel);
+    SetGameHook(HOOK_DAMAGE_LOG, dmg_log);
+    SetGameHook(HOOK_COMBAT_LOG, combat_log);
+    // TODO: new stuff to explore HOOK_ALLOCATOR and HOOK_LOGGER
 
     thread t1(&threadHotKeys);
     thread t2(&threadDps);
