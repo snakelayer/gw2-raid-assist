@@ -16,7 +16,7 @@ void Slubling::drawSlublingCounts(stringstream &ss) {
         }
     }
 
-    ss << format("Slublings: %d\n") % count;
+    ss << format("Slublings: %d") % count;
 }
 
 bool Slubling::isSlubling(Agent &agent) {
