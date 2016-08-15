@@ -6,6 +6,7 @@
 /* to make a variable global, it must have "extern" so it will be seen across translation units */
 
 extern GW2LIB::Texture profIcon[GW2LIB::GW2::PROFESSION_END];
+extern GW2LIB::Texture eliteIcon[GW2LIB::GW2::PROFESSION_END];
 extern float icon_w;
 extern float icon_h;
 

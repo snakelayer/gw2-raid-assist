@@ -96,6 +96,7 @@ struct Float {
     float cHealth;
     float mHealth;
     int prof;
+    bool eliteSpec = false;
     string name;
 };
 

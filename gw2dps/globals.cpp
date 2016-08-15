@@ -3,6 +3,7 @@
 using namespace GW2LIB;
 
 Texture profIcon[GW2::PROFESSION_END];
+Texture eliteIcon[GW2::PROFESSION_END];
 float icon_w = 20;
 float icon_h = 20;
 
