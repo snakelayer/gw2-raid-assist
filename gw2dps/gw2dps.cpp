@@ -203,8 +203,7 @@ void ESP()
         ss << format("[%i] Measure Distance (%s)\n") % logDisplacement % get_key_description("Hotkeys.LOG_DISPLACEMENT");
         ss << format("[%i] Distance for Self/Enemy (%s)\n") % logDisplacementEnemy % get_key_description("Hotkeys.LOG_DISPLACEMENT_ENEMY");
 
-        StrInfo strInfo;
-        strInfo = AssistDrawer::StringInfo(ss.str());
+        Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
         float x = round(aCenter.x - strInfo.x / 2);
         float y = round(aCenter.y - strInfo.y / 2);
 
@@ -570,10 +569,9 @@ void ESP()
         int rows = 3;
 
         stringstream ss;
-        StrInfo strInfo;
         ss << format("%i\n%i\n%i") % fps % ping % glide;
 
-        strInfo = AssistDrawer::StringInfo(ss.str());
+        Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
         float x = round(ww - strInfo.x - 2);
         float y = round(wh - AssistDrawer::lineHeight * rows - 4);
 
@@ -584,13 +582,12 @@ void ESP()
     // Bottom Element //
     {
         stringstream ss;
-        StrInfo strInfo;
 
         if (selfHealthPercent && self.alive)
         {
             ss << format("%i") % (int)self.pHealth;
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             float x = round(aBottom.x - strInfo.x / 2);
             float y = round(aBottom.y - AssistDrawer::lineHeight);
 
@@ -612,7 +609,7 @@ void ESP()
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
-                aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
+                aTopLeft.y += AssistDrawer::adjustYForNextElement(AssistDrawer::StringInfo(ss.str()).y);
             }
             else if (selected.valid)
             {
@@ -622,7 +619,7 @@ void ESP()
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
-                aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
+                aTopLeft.y += AssistDrawer::adjustYForNextElement(AssistDrawer::StringInfo(ss.str()).y);
             }
 
             if (targetInfo && selected.valid)
@@ -659,7 +656,7 @@ void ESP()
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
-                aTopLeft.y += AssistDrawer::adjustYForNextElementByLines(AssistDrawer::StringInfo(ss.str()).lineCount);
+                aTopLeft.y += AssistDrawer::adjustYForNextElement(AssistDrawer::StringInfo(ss.str()).y);
 
                 ss.str("");
             }
@@ -671,7 +668,6 @@ void ESP()
         if (floatAllyNpc || floatEnemyNpc || floatAllyPlayer || floatEnemyPlayer || floatSiege)
         {
             stringstream ss;
-            StrInfo strInfo;
 
             ss << format("R: %i") % floatRadius;
 
@@ -690,14 +686,14 @@ void ESP()
             if (floatSiege)
                 ss << format(" | Siege: %i") % floaters.siege.size();
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             float x = round(aTop.x - strInfo.x / 2);
             float y = round(aTop.y);
 
             AssistDrawer::get().drawBackground(x, y, strInfo);
             AssistDrawer::get().drawFont(x, y, (floatCircles ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-            aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
+            aTop.y += AssistDrawer::adjustYForNextElement(strInfo.y);
 
             if (floatAllyPlayerProf)
             {
@@ -724,7 +720,7 @@ void ESP()
                 AssistDrawer::get().drawBackground(x, y, strInfo);
                 AssistDrawer::get().drawFont(x, y, (floatCircles ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-                aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
+                aTop.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             }
 
             if (floatCircles)
@@ -879,7 +875,7 @@ void ESP()
             stringstream fs;
             fs << format("Wold Bosses: %i") % wbosses.list.size();
 
-            StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(fs.str());
             float lx = 12;
             float ly = 32;
 
@@ -898,7 +894,7 @@ void ESP()
                         //fs << format("%i / %i") % wboss.cHealth % wboss.mHealth;
                         fs << format("[%i] %i") % wboss.id % int(Dist(self.pos, wboss.pos));
 
-                        StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
+                        Vector2 strInfo = AssistDrawer::StringInfo(fs.str());
                         fx = round(fx - strInfo.x / 2);
                         fy = round(fy - 15);
 
@@ -911,7 +907,7 @@ void ESP()
                         stringstream fs;
                         fs << format("[%i] %i / %i (%i)") % wboss.id % (int)wboss.cHealth % (int)wboss.mHealth % int(Dist(self.pos, wboss.pos));
 
-                        StrInfo strInfo = AssistDrawer::StringInfo(fs.str());
+                        Vector2 strInfo = AssistDrawer::StringInfo(fs.str());
                         ly = round(ly + strInfo.y + AssistDrawer::PADY);
 
                         AssistDrawer::get().drawBackground(lx, ly, strInfo);
@@ -923,7 +919,6 @@ void ESP()
 
         if (logSpeedometer) {
             stringstream ss;
-            StrInfo strInfo;
 
             ss << format("Speed: ");
 
@@ -958,31 +953,30 @@ void ESP()
                 ss << format("0 in/s, 0 in/s");
             }
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             float x = round(aTop.x - strInfo.x / 2);
             float y = round(aTop.y);
 
             AssistDrawer::get().drawBackground(x, y, strInfo);
             AssistDrawer::get().drawFont(x, y, (logSpeedometerEnemy ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-            aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
+            aTop.y += AssistDrawer::adjustYForNextElement(strInfo.y);
         }
 
         if (logDisplacement)
         {
             stringstream ss;
-            StrInfo strInfo;
 
             ss << format("Distance: %i") % bufferDisplacement.dist;
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             float x = round(aTop.x - strInfo.x / 2);
             float y = round(aTop.y);
 
             AssistDrawer::get().drawBackground(x, y, strInfo);
             AssistDrawer::get().drawFont(x, y, (logDisplacementEnemy ? AssistDrawer::CYAN : AssistDrawer::WHITE), ss.str());
 
-            aTop.y += AssistDrawer::adjustYForNextElementByPos(strInfo.y);
+            aTop.y += AssistDrawer::adjustYForNextElement(strInfo.y);
 
         }
         else
@@ -998,7 +992,6 @@ void ESP()
         {
             // separate ss vars
             stringstream ss;
-            StrInfo strInfo;
 
             float aAdjustX = 120; // adjust anchor -120
 
@@ -1026,7 +1019,7 @@ void ESP()
                 ss << format("(no target)\n");
             }
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             strInfo.x = aAdjustX; // box min-width with history stream
             float x = round(aTopRight.x - aAdjustX / 2); // perma anchor offset
             float y = round(aTopRight.y);
@@ -1036,7 +1029,7 @@ void ESP()
 
             // Prepare for Next Element
             //ss.str("");
-            //aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+            //aTopRight.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             aTopRight.x -= aAdjustX / 2 + AssistDrawer::PADX + 2;
         }
         else {
@@ -1047,7 +1040,6 @@ void ESP()
         {
             // separate ss vars
             stringstream ss;
-            StrInfo strInfo;
 
             // Prepare String
             if (bufferKillTimer.time > 0)
@@ -1063,7 +1055,7 @@ void ESP()
                     ss << format("\nDPS: 0.0");
             }
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
             float x = 0;
             float y = round(aTopRight.y);
             if (logDps)
@@ -1076,7 +1068,7 @@ void ESP()
 
             // Prepare for Next Element
             //ss.str("");
-            aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+            aTopRight.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             //aTopRight.x -= 0;
         }
 
@@ -1087,7 +1079,6 @@ void ESP()
         if (logAttackRate)
         {
             stringstream ss;
-            StrInfo strInfo;
 
             if (logAttackRateToFile)
                 ss << format(".: Recording :.\n");
@@ -1135,7 +1126,7 @@ void ESP()
             ss << format("\n");
             ss << format("Threshold: %i hits\n") % AttackRateChainHits;
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
 
             float aAdjustX = 120; // adjust anchor -120
             if (strInfo.x < aAdjustX)
@@ -1148,14 +1139,13 @@ void ESP()
 
             // Prepare for Next Element
             //ss.str("");
-            //aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+            //aTopRight.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             aRight.x = AssistDrawer::adjustXForNextElement(x);
         }
 
         if (logHits)
         {
             stringstream ss;
-            StrInfo strInfo;
 
             if (logHitsToFile)
                 ss << format(".: Recording :.\n");
@@ -1198,7 +1188,7 @@ void ESP()
                 }
             }
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
 
 
             float aAdjustX = 120; // adjust anchor -120
@@ -1212,14 +1202,13 @@ void ESP()
 
             // Prepare for Next Element
             //ss.str("");
-            //aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+            //aTopRight.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             aRight.x = AssistDrawer::adjustXForNextElement(x);
         }
 
         if (logCrits)
         {
             stringstream ss;
-            StrInfo strInfo;
 
             if (logCritsToFile)
                 ss << format(".: Recording :.\n");
@@ -1252,7 +1241,7 @@ void ESP()
             ss << format("Sample Hit: %i\n") % logCritsSample;
 
 
-            strInfo = AssistDrawer::StringInfo(ss.str());
+            Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
 
 
             float aAdjustX = 120; // adjust anchor -120
@@ -1266,7 +1255,7 @@ void ESP()
 
             // Prepare for Next Element
             //ss.str("");
-            //aTopRight.y += AssistDrawer::adjustYForNextElementByLines(strInfo.lineCount);
+            //aTopRight.y += AssistDrawer::adjustYForNextElement(strInfo.y);
             aRight.x = AssistDrawer::adjustXForNextElement(x);
         }
 
@@ -1379,7 +1368,7 @@ float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
 }
 
 void drawElementAt(stringstream &ss, Anchor &location) {
-    StrInfo strInfo = AssistDrawer::StringInfo(ss.str());
+    Vector2 strInfo = AssistDrawer::StringInfo(ss.str());
     float x = round(location.x - strInfo.x / 2);
     float y = round(location.y);
 
