@@ -1,7 +1,7 @@
 #include "personal_combat.h"
 
 using namespace boost;
-using namespace GW2LIB;
+using namespace GW2LIB::GW2;
 
 PersonalCombat::PersonalCombat() {
     timer.stop();

@@ -14,7 +14,7 @@ class PersonalCombat : public RecordableStats
     public:
         PersonalCombat();
 
-        void record(GW2LIB::CombatLogType type, int amount);
+        void record(GW2LIB::GW2::CombatLogType type, int amount);
         void reset();
 
         int getTotalDamageGiven();

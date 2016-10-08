@@ -15,6 +15,7 @@
 #include <locale> // locale
 
 using namespace GW2LIB;
+using namespace GW2LIB::GW2;
 using namespace boost;
 using namespace std;
 
