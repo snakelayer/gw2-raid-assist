@@ -605,7 +605,7 @@ void ESP()
 
                 stringstream ss;
                 string formatString("Selected & Locked: %i / %i [%i%s]");
-                ss << format(formatString) % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
+                ss << format(formatString) % (int)locked.cHealth % (int)locked.mHealth % (int)locked.pHealth % "%%";
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
