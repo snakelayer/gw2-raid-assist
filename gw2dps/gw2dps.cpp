@@ -93,9 +93,6 @@ Vector3 logDisplacementStart = Vector3(0, 0, 0);
 bool mouse_down = false;
 int mouse_delta = 0, mouse_btn = 0, mouse_x = 0, mouse_y = 0, mouse_keys = 0;
 string chat;
-timer::cpu_timer timer2;
-uint64_t totaldmg = 0;
-int pAgentId2 = 0;
 
 PersonalCombat pc;
 
@@ -1278,19 +1275,6 @@ void ESP()
             }
         }
     }
-
-    if (!(locked.valid && locked.id == pAgentId2)) {
-        pAgentId2 = 0;
-        if (!timer2.is_stopped()) timer2.stop();
-    }
-
-    Compass comp = GetCompass();
-
-    stringstream ss;
-    timer::cpu_times elapsed2 = timer2.elapsed();
-    double elapsedMs = elapsed2.wall / 1e9;
-    if (elapsedMs) ss << format("dps: %i") % int(totaldmg / elapsedMs);
-    AssistDrawer::get().drawFont(10, 25, AssistDrawer::WHITE, ss.str());
 }
 
 void displayDebug() {
@@ -1671,19 +1655,11 @@ void dmg_log(Agent src, Agent tgt, int hit) {
 }
 
 void combat_log(CombatLogType type, int hit, Agent agent) {
-    int dmg = 0;
     switch (type) {
     case CL_CONDI_DMG_OUT:
     case CL_CRIT_DMG_OUT:
     case CL_GLANCE_DMG_OUT:
     case CL_PHYS_DMG_OUT:
-        if (locked.valid && !pAgentId2) {
-            pAgentId2 = locked.id;
-            totaldmg = 0;
-            if (timer2.is_stopped()) timer2.start();
-        }
-
-        totaldmg += hit;
         break;
     }
 
@@ -1731,10 +1707,6 @@ void GW2LIB::gw2lib_main()
     // wait for exit hotkey
     while (GetAsyncKeyState(VK_F12) >= 0)
         Sleep(25);
-
-    if (!timer2.is_stopped()) {
-        timer2.stop();
-    }
 
     close_config();
 
