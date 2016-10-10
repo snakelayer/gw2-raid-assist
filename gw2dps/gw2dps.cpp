@@ -5,103 +5,10 @@
 #include "keymap.h"
 #include "hotkey.h"
 #include "preferences.h"
-#include "combat/personal_combat.h"
 #include "assist_drawer.h"
-#include "boss/raid_boss.h"
-#include "raid/squad.h"
 
 #include "hacklib/Main.h"
 #include "hacklib/Logging.h"
-
-// Settings //
-bool killApp = false;
-
-bool help = false;
-bool expMode = false;
-bool selfFloat = false;
-bool selfHealthPercent = true;
-bool loopLimiter = true;
-
-bool showPing = false;
-bool woldBosses = false;
-bool compDotsFade = false;
-bool compDots = false;
-bool targetSelected = true;
-bool targetInfo = false;
-bool targetInfoAlt = false;
-bool targetLock = false;
-
-bool dpsAllowNegative = false;
-
-bool logDps = true;
-bool logDpsDetails = false;
-string logDpsFile = "gw2dpsLog-Dps.txt";
-
-float averageDps[3] = { 0.0f, 0.0f, 0.0f };
-float secondsToDeath = 0.0f;
-bool logRaidAssistToFile = true;
-
-bool logKillTimer = false;
-bool logKillTimerDetails = false;
-bool logKillTimerToFile = false;
-
-bool logHits = false;
-bool logHitsDetails = false;
-bool logHitsToFile = false;
-string logHitsFile = "gw2dpsLog-Hits.txt";
-int threadHitsCounter = 0;
-
-bool logAttackRate = false;
-bool logAttackRateDetails = false;
-bool logAttackRateToFile = false;
-int AttackRateChainHits = 1;
-int AttackRateChainTime = 0; // not used atm
-string logAttackRateFile = "gw2dpsLog-AttackRate.txt";
-int threadAttackRateCounter = 0;
-
-bool logCrits = false;
-bool logCritsDetails = true;
-int logCritsSample = 0;
-int logCritsGlances = 0;
-int logCritsNormals = 0;
-int logCritsCrits = 0;
-bool logCritsToFile = false;
-string logCritsFile = "gw2dpsLog-Crits.txt";
-
-bool alliesList = false;
-int wvwBonus = 0;
-
-bool floatAllyNpc = false;
-bool floatEnemyNpc = false;
-bool floatAllyPlayer = false;
-bool floatAllyPlayerProf = false;
-bool floatEnemyPlayer = false;
-bool floatSiege = false;
-int floatRadius = 7000;
-bool floatCircles = false;
-bool floatType = true; // false = HP; true = Dist;
-
-bool logSpeedometer = false;
-bool logSpeedometerEnemy = false;
-int logDisplacementValue = 0;
-bool logDisplacement = false;
-bool logDisplacementEnemy = false;
-Vector3 logDisplacementStart = Vector3(0, 0, 0);
-
-bool mouse_down = false;
-int mouse_delta = 0, mouse_btn = 0, mouse_x = 0, mouse_y = 0, mouse_keys = 0;
-string chat;
-
-PersonalCombat pc;
-
-bool raid_debug = false;
-bool raid_boss_assist = false;
-bool raid_boss_assist_was_on = false;
-
-Squad *squad;
-RaidBoss *boss;
-
-DWORD thread_id_hotkey = 0;
 
 // Threads //
 #include "thread.Hotkeys.cpp"
@@ -112,11 +19,6 @@ DWORD thread_id_hotkey = 0;
 #include "thread.Crits.cpp"
 #include "thread.Speedometer.cpp"
 #include "thread.RaidAssist.cpp"
-
-// Self
-Character me;
-Agent meAg = me.GetAgent();
-CompassOverlay *compOverlay = new CompassOverlay();
 
 void ESP()
 {
@@ -1673,6 +1575,8 @@ void GW2LIB::gw2lib_main()
     init_config();
     load_preferences();
 
+    compOverlay = new CompassOverlay();
+
     EnableEsp(ESP);
     SetGameHook(HOOK_CHAT, chat_log);
     SetGameHook(HOOK_MOUSE_MOVE, mouse_move);
@@ -1710,6 +1614,9 @@ void GW2LIB::gw2lib_main()
 
     // make threads clean-up first before interrupting
     PostThreadMessage(thread_id_hotkey, WM_USER, NULL, NULL);
+
+    delete compOverlay;
+    compOverlay = nullptr;
 
     // self destruct sequence
     t1.interrupt(); //t1.join();
