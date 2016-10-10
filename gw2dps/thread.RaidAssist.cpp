@@ -1,3 +1,5 @@
+#include "boss/raid_boss_factory.h"
+
 // for bug fixing...
 #include "hacklib/Logging.h"
 

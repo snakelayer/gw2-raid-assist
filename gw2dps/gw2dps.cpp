@@ -7,10 +7,8 @@
 #include "preferences.h"
 #include "combat/personal_combat.h"
 #include "assist_drawer.h"
+#include "boss/raid_boss.h"
 #include "raid/squad.h"
-#include "boss/unknown_boss.h"
-#include "boss/vale_guardian.h"
-#include "boss/raid_boss_factory.h"
 
 #include "hacklib/Main.h"
 #include "hacklib/Logging.h"
