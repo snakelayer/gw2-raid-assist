@@ -3,6 +3,7 @@
 
 // Boost v1.56 library
 #include <boost/thread.hpp>
+#include <boost/chrono.hpp>
 #include <boost/circular_buffer.hpp>
 #include <boost/timer/timer.hpp>
 #include <boost/math/special_functions/round.hpp>

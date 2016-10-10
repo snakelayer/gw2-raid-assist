@@ -1586,14 +1586,14 @@ void GW2LIB::gw2lib_main()
     SetGameHook(HOOK_COMBAT_LOG, combat_log);
     // TODO: new stuff to explore HOOK_ALLOCATOR and HOOK_LOGGER
 
-    thread t1(&threadHotKeys);
-    thread t2(&threadDps);
-    thread t3(&threadKillTimer);
-    thread t4(&threadHits);
-    thread t5(&threadAttackRate);
-    thread t6(&threadCrits);
-    thread t7(&threadSpeedometer);
-    thread t8(&threadRaidAssist);
+    thread t1(threadHotKeys);
+    thread t2(threadDps);
+    thread t3(threadKillTimer);
+    thread t4(threadHits);
+    thread t5(threadAttackRate);
+    thread t6(threadCrits);
+    thread t7(threadSpeedometer);
+    thread t8(threadRaidAssist);
 
     HMODULE dll = hl::GetCurrentModule();
 
@@ -1608,7 +1608,7 @@ void GW2LIB::gw2lib_main()
 
     // wait for exit hotkey
     while (GetAsyncKeyState(VK_F12) >= 0)
-        Sleep(25);
+        this_thread::sleep_for(chrono::milliseconds(25));
 
     close_config();
 
@@ -1628,6 +1628,6 @@ void GW2LIB::gw2lib_main()
     t7.interrupt(); //t7.join();
     t8.interrupt();
 
-    Sleep(1000);
+    this_thread::sleep_for(chrono::milliseconds(1000));
     return;
 }
