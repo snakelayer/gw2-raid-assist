@@ -1,5 +1,4 @@
-#ifndef GW2DPS_H
-#define GW2DPS_H
+#pragma once
 
 // Boost v1.56 library
 #include <boost/thread.hpp>
@@ -15,118 +14,33 @@
 #include <fstream> // ofstream / file
 #include <locale> // locale
 
+#include "gw2lib.h"
+#include "config.h"
+#include "keymap.h"
+#include "hotkey.h"
+#include "preferences.h"
+
+#include "hacklib/Main.h"
+#include "hacklib/Logging.h"
+
+#include "assist_drawer.h"
 #include "boss/raid_boss.h"
 #include "combat/personal_combat.h"
 #include "raid/squad.h"
 
-using namespace GW2LIB;
-using namespace GW2LIB::GW2;
-using namespace boost;
-using namespace std;
-
-Texture profIcon[GW2::PROFESSION_END];
-float icon_w = 20;
-float icon_h = 20;
-
-// Settings //
-bool killApp = false;
-
-bool help = false;
-bool expMode = false;
-bool selfFloat = false;
-bool selfHealthPercent = true;
-bool loopLimiter = true;
-
-bool showPing = false;
-bool woldBosses = false;
-bool compDotsFade = false;
-bool compDots = false;
-bool targetSelected = true;
-bool targetInfo = false;
-bool targetInfoAlt = false;
-bool targetLock = false;
-
-bool dpsAllowNegative = false;
-
-bool logDps = true;
-bool logDpsDetails = false;
-string logDpsFile = "gw2dpsLog-Dps.txt";
-
-float averageDps[3] = { 0.0f, 0.0f, 0.0f };
-float secondsToDeath = 0.0f;
-bool logRaidAssistToFile = true;
-
-bool logKillTimer = false;
-bool logKillTimerDetails = false;
-bool logKillTimerToFile = false;
-
-bool logHits = false;
-bool logHitsDetails = false;
-bool logHitsToFile = false;
-string logHitsFile = "gw2dpsLog-Hits.txt";
-int threadHitsCounter = 0;
-
-bool logAttackRate = false;
-bool logAttackRateDetails = false;
-bool logAttackRateToFile = false;
-int AttackRateChainHits = 1;
-int AttackRateChainTime = 0; // not used atm
-string logAttackRateFile = "gw2dpsLog-AttackRate.txt";
-int threadAttackRateCounter = 0;
-
-bool logCrits = false;
-bool logCritsDetails = true;
-int logCritsSample = 0;
-int logCritsGlances = 0;
-int logCritsNormals = 0;
-int logCritsCrits = 0;
-bool logCritsToFile = false;
-string logCritsFile = "gw2dpsLog-Crits.txt";
-
-bool alliesList = false;
-int wvwBonus = 0;
-
-bool floatAllyNpc = false;
-bool floatEnemyNpc = false;
-bool floatAllyPlayer = false;
-bool floatAllyPlayerProf = false;
-bool floatEnemyPlayer = false;
-bool floatSiege = false;
-int floatRadius = 7000;
-bool floatCircles = false;
-bool floatType = true; // false = HP; true = Dist;
-
-bool logSpeedometer = false;
-bool logSpeedometerEnemy = false;
-int logDisplacementValue = 0;
-bool logDisplacement = false;
-bool logDisplacementEnemy = false;
-Vector3 logDisplacementStart = Vector3(0, 0, 0);
-
-bool mouse_down = false;
-int mouse_delta = 0, mouse_btn = 0, mouse_x = 0, mouse_y = 0, mouse_keys = 0;
-string chat;
-
-DWORD thread_id_hotkey = 0;
-
-class CompassOverlay;
-Character me;
-Agent meAg = me.GetAgent();
-CompassOverlay *compOverlay = nullptr;
-
-PersonalCombat pc;
-
-bool raid_debug = false;
-bool raid_boss_assist = false;
-bool raid_boss_assist_was_on = false;
-
-Squad *squad;
-RaidBoss *boss;
+// threads
+void threadAttackRate();
+void threadCrits();
+void threadDps();
+void threadHits();
+void threadHotKeys();
+void threadKillTimer();
+void threadRaidAssist();
+void threadSpeedometer();
 
 // THREADS //
-int targetLockID;
 struct Target {
-    Target() : valid(false), alive(true), id(0), type(0), cHealth(0), mHealth(0), pHealth(0), lvl(0), lvlActual(0), pos(Vector3(0,0,0)), breakbar(0), rot(0) {}
+    Target() : valid(false), alive(true), id(0), type(0), cHealth(0), mHealth(0), pHealth(0), lvl(0), lvlActual(0), pos(GW2LIB::Vector3(0,0,0)), breakbar(0), rot(0) {}
 
     bool valid;
     bool alive;
@@ -139,12 +53,10 @@ struct Target {
     int lvlActual;
     float breakbar;
 
-    Vector3 pos;
+    GW2LIB::Vector3 pos;
     float rot;
 };
-Target selected;
-Target locked;
-Target self;
+
 struct Ally {
     Ally() : id(0), profession(0), lvl(0), lvlActual(0), cHealth(0), mHealth(0), pHealth(0), vitality(0), pos({ 0, 0, 0 }), name(""), rot(0) {}
 
@@ -156,12 +68,13 @@ struct Ally {
     float mHealth; // max health
     float pHealth; // current health in percent
 
-    Vector3 pos;
+    GW2LIB::Vector3 pos;
     float rot;
 
     int vitality;
     string name;
 };
+
 struct Allies {
     vector<Ally> war;
     vector<Ally> necro;
@@ -175,20 +88,23 @@ struct Allies {
     vector<Ally> ele;
     vector<Ally> thief;
 };
+
 struct Float {
-    Vector3 pos;
+    GW2LIB::Vector3 pos;
     float rot = 0;
     float cHealth;
     float mHealth;
     int prof;
     string name;
 };
+
 struct Siege {
     int type;
-    Vector3 pos;
+    GW2LIB::Vector3 pos;
     float mHealth;
     float cHealth;
 };
+
 struct Floaters {
     vector<Float> allyNpc;
     vector<Float> enemyNpc;
@@ -196,16 +112,19 @@ struct Floaters {
     vector<Float> enemyPlayer;
     vector<Siege> siege;
 };
+
 struct WBoss {
     int id;
-    Vector3 pos;
+    GW2LIB::Vector3 pos;
     float mHealth;
     float cHealth;
     float pHealth;
 };
+
 struct WBosses {
     vector<WBoss> list;
 };
+
 struct Killtimer {
     Killtimer() : dmg(0), dps(0), time(0), samplesKnown(0), samplesUnknown(0) {}
 
@@ -215,20 +134,14 @@ struct Killtimer {
     int samplesKnown;
     int samplesUnknown;
 };
-Killtimer bufferKillTimer;
+
 struct Displacement {
-    Displacement() : id(0), start(Vector3(0, 0, 0)), dist(0) {}
+    Displacement() : id(0), start(GW2LIB::Vector3(0, 0, 0)), dist(0) {}
 
     int id;
-    Vector3 start;
+    GW2LIB::Vector3 start;
     int dist;
 };
-Displacement bufferDisplacement;
-boost::circular_buffer<float> bufferDps(240); // 1 minute for 250ms sampling rate
-boost::circular_buffer<float> bufferBossDps(240); // 1 minute for 250ms sampling rate
-boost::circular_buffer<int> bufferHits(50);
-boost::circular_buffer<double> bufferAttackRate(50); // seconds
-boost::circular_buffer<int> bufferSpeedometer(30); // inches/sec, 100ms sampleRate,3s worth
 
 // Layout Anchors
 struct Anchor {
@@ -237,26 +150,6 @@ struct Anchor {
     float x;
     float y;
 };
-
-// FUNCTIONS //
-float Dist(Vector3 p1, Vector3 p2)
-{
-    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
-}
-string SecondsToString(double input)
-{
-    int hours = int(input) / 60 / 60;
-    int minutes = (int(input) - hours * 60 * 60) / 60;
-    double seconds = (input - hours * 60 * 60 - minutes * 60);
-
-    stringstream ss;
-    if (hours > 0) ss << format("%ihr ") % hours;
-    if (minutes > 0) ss << format("%im ") % minutes;
-    if (seconds > 0) ss << format("%0.2fs") % seconds;
-    if (input == 0) ss << "0.00s";
-
-    return ss.str();
-}
 
 class CompassOverlay {
     const float PI = 3.141592653f;
@@ -291,106 +184,16 @@ struct baseHpReturn {
     float vitality;
 };
 
-baseHpReturn baseHp(int lvl, int profession)
-{
-    // base stats
-    float hp = 0;
-    float vit = 0;
+float Dist(GW2LIB::Vector3 p1, GW2LIB::Vector3 p2);
+string SecondsToString(double input);
+baseHpReturn baseHp(int lvl, int profession);
 
-    // calc base vit for the lvl
-    int cake = 0;
-    while (cake <= lvl) {
-
-        if (cake == 2)
-            vit += 44;
-
-        if (cake > 2 && cake < 11) {
-            vit += 7;
-        }
-        else {
-            if (cake % 2 == 0) {
-                if (11 < cake && cake < 21)
-                    vit += 10;
-                if (21 < cake && cake < 25)
-                    vit += 14;
-                if (25 < cake && cake < 27)
-                    vit += 15;
-                if (27 < cake && cake < 31)
-                    vit += 16;
-                if (31 < cake && cake < 41)
-                    vit += 20;
-                if (41 < cake && cake < 45)
-                    vit += 24;
-                if (45 < cake && cake < 47)
-                    vit += 25;
-                if (47 < cake && cake < 51)
-                    vit += 26;
-                if (51 < cake && cake < 61)
-                    vit += 30;
-                if (61 < cake && cake < 65)
-                    vit += 34;
-                if (65 < cake && cake < 67)
-                    vit += 35;
-                if (67 < cake && cake < 71)
-                    vit += 36;
-                if (71 < cake && cake < 75)
-                    vit += 44;
-                if (75 < cake && cake < 77)
-                    vit += 45;
-                if (77 < cake && cake <= 80)
-                    vit += 46;
-            }
-        }
-
-        cake++;
-    }
-
-    // calc base hp
-    switch (profession)
-    {
-    case GW2::PROFESSION_WARRIOR:
-    case GW2::PROFESSION_NECROMANCER:
-        hp = lvl * 28.f;
-        if (lvl > 19) hp += (lvl - 19) * float(42);
-        if (lvl > 39) hp += (lvl - 39) * float(70);
-        if (lvl > 59) hp += (lvl - 59) * float(70);
-        if (lvl > 79) hp += (lvl - 79) * float(70);
-        hp += vit * 10;
-        break;
-    case GW2::PROFESSION_ENGINEER:
-    case GW2::PROFESSION_RANGER:
-    case GW2::PROFESSION_MESMER:
-    case GW2::PROFESSION_REVENANT:
-        hp = lvl * 18.f;
-        if (lvl > 19) hp += (lvl - 19) * float(27);
-        if (lvl > 39) hp += (lvl - 39) * float(45);
-        if (lvl > 59) hp += (lvl - 59) * float(45);
-        if (lvl > 79) hp += (lvl - 79) * float(45);
-        hp += vit * 10;
-        break;
-    case GW2::PROFESSION_GUARDIAN:
-    case GW2::PROFESSION_ELEMENTALIST:
-    case GW2::PROFESSION_THIEF:
-        hp = lvl * 5.f;
-        if (lvl > 19) hp += (lvl - 19) * float(7.5);
-        if (lvl > 39) hp += (lvl - 39) * float(12.5);
-        if (lvl > 59) hp += (lvl - 59) * float(12.5);
-        if (lvl > 79) hp += (lvl - 79) * float(12.5);
-        hp += vit * 10;
-        break;
-    }
-
-    baseHpReturn out;
-    out.health = hp;
-    out.vitality = vit;
-    return out;
-}
+void load_preferences();
+void save_preferences();
 
 void displayDebug();
-void displayAgent(string prefix, Agent &agent, stringstream &ss);
+void displayAgent(std::string prefix, GW2LIB::Agent &agent, stringstream &ss);
 
 float computeAverage(size_t samples, boost::circular_buffer<float> bufferDps);
 
-void drawElementAt(stringstream &ss, Anchor &aTopLeft);
-
-#endif
+void drawElementAt(std::stringstream &ss, Anchor &aTopLeft);

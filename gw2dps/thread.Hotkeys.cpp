@@ -1,6 +1,6 @@
-#include "config.h"
-#include "hotkey.h"
-#include "preferences.h"
+#include "globals.h"
+
+using namespace boost;
 
 #define KILL_APP 999
 

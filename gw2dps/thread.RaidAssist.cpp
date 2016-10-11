@@ -1,7 +1,9 @@
+#include "globals.h"
+
 #include "boss/raid_boss_factory.h"
 
-// for bug fixing...
-#include "hacklib/Logging.h"
+using namespace GW2LIB;
+using namespace boost;
 
 int disableRaidAssist() {
     if (squad != nullptr) {

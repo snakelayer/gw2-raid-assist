@@ -1,3 +1,7 @@
+#include "globals.h"
+
+using namespace boost;
+
 void threadDps() {
     int pAgentId = 0;
     float pHealth = 0;

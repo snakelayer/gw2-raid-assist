@@ -1,3 +1,8 @@
+#include "globals.h"
+
+using namespace GW2LIB;
+using namespace boost;
+
 void threadSpeedometer() {
     double pollingRate = 100; // ms
     int pId = 0;

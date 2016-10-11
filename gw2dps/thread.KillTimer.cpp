@@ -1,3 +1,8 @@
+#include "globals.h"
+
+using namespace GW2LIB;
+using namespace boost;
+
 void threadKillTimer()
 {
     int pAgentId = 0;
