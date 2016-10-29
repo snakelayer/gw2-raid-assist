@@ -488,8 +488,8 @@ void ESP()
             {
 
                 stringstream ss;
-                string formatString("Selected & Locked: %i / %i [%i%s]");
-                ss << format(formatString) % (int)locked.cHealth % (int)locked.mHealth % (int)locked.pHealth % "%%";
+                string formatString("Selected & Locked: %i / %i");
+                ss << format(formatString) % (int)locked.cHealth % (int)locked.mHealth;
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
@@ -498,8 +498,8 @@ void ESP()
             else if (selected.valid)
             {
                 stringstream ss;
-                string formatString("Selected: %i / %i [%i%s]");
-                ss << format(formatString) % (int)selected.cHealth % (int)selected.mHealth % (int)selected.pHealth % "%%";
+                string formatString("Selected: %i / %i");
+                ss << format(formatString) % (int)selected.cHealth % (int)selected.mHealth;
                 drawElementAt(ss, aTopLeft);
 
                 // Prepare for Next Element
