@@ -65,7 +65,7 @@ class RaidBoss : public RecordableStats
         std::string outputHeader;
 
         float getHealthMeterX() { return (GW2LIB::GetWindowWidth() / 2) - 178.0f; }
-        float getHealthMeterY() { return 86.0f; }
+        float getHealthMeterY() { return 77.0f; }
 
         virtual float getMaxHp() = 0;
         virtual float getBossHeight() = 0;
