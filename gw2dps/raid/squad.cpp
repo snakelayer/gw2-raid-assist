@@ -33,9 +33,10 @@ CharacterMap Squad::getCharacterMap() {
     CharacterMap characterMap;
 
     while (player.BeNext()) {
-        SquadMemberMap::iterator it = members.find(player.GetName());
+        uint32_t agentId = player.GetAgent().GetAgentId();
+        SquadMemberMap::iterator it = members.find(agentId);
         if (it != members.end()) {
-            characterMap.insert(CharacterEntry(player.GetName(), player.GetCharacter()));
+            characterMap.insert(CharacterEntry(agentId, player.GetCharacter()));
         }
     }
 
@@ -62,17 +63,15 @@ void Squad::updateState() {
     updateRaidState(characterMap);
 }
 
-void Squad::updateDamage(Agent src, int damage) {
-    Character character = src.GetCharacter();
-    if (!src.IsValid() || !character.IsValid()) {
+void Squad::updateDamage(Agent &src, int damage) {
+    if (!src.IsValid()) {
         return;
     }
 
-    SquadMemberMap::iterator it = members.find(character.GetName());
-    if (it == members.end()) {
-        return;
+    SquadMemberMap::iterator it = members.find(src.GetAgentId());
+    if (it != members.end()) {
+        it->second.addDirectDamage(damage);
     }
-    it->second.addDirectDamage(damage);
 }
 
 void Squad::outputPlayerStats(ostream &stream) {
@@ -88,8 +87,7 @@ void Squad::addPlayer(Player &player) {
         return;
     }
 
-    SquadMember member(player);
-    members.insert(SquadMemberEntry(player.GetName(), member));
+    members.insert(SquadMemberEntry(player.GetAgent().GetAgentId(), SquadMember(player)));
 }
 
 void Squad::updateHeavyHits(float heavyHitDamageThreshold) {

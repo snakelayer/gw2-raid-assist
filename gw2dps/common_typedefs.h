@@ -9,7 +9,7 @@
 
 #include "raid/squad_member.h"
 
-typedef std::map<std::string, GW2LIB::Character> CharacterMap;
-typedef std::pair<std::string, GW2LIB::Character> CharacterEntry;
-typedef std::map<std::string, SquadMember> SquadMemberMap;
-typedef std::pair<std::string, SquadMember> SquadMemberEntry;
+typedef std::map<uint32_t, GW2LIB::Character> CharacterMap;
+typedef std::pair<uint32_t, GW2LIB::Character> CharacterEntry;
+typedef std::map<uint32_t, SquadMember> SquadMemberMap;
+typedef std::pair<uint32_t, SquadMember> SquadMemberEntry;

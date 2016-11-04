@@ -52,7 +52,7 @@ class Squad : public RecordableStats
         void setBoss(RaidBoss *raidBoss);
         CharacterMap getCharacterMap();
         void updateState();
-        void updateDamage(GW2LIB::Agent agent, int damage);
+        void updateDamage(GW2LIB::Agent &agent, int damage);
 
         void outputPlayerStats(std::ostream &stream);
 
