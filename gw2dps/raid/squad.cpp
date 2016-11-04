@@ -74,6 +74,17 @@ void Squad::updateDamage(Agent &src, int damage) {
     }
 }
 
+void Squad::drawAssistInfo() {
+    if (isHealerRole(GetOwnAgent())) {
+        CharacterMap characterMap = getCharacterMap();
+        for (auto &characterEntry : characterMap) {
+            if (characterEntry.first != GetOwnAgent().GetAgentId()) {
+                members.at(characterEntry.first).tryDrawHealthMeter(characterEntry.second);
+            }
+        }
+    }
+}
+
 void Squad::outputPlayerStats(ostream &stream) {
     stream << "Player\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\n";
     for (auto &member : members) {
@@ -88,6 +99,18 @@ void Squad::addPlayer(Player &player) {
     }
 
     members.insert(SquadMemberEntry(player.GetAgent().GetAgentId(), SquadMember(player)));
+}
+
+bool Squad::isHealerRole(Agent &agent) {
+    Player player = agent.GetPlayer();
+    Character character = agent.GetCharacter();
+
+    if ((character.IsValid() && character.GetProfession() == GW2::Profession::PROFESSION_RANGER) &&
+        (player.IsValid() && player.HasEliteSpec())) {
+        return true;
+    }
+
+    return false;
 }
 
 void Squad::updateHeavyHits(float heavyHitDamageThreshold) {

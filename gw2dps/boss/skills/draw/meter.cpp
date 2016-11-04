@@ -37,3 +37,13 @@ void Meter::drawAtPercent(float x, float y, DWORD color, float cooldown, float p
 
     drawAtPercent(x, y, color, cooldownStr, percent);
 }
+
+void Meter::drawAtAgentPositionWithZOffset(GW2LIB::Agent &agent, float zOffset, DWORD color, float percent) {
+    Vector3 pos = agent.GetPos();
+    pos.z -= zOffset;
+
+    float x, y;
+    if (WorldToScreen(pos, &x, &y)) {
+        drawAtPercent(x, y, color, percent);
+    }
+}

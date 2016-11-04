@@ -17,7 +17,7 @@ void ESP()
     bossDpsAnchor.x = round(GetWindowWidth() * 5 / 7);
     bossDpsAnchor.y = 8;
 
-    aLeft.x = round(GetWindowWidth() / 6);
+    aLeft.x = round(GetWindowWidth() / 3);
     aLeft.y = 75;
 
     //aTopLeft.x = round((GetWindowWidth() / 2 - 316 + 280) / 2 + 316);
@@ -1160,6 +1160,10 @@ void ESP()
                     drawElementAt(ssDps, bossDpsAnchor);
                 }
             }
+
+            if (squad != nullptr) {
+                squad->drawAssistInfo();
+            }
         }
     }
 }
@@ -1195,7 +1199,7 @@ void displayDebug() {
 
 void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     Character character = agent.GetCharacter();
-    ss << format(prefix + " agentId: %d\n") % character.GetAgent().GetAgentId();
+    ss << format(prefix + " agentId: %d\n") % agent.GetAgentId();
     ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
     ss << format(prefix + " selectable: %s\n") % (agent.IsSelectable() ? "yes" : "no");
     ss << format(prefix + " type: %d\n") % agent.GetType();
@@ -1205,17 +1209,20 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
     ss << format(prefix + " speed: %.40f\n") % agent.GetSpeed();
     ss << format(prefix + " max speed: %.40f\n") % agent.GetMaxSpeed();
-    ss << format(prefix + " name: %s\n") % agent.GetPlayer().GetName();
+    ss << format(prefix + " name: %s\n") % agent.GetName();
+    ss << format(prefix + " profession: %d\n") % character.GetProfession();
+    ss << format(prefix + " hasEliteSpec: " + string(agent.GetPlayer().HasEliteSpec() ? "yes" : "no") + "\n");
     ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
     ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
     ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
     ss << format(prefix + " monster player clone: " + string(character.IsClone() ? "yes" : "no") + "\n");
     ss << format(prefix + " valid: " + string(character.IsValid() ? "yes" : "no") + "\n");
     ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
-    ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
     ss << format(prefix + " player: " + string(character.IsPlayer() ? "yes" : "no") + "\n");
     ss << format(prefix + " pet: " + string(character.IsRangerPet() ? "yes" : "no") + "\n");
     ss << format(prefix + " gender: %d\n") % character.GetGender();
+    ss << format(prefix + " race: %d\n") % character.GetRace();
+    ss << format(prefix + " stance: %d\n") % character.GetStance();
     ss << format(prefix + " breakbar state: %d\n") % character.GetBreakbarState();
     ss << format(prefix + " breakbar percent: %f\n") % character.GetBreakbarPercent();
     ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();

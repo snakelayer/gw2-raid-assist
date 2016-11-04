@@ -1,5 +1,6 @@
 #include "squad_member.h"
 
+using namespace boost::assign;
 using namespace GW2LIB;
 using namespace std;
 
@@ -11,6 +12,15 @@ const float SquadMember::GLIDE_SPEED = 12.1875f;
 const float SquadMember::SWIFTNESS_SPEED = 12.2193756103515625f;
 const float SquadMember::COMBAT_SWIFTNESS_SPEED = 8.72812557220458984375f;
 const float SquadMember::SUPERSPEED = 12.5f;
+
+const double SquadMember::HEALTH_METER_FADE_DELAY_MILLISECONDS = 3000;
+
+map<GW2::Race, float> SquadMember::raceHeightOffset = map_list_of
+(GW2::Race::RACE_ASURA, 70.0f)
+(GW2::Race::RACE_CHARR, 140.0f)
+(GW2::Race::RACE_HUMAN, 90.0f)
+(GW2::Race::RACE_NORN, 100.0f)
+(GW2::Race::RACE_SYLVARI, 80.0f);
 
 SquadMember::SquadMember(Player &player) :
     name(player.GetName()),
@@ -26,7 +36,10 @@ SquadMember::SquadMember(Player &player) :
     secondLastSpeed(COMBAT_RUN_SPEED),
     isAlive(true),
     lastHealth(player.GetCharacter().GetCurrentHealth()),
-    lastHealthDelta(0.0f) {
+    lastHealthDelta(0.0f),
+    shouldDrawHealthMeter(false),
+    meter(60.0f, 6.0f) {
+    healthMeterTimer.stop();
 }
 
 void SquadMember::updateStats(Character &character) {
@@ -66,9 +79,45 @@ string SquadMember::getProfession() {
     return "Unknown";
 }
 
+void SquadMember::tryDrawHealthMeter(Character &character) {
+    if (isBelowHalfHealth(character)) {
+        shouldDrawHealthMeter = true;
+        healthMeterTimer.start();
+    }
+
+    double elapsedMilliseconds = healthMeterTimer.elapsed().wall / 1e6;
+    if ((elapsedMilliseconds > HEALTH_METER_FADE_DELAY_MILLISECONDS) ||
+        !character.IsAlive()) {
+        shouldDrawHealthMeter = false;
+        healthMeterTimer.stop();
+    }
+
+    if (character.GetStance() == GW2::ProfessionStance::STANCE_NECRO_SHROUD) {
+        return;
+    }
+
+    if (shouldDrawHealthMeter) {
+        float healthPercent = lastHealth / character.GetMaxHealth();
+        DWORD healthColor = interpolateHealthColor(healthPercent);
+        meter.drawAtAgentPositionWithZOffset(character.GetAgent(), raceHeightOffset[character.GetRace()], healthColor, healthPercent);
+    }
+}
+
 void SquadMember::takeHeavyHit() {
     heavyDamageTaken -= lastHealthDelta;
     ++heavyHitsTaken;
+}
+
+bool SquadMember::isBelowHalfHealth(Character &character) {
+    return character.IsAlive() && (lastHealth < (character.GetMaxHealth() / 2));
+}
+
+DWORD SquadMember::interpolateHealthColor(float percent) {
+    float half = 0.5f;
+    DWORD red = (percent < half) ? 0xff : static_cast<int>(0xff * 2 * (1 - percent));
+    DWORD green = static_cast<int>(0xff * percent);
+
+    return 0xff000000 | (red << 16) | (green << 8);
 }
 
 void SquadMember::updateLastHealthDelta(Character &character) {

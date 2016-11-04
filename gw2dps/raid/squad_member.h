@@ -1,8 +1,14 @@
 #pragma once
 
+#include <map>
 #include <string>
 
+#include <boost/assign.hpp>
+#include <boost/timer/timer.hpp>
+
 #include "GameData.h"
+
+#include "../boss/skills/draw/meter.h"
 
 class SquadMember {
     private:
@@ -14,6 +20,9 @@ class SquadMember {
         static const float SWIFTNESS_SPEED;
         static const float COMBAT_SWIFTNESS_SPEED;
         static const float SUPERSPEED;
+
+        static const double HEALTH_METER_FADE_DELAY_MILLISECONDS;
+        static std::map<GW2LIB::GW2::Race, float> raceHeightOffset;
 
         std::string name;
         GW2LIB::GW2::Profession profession;
@@ -30,6 +39,13 @@ class SquadMember {
         bool isAlive;
         float lastHealth;
         float lastHealthDelta;
+
+        bool shouldDrawHealthMeter;
+        boost::timer::cpu_timer healthMeterTimer;
+        Meter meter;
+
+        bool isBelowHalfHealth(GW2LIB::Character &character);
+        DWORD interpolateHealthColor(float percent);
 
         void updateLastHealthDelta(GW2LIB::Character &character);
         void updateDamageTaken();
@@ -51,6 +67,8 @@ class SquadMember {
         float getTotalDamageTaken() { return totalDamageTaken; }
         int getDirectDamage() { return directDamage; }
         int getDownedCount() { return downedCount; }
+
+        void tryDrawHealthMeter(GW2LIB::Character &character);
 
         void takeHeavyHit();
         void addDirectDamage(int damage) { directDamage += damage; }

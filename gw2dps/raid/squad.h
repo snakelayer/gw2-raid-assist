@@ -29,6 +29,8 @@ class Squad : public RecordableStats
 {
     private:
         static const int MAX_SQUAD_SIZE = 10;
+        static bool isHealerRole(GW2LIB::Agent &agent);
+
         SquadMemberMap members;
         RaidBoss *raidBoss;
 
@@ -54,6 +56,7 @@ class Squad : public RecordableStats
         void updateState();
         void updateDamage(GW2LIB::Agent &agent, int damage);
 
+        void drawAssistInfo();
         void outputPlayerStats(std::ostream &stream);
 
         RAID::RaidState getRaidState() { return raidState; }
