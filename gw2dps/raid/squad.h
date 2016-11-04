@@ -35,7 +35,7 @@ class Squad : public RecordableStats
         RAID::RaidState raidState;
         bool disable;
 
-        void addPlayer(GW2LIB::Player player);
+        void addPlayer(GW2LIB::Player &player);
 
         void updateHeavyHits(float heavyHitDamageThreshold);
         void updateRaidState(CharacterMap &characterMap);

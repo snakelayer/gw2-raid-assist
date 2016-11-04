@@ -83,7 +83,7 @@ void Squad::outputPlayerStats(ostream &stream) {
     }
 }
 
-void Squad::addPlayer(Player player) {
+void Squad::addPlayer(Player &player) {
     if (!player.IsValid()) {
         return;
     }

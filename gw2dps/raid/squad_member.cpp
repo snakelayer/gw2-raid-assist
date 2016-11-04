@@ -12,7 +12,7 @@ const float SquadMember::SWIFTNESS_SPEED = 12.2193756103515625f;
 const float SquadMember::COMBAT_SWIFTNESS_SPEED = 8.72812557220458984375f;
 const float SquadMember::SUPERSPEED = 12.5f;
 
-SquadMember::SquadMember(Player player) :
+SquadMember::SquadMember(Player &player) :
     name(player.GetName()),
     profession(player.GetCharacter().GetProfession()),
     dodgeCount(0),

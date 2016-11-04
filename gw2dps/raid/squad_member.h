@@ -38,7 +38,7 @@ class SquadMember {
         SquadMember() = delete;
 
     public:
-        SquadMember(GW2LIB::Player player);
+        SquadMember(GW2LIB::Player &player);
         void updateStats(GW2LIB::Character &character);
 
         std::string getName() { return name; }
