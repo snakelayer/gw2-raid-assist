@@ -11,6 +11,9 @@ Raid Assist is a tool to help players perform better at GW2 raids. It is based o
 - Tracks and displays internal state of players and bosses, which is intended to help learning and/or performing better at raids. The output is customized to be relevant for each boss, eg:
  - Vale guardian: cooldown for Magic Storm attack
  - Sabetha: compass and cannon timer
+- Feature details:
+ - Engineer: displays a radius around the boss indicating range of bomb kit attacks
+ - Druid: displays health bar above low health players
 - Outputs stats for each raid attempt, which is intended to help players understand what went wrong, where/when errors occurred, and possible ways to improve.
 - Explanation of stat output columns:
  - **DodgeCount**: The number of times a player dodged.
