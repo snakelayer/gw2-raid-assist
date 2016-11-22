@@ -4,6 +4,7 @@
 #include "hacklib/Logging.h"
 
 using namespace boost;
+using namespace boost::chrono;
 using namespace GW2LIB;
 using namespace std;
 
@@ -99,6 +100,10 @@ bool RaidBoss::getScreenLocation(float *x, float *y, Vector3 pos) {
     return false;
 }
 
+milliseconds RaidBoss::getEncounterDuration() {
+    return milliseconds(encounterTimer.getElapsedMilliseconds());
+}
+
 Vector3 RaidBoss::getDrawAssistPosition() {
     Vector3 pos = agent.GetPos();
     pos.z -= getBossHeight();
@@ -181,7 +186,7 @@ void RaidBoss::writeToFile() {
         string universalNow = boost::posix_time::to_simple_string(boost::posix_time::second_clock::universal_time());
         file << format("//   end time: %s\n") % universalNow;
         file << format("// remaining health: %d\n") % (int)getCurrentHealth();
-        file << format("// encounter duration: %d\n") % encounterTimer.getElapsedSeconds();
+        file << format("// encounter duration: %d s\n") % encounterTimer.getElapsedSeconds();
         outputDps(file);
         writeHeavyHitsInfo(file);
         writeHealthData(file);

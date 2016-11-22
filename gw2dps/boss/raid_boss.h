@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 
+#include <boost/chrono.hpp>
 #include <boost/circular_buffer.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
@@ -35,6 +36,7 @@ class RaidBoss : public RecordableStats
         virtual void updateState(boost::circular_buffer<float> &damageBuffer) = 0;
         virtual void drawAssistInfo();
 
+        bool isStarted() { return !encounterTimer.isStopped(); }
         virtual bool isDead();
 
         int getAgentId() { return agent.GetAgentId(); }
@@ -44,6 +46,7 @@ class RaidBoss : public RecordableStats
         float getHeavyHitDamageThreshold() { return heavyHitDamageThreshold; }
 
         bool getScreenLocation(float *x, float *y, GW2LIB::Vector3 pos);
+        boost::chrono::milliseconds getEncounterDuration();
 
         virtual void outputDebug(std::stringstream &ss) = 0;
 
@@ -60,7 +63,6 @@ class RaidBoss : public RecordableStats
         float dps[3];
 
         EncounterTimer encounterTimer;
-        int totalEncounterDuration;
 
         std::string outputHeader;
 

@@ -55,15 +55,16 @@ void threadRaidAssist() {
                 
                 //squad&boss creation/update scope
                 {
-                    if (squad == nullptr) {
-                        squad = new Squad();
-                    }
-                    else {
-                        squad->updateState();
-                    }
-
                     if (boss == nullptr) {
                         boss = RaidBossFactory::get().getNextBoss();
+                    }
+                    else {
+                        boss->updateState(bufferBossDps);
+                    }
+
+                    if (squad == nullptr) {
+                        squad = new Squad();
+
                         if (squad != nullptr && boss != nullptr) {
                             boss->setSquad(squad);
                             squad->setBoss(boss);
@@ -73,7 +74,7 @@ void threadRaidAssist() {
                         }
                     }
                     else {
-                        boss->updateState(bufferBossDps);
+                        squad->updateState();
                     }
                 }
 

@@ -5,6 +5,7 @@
 
 #include <boost/assign.hpp>
 #include <boost/timer/timer.hpp>
+#include <boost/chrono.hpp>
 
 #include "GameData.h"
 
@@ -44,6 +45,9 @@ class SquadMember {
         boost::timer::cpu_timer healthMeterTimer;
         Meter meter;
 
+        boost::timer::cpu_timer uptimeTimer;
+        boost::chrono::milliseconds totalUptime;
+
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
@@ -56,6 +60,11 @@ class SquadMember {
     public:
         SquadMember(GW2LIB::Player &player);
         void updateStats(GW2LIB::Character &character);
+
+        void upped();
+        void downed();
+        void updateUptime();
+        boost::chrono::milliseconds getTotalUptime();
 
         std::string getName() { return name; }
         std::string getProfession();

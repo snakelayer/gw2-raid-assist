@@ -5,6 +5,7 @@
 #include <ostream>
 #include <sstream>
 
+#include <boost/chrono.hpp>
 #include <boost/format.hpp>
 
 #include "GameData.h"

@@ -1,6 +1,7 @@
 #include "squad_member.h"
 
 using namespace boost::assign;
+using namespace boost::chrono;
 using namespace GW2LIB;
 using namespace std;
 
@@ -38,8 +39,10 @@ SquadMember::SquadMember(Player &player) :
     lastHealth(player.GetCharacter().GetCurrentHealth()),
     lastHealthDelta(0.0f),
     shouldDrawHealthMeter(false),
-    meter(60.0f, 6.0f) {
+    meter(60.0f, 6.0f),
+    totalUptime(milliseconds(0)) {
     healthMeterTimer.stop();
+    uptimeTimer.stop();
 }
 
 void SquadMember::updateStats(Character &character) {
@@ -49,6 +52,13 @@ void SquadMember::updateStats(Character &character) {
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
+    }
+
+    if (character.IsAlive()) {
+        upped();
+    }
+    else {
+        downed();
     }
 
     isAlive = character.IsAlive();
@@ -169,4 +179,26 @@ void SquadMember::updateMovementStats(Character &character) {
         secondLastSpeed = lastSpeed;
     }
     lastSpeed = speed;
+}
+
+void SquadMember::upped() {
+    if (uptimeTimer.is_stopped()) {
+        uptimeTimer.start();
+    }
+}
+
+void SquadMember::downed() {
+    if (!uptimeTimer.is_stopped()) {
+        updateUptime();
+        uptimeTimer.stop();
+    }
+}
+
+void SquadMember::updateUptime() {
+    totalUptime += milliseconds(uptimeTimer.elapsed().wall / int(1e6));
+    uptimeTimer.start();
+}
+
+milliseconds SquadMember::getTotalUptime() {
+    return totalUptime;
 }

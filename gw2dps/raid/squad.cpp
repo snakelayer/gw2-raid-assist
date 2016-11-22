@@ -1,6 +1,7 @@
 #include "squad.h"
 
 using namespace boost;
+using namespace boost::chrono;
 using namespace GW2LIB;
 using namespace std;
 
@@ -15,12 +16,18 @@ Squad::Squad()
         if (members.size() == MAX_SQUAD_SIZE) {
             break;
         }
+        if (player == GetOwnAgent().GetPlayer()) {
+            continue;
+        }
 
         addPlayer(player);
     }
 }
 
 Squad::~Squad() {
+    for (auto &member : members) {
+        member.second.updateUptime();
+    }
     writeToFile();
 }
 
@@ -44,6 +51,15 @@ CharacterMap Squad::getCharacterMap() {
 }
 
 void Squad::updateState() {
+    if (raidBoss == nullptr) {
+        HL_LOG_ERR("raid boss ptr missing\n");
+        return;
+    }
+
+    if (!raidBoss->isStarted()) {
+        return;
+    }
+
     CharacterMap characterMap = getCharacterMap();
     if (characterMap.empty()) {
         return; // sometimes hacklib_gw2 doesn't return any character objects for some reason...
@@ -56,9 +72,7 @@ void Squad::updateState() {
         }
     }
 
-    if (raidBoss != nullptr) {
-        updateHeavyHits(raidBoss->getHeavyHitDamageThreshold());
-    }
+    updateHeavyHits(raidBoss->getHeavyHitDamageThreshold());
 
     updateRaidState(characterMap);
 }
@@ -86,10 +100,23 @@ void Squad::drawAssistInfo() {
 }
 
 void Squad::outputPlayerStats(ostream &stream) {
-    stream << "Player\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\n";
+    double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
+
+    stream << "Player\t\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\tUptimeSeconds\tUptimePercent\n";
     for (auto &member : members) {
-        SquadMember m = member.second;
-        stream << format("%-19s\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n") % m.getName() % m.getProfession() % m.getDodgeCount() % m.getSuperspeedCount() % m.getHeavyHitsTaken() % int(m.getHeavyDamageTaken()) % int(m.getTotalDamageTaken()) % m.getDirectDamage() % m.getDownedCount();
+        int memberUptime = member.second.getTotalUptime().count();
+        stream << format("%-19s\t\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%2.1f\n") %
+            member.second.getName() %
+            member.second.getProfession() %
+            member.second.getDodgeCount() %
+            member.second.getSuperspeedCount() %
+            member.second.getHeavyHitsTaken() %
+            int(member.second.getHeavyDamageTaken()) %
+            int(member.second.getTotalDamageTaken()) %
+            member.second.getDirectDamage() %
+            member.second.getDownedCount() %
+            int(memberUptime / 1e3) %
+            ((totalMillisecondDuration == 0) ? 0 : (memberUptime / totalMillisecondDuration * 100));
     }
 }
 
@@ -98,7 +125,7 @@ void Squad::addPlayer(Player &player) {
         return;
     }
 
-    members.insert(SquadMemberEntry(player.GetAgent().GetAgentId(), SquadMember(player)));
+    members.emplace(player.GetAgent().GetAgentId(), SquadMember(player));
 }
 
 bool Squad::isHealerRole(Agent &agent) {
