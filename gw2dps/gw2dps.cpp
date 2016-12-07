@@ -1201,31 +1201,22 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     Character character = agent.GetCharacter();
     ss << format(prefix + " agentId: %d\n") % agent.GetAgentId();
     ss << format(prefix + " location: x=%f, y=%f, z=%f\n") % agent.GetPos().x % agent.GetPos().y % agent.GetPos().z;
-    ss << format(prefix + " selectable: %s\n") % (agent.IsSelectable() ? "yes" : "no");
-    ss << format(prefix + " type: %d\n") % agent.GetType();
-    ss << format(prefix + " gadget: %f / %f\n") % agent.GetGadget().GetCurrentHealth() % agent.GetGadget().GetMaxHealth();
-    ss << format(prefix + " rot: %f\n") % agent.GetRot();
-    ss << format(prefix + " token: %" PRIu64 "\n") % agent.GetToken();
-    ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
+    //ss << format(prefix + " selectable: %s\n") % (agent.IsSelectable() ? "yes" : "no");
+    //ss << format(prefix + " type: %d\n") % agent.GetType();
+    //ss << format(prefix + " rot: %f\n") % agent.GetRot();
+    //ss << format(prefix + " token: %" PRIu64 "\n") % agent.GetToken();
+    //ss << format(prefix + " seq: %" PRIu64 "\n") % agent.GetSequence();
     ss << format(prefix + " speed: %.40f\n") % agent.GetSpeed();
     ss << format(prefix + " max speed: %.40f\n") % agent.GetMaxSpeed();
     ss << format(prefix + " name: %s\n") % agent.GetName();
     ss << format(prefix + " profession: %d\n") % character.GetProfession();
     ss << format(prefix + " hasEliteSpec: " + string(agent.GetPlayer().HasEliteSpec() ? "yes" : "no") + "\n");
-    ss << format(prefix + " alive: " + string(character.IsAlive() ? "yes" : "no") + "\n");
-    ss << format(prefix + " downed: " + string(character.IsDowned() ? "yes" : "no") + "\n");
-    ss << format(prefix + " monster: " + string(character.IsMonster() ? "yes" : "no") + "\n");
-    ss << format(prefix + " monster player clone: " + string(character.IsClone() ? "yes" : "no") + "\n");
-    ss << format(prefix + " valid: " + string(character.IsValid() ? "yes" : "no") + "\n");
-    ss << format(prefix + " controlled: " + string(character.IsControlled() ? "yes" : "no") + "\n");
-    ss << format(prefix + " player: " + string(character.IsPlayer() ? "yes" : "no") + "\n");
-    ss << format(prefix + " pet: " + string(character.IsRangerPet() ? "yes" : "no") + "\n");
-    ss << format(prefix + " gender: %d\n") % character.GetGender();
-    ss << format(prefix + " race: %d\n") % character.GetRace();
-    ss << format(prefix + " stance: %d\n") % character.GetStance();
-    ss << format(prefix + " breakbar state: %d\n") % character.GetBreakbarState();
-    ss << format(prefix + " breakbar percent: %f\n") % character.GetBreakbarPercent();
+    ss << format(prefix + " alive=" + string(character.IsAlive() ? "yes" : "no") + " downed=" + string(character.IsDowned() ? "yes" : "no") + " monster=" + string(character.IsMonster() ? "yes" : "no") + "\n");
+    ss << format(prefix + " player=" + string(character.IsPlayer() ? "yes" : "no") + " pet=" + string(character.IsRangerPet() ? "yes" : "no") + "\n");
+    ss << format(prefix + " gender=%d race=%d stance=%d\n") % character.GetGender() % character.GetRace() % character.GetStance();
+    ss << format(prefix + " breakbar state=%d percent=%2.1f\n") % character.GetBreakbarState() %character.GetBreakbarPercent();
     ss << format(prefix + " hp: %f/%f\n") % character.GetCurrentHealth() % character.GetMaxHealth();
+    ss << format(prefix + " gadget: %f / %f\n") % agent.GetGadget().GetCurrentHealth() % agent.GetGadget().GetMaxHealth();
     AttackTarget at = agent.GetAttackTarget();
     ss << format(prefix + " at hp: %f/%f\n") % at.GetCurrentHealth() % at.GetMaxHealth();
     ss << format(prefix + " endurance: %f/%f\n") % character.GetCurrentEndurance() % character.GetMaxEndurance();
@@ -1240,6 +1231,7 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
         ss << format(prefix + " buff type=%d duration=%d applyTime=%d stackType=%d src=%d\n") % buffs.GetEffectType() % buffs.GetDuration() % buffs.GetApplyTime() % buffs.GetStackType() % buffs.GetSource().GetAgentId();
     }
     ss << format(prefix + " might stack %d\n") % character.GetBuffStackCount(GW2::EffectType::EFFECT_MIGHT);
+    ss << format(prefix + " fury stack %d\n") % character.GetBuffStackCount(GW2::EffectType::EFFECT_FURY);
 }
 
 float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
