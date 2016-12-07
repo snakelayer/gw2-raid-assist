@@ -48,6 +48,10 @@ class SquadMember {
         boost::timer::cpu_timer uptimeTimer;
         boost::chrono::milliseconds totalUptime;
 
+        int sumMight;
+        int mightSamples;
+        void addMight(int stacks);
+
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
@@ -76,6 +80,8 @@ class SquadMember {
         float getTotalDamageTaken() { return totalDamageTaken; }
         int getDirectDamage() { return directDamage; }
         int getDownedCount() { return downedCount; }
+
+        double getAverageMight() { return (mightSamples == 0) ? 0.0f : (sumMight / double(mightSamples)); }
 
         void tryDrawHealthMeter(GW2LIB::Character &character);
 

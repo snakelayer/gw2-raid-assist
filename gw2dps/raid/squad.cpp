@@ -102,10 +102,10 @@ void Squad::drawAssistInfo() {
 void Squad::outputPlayerStats(ostream &stream) {
     double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
 
-    stream << "Player\t\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\tUptimeSeconds\tUptimePercent\n";
+    stream << "Player\t\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\tUptimeSeconds\tUptimePercent\tAverageMight\n";
     for (auto &member : members) {
         int memberUptime = member.second.getTotalUptime().count();
-        stream << format("%-19s\t\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%2.1f\n") %
+        stream << format("%-19s\t\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%2.1f\t%2.1f\n") %
             member.second.getName() %
             member.second.getProfession() %
             member.second.getDodgeCount() %
@@ -116,7 +116,8 @@ void Squad::outputPlayerStats(ostream &stream) {
             member.second.getDirectDamage() %
             member.second.getDownedCount() %
             int(memberUptime / 1e3) %
-            ((totalMillisecondDuration == 0) ? 0 : (memberUptime / totalMillisecondDuration * 100));
+            ((totalMillisecondDuration == 0) ? 0 : (memberUptime / totalMillisecondDuration * 100)) %
+            (member.second.getAverageMight());
     }
 }
 

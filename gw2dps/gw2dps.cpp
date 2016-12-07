@@ -1231,6 +1231,15 @@ void displayAgent(string prefix, Agent &agent, stringstream &ss) {
     ss << format(prefix + " endurance: %f/%f\n") % character.GetCurrentEndurance() % character.GetMaxEndurance();
     ss << format(prefix + " glide: %d\n") % character.GetGliderPercent();
     ss << format(prefix + " attitude: %d\n") % character.GetAttitude();
+
+    Buff buffs = character.GetBuffs();
+    while (buffs.BeNext()) {
+        if (buffs.GetDuration() == -1) {
+            continue;
+        }
+        ss << format(prefix + " buff type=%d duration=%d applyTime=%d stackType=%d src=%d\n") % buffs.GetEffectType() % buffs.GetDuration() % buffs.GetApplyTime() % buffs.GetStackType() % buffs.GetSource().GetAgentId();
+    }
+    ss << format(prefix + " might stack %d\n") % character.GetBuffStackCount(GW2::EffectType::EFFECT_MIGHT);
 }
 
 float computeAverage(size_t seconds, boost::circular_buffer<float> bufferDps) {
