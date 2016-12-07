@@ -42,7 +42,9 @@ SquadMember::SquadMember(Player &player) :
     meter(60.0f, 6.0f),
     totalUptime(milliseconds(0)),
     sumMight(0),
-    mightSamples(0) {
+    mightSamples(0),
+    sumFury(0),
+    furySamples(0) {
     healthMeterTimer.stop();
     uptimeTimer.stop();
 }
@@ -53,6 +55,7 @@ void SquadMember::updateStats(Character &character) {
     updateMovementStats(character);
 
     addMight(character.GetBuffStackCount(GW2::EffectType::EFFECT_MIGHT));
+    addFury(character.GetBuffStackCount(GW2::EffectType::EFFECT_FURY));
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
@@ -125,6 +128,11 @@ void SquadMember::takeHeavyHit() {
 void SquadMember::addMight(int stacks) {
     sumMight += stacks;
     mightSamples += 1;
+}
+
+void SquadMember::addFury(int stacks) {
+    sumFury += (stacks != 0);
+    furySamples += 1;
 }
 
 bool SquadMember::isBelowHalfHealth(Character &character) {

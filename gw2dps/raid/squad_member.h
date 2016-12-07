@@ -52,6 +52,10 @@ class SquadMember {
         int mightSamples;
         void addMight(int stacks);
 
+        int sumFury;
+        int furySamples;
+        void addFury(int stacks);
+
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
@@ -82,6 +86,7 @@ class SquadMember {
         int getDownedCount() { return downedCount; }
 
         double getAverageMight() { return (mightSamples == 0) ? 0.0f : (sumMight / double(mightSamples)); }
+        double getFuryUptime() { return (furySamples == 0) ? 0.0f : (sumFury / double(furySamples)); }
 
         void tryDrawHealthMeter(GW2LIB::Character &character);
 
