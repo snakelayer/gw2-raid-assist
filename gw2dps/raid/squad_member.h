@@ -32,7 +32,7 @@ class SquadMember {
         int heavyHitsTaken;
         float heavyDamageTaken;
         float totalDamageTaken;
-        int directDamage;
+        int directDamageOutput;
         int downedCount;
 
         float lastSpeed;
@@ -82,7 +82,7 @@ class SquadMember {
         int getHeavyHitsTaken() { return heavyHitsTaken; }
         float getHeavyDamageTaken() { return heavyDamageTaken; }
         float getTotalDamageTaken() { return totalDamageTaken; }
-        int getDirectDamage() { return directDamage; }
+        int getDirectDamageOutput() { return directDamageOutput; }
         int getDownedCount() { return downedCount; }
 
         double getAverageMight() { return (mightSamples == 0) ? 0.0f : (sumMight / double(mightSamples)); }
@@ -91,5 +91,5 @@ class SquadMember {
         void tryDrawHealthMeter(GW2LIB::Character &character);
 
         void takeHeavyHit();
-        void addDirectDamage(int damage) { directDamage += damage; }
+        void addDirectDamageOutput(int damage) { directDamageOutput += damage; }
 };

@@ -84,7 +84,7 @@ void Squad::updateDamage(Agent &src, int damage) {
 
     SquadMemberMap::iterator it = members.find(src.GetAgentId());
     if (it != members.end()) {
-        it->second.addDirectDamage(damage);
+        it->second.addDirectDamageOutput(damage);
     }
 }
 
@@ -102,10 +102,22 @@ void Squad::drawAssistInfo() {
 void Squad::outputPlayerStats(ostream &stream) {
     double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
 
-    stream << "Player\t\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDirectDamage\tDownedCount\tUptimeSeconds\tUptimePercent\tAverageMight\tFuryUptime\n";
+    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\n";
+    for (auto &member : members) {
+        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\n") %
+            member.second.getName() %
+            member.second.getProfession() %
+            member.second.getDirectDamageOutput() %
+            (member.second.getAverageMight()) %
+            (member.second.getFuryUptime());
+    }
+
+    stream << endl;
+
+    stream << "Player\t\tProfession\tDodgeCount\tSuperspeedCount\tHeavyHitsTaken\tHeavyDamageTaken\tTotalDamageTaken\tDownedCount\tUptimeSeconds\tUptimePercent\n";
     for (auto &member : members) {
         int memberUptime = member.second.getTotalUptime().count();
-        stream << format("%-19s\t\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%2.1f\t%2.1f\t%1.2f\n") %
+        stream << format("%-19s\t\t%-12s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%2.1f\n") %
             member.second.getName() %
             member.second.getProfession() %
             member.second.getDodgeCount() %
@@ -113,12 +125,9 @@ void Squad::outputPlayerStats(ostream &stream) {
             member.second.getHeavyHitsTaken() %
             int(member.second.getHeavyDamageTaken()) %
             int(member.second.getTotalDamageTaken()) %
-            member.second.getDirectDamage() %
             member.second.getDownedCount() %
             int(memberUptime / 1e3) %
-            ((totalMillisecondDuration == 0) ? 0 : (memberUptime / totalMillisecondDuration * 100)) %
-            (member.second.getAverageMight()) %
-            (member.second.getFuryUptime());
+            ((totalMillisecondDuration == 0) ? 0 : (memberUptime / totalMillisecondDuration * 100));
     }
 }
 

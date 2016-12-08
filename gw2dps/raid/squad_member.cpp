@@ -31,7 +31,7 @@ SquadMember::SquadMember(Player &player) :
     heavyHitsTaken(0),
     heavyDamageTaken(0.0f),
     totalDamageTaken(0.0f),
-    directDamage(0),
+    directDamageOutput(0),
     downedCount(0),
     lastSpeed(COMBAT_RUN_SPEED),
     secondLastSpeed(COMBAT_RUN_SPEED),
