@@ -22,6 +22,8 @@ class SquadMember {
         static const float COMBAT_SWIFTNESS_SPEED;
         static const float SUPERSPEED;
 
+        static const float SCHOLAR_HEALTH_PERCENT_THRESHOLD;
+
         static const double HEALTH_METER_FADE_DELAY_MILLISECONDS;
         static std::map<GW2LIB::GW2::Race, float> raceHeightOffset;
 
@@ -56,6 +58,10 @@ class SquadMember {
         int furySamples;
         void addFury(int stacks);
 
+        int sumScholarly;
+        int scholarlySamples;
+        void addScholarly(GW2LIB::Character &character);
+
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
@@ -87,6 +93,7 @@ class SquadMember {
 
         double getAverageMight() { return (mightSamples == 0) ? 0.0f : (sumMight / double(mightSamples)); }
         double getFuryUptime() { return (furySamples == 0) ? 0.0f : (sumFury / double(furySamples)); }
+        double getScholarUptime() { return (scholarlySamples == 0) ? 0.0f : (sumScholarly / double(scholarlySamples)); }
 
         void tryDrawHealthMeter(GW2LIB::Character &character);
 

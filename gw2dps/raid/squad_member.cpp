@@ -14,6 +14,8 @@ const float SquadMember::SWIFTNESS_SPEED = 12.2193756103515625f;
 const float SquadMember::COMBAT_SWIFTNESS_SPEED = 8.72812557220458984375f;
 const float SquadMember::SUPERSPEED = 12.5f;
 
+const float SquadMember::SCHOLAR_HEALTH_PERCENT_THRESHOLD = 0.9f;
+
 const double SquadMember::HEALTH_METER_FADE_DELAY_MILLISECONDS = 3000;
 
 map<GW2::Race, float> SquadMember::raceHeightOffset = map_list_of
@@ -44,7 +46,9 @@ SquadMember::SquadMember(Player &player) :
     sumMight(0),
     mightSamples(0),
     sumFury(0),
-    furySamples(0) {
+    furySamples(0),
+    sumScholarly(0),
+    scholarlySamples(0) {
     healthMeterTimer.stop();
     uptimeTimer.stop();
 }
@@ -56,6 +60,7 @@ void SquadMember::updateStats(Character &character) {
 
     addMight(character.GetBuffStackCount(GW2::EffectType::EFFECT_MIGHT));
     addFury(character.GetBuffStackCount(GW2::EffectType::EFFECT_FURY));
+    addScholarly(character);
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
@@ -133,6 +138,14 @@ void SquadMember::addMight(int stacks) {
 void SquadMember::addFury(int stacks) {
     sumFury += (stacks != 0);
     furySamples += 1;
+}
+
+void SquadMember::addScholarly(GW2LIB::Character &character) {
+    if (character.IsAlive() &&
+        (character.GetCurrentHealth() > character.GetMaxHealth() * SCHOLAR_HEALTH_PERCENT_THRESHOLD)) {
+        sumScholarly += 1;
+    }
+    scholarlySamples += 1;
 }
 
 bool SquadMember::isBelowHalfHealth(Character &character) {
