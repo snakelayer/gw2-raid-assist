@@ -102,15 +102,16 @@ void Squad::drawAssistInfo() {
 void Squad::outputPlayerStats(ostream &stream) {
     double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
 
-    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\n";
+    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\tQuicknessUptime\n";
     for (auto &member : members) {
-        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\n") %
+        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\t%1.2f\n") %
             member.second.getName() %
             member.second.getProfession() %
             member.second.getDirectDamageOutput() %
             (member.second.getAverageMight()) %
             (member.second.getFuryUptime()) %
-            (member.second.getScholarUptime());
+            (member.second.getScholarUptime()) %
+            (member.second.getQuicknessUptime());
     }
 
     stream << endl;

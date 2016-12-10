@@ -48,7 +48,9 @@ SquadMember::SquadMember(Player &player) :
     sumFury(0),
     furySamples(0),
     sumScholarly(0),
-    scholarlySamples(0) {
+    scholarlySamples(0),
+    sumQuickness(0),
+    quicknessSamples(0) {
     healthMeterTimer.stop();
     uptimeTimer.stop();
 }
@@ -61,6 +63,7 @@ void SquadMember::updateStats(Character &character) {
     addMight(character.GetBuffStackCount(GW2::EffectType::EFFECT_MIGHT));
     addFury(character.GetBuffStackCount(GW2::EffectType::EFFECT_FURY));
     addScholarly(character);
+    addQuickness(character.GetBuffStackCount(GW2::EffectType::EFFECT_QUICKNESS));
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
@@ -146,6 +149,11 @@ void SquadMember::addScholarly(GW2LIB::Character &character) {
         sumScholarly += 1;
     }
     scholarlySamples += 1;
+}
+
+void SquadMember::addQuickness(int stacks) {
+    sumQuickness += (stacks != 0);
+    quicknessSamples += 1;
 }
 
 bool SquadMember::isBelowHalfHealth(Character &character) {

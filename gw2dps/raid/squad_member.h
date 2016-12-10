@@ -62,6 +62,10 @@ class SquadMember {
         int scholarlySamples;
         void addScholarly(GW2LIB::Character &character);
 
+        int sumQuickness;
+        int quicknessSamples;
+        void addQuickness(int stacks);
+
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
@@ -94,6 +98,7 @@ class SquadMember {
         double getAverageMight() { return (mightSamples == 0) ? 0.0f : (sumMight / double(mightSamples)); }
         double getFuryUptime() { return (furySamples == 0) ? 0.0f : (sumFury / double(furySamples)); }
         double getScholarUptime() { return (scholarlySamples == 0) ? 0.0f : (sumScholarly / double(scholarlySamples)); }
+        double getQuicknessUptime() { return (quicknessSamples == 0) ? 0.0f : (sumQuickness / double(quicknessSamples)); }
 
         void tryDrawHealthMeter(GW2LIB::Character &character);
 
