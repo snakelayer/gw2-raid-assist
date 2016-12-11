@@ -20,6 +20,9 @@ Raid Assist is a tool to help players perform better at GW2 raids. It is based o
  - **AverageMight**: The number of might stacks on the player averaged over the duration of the encounter. (eg: 0 means the player never gained might. 25 means the player was maxed out on might at every moment. 12.5 could mean the player had 0 might for the first half of the encounter, and 25 might for the second half. It could also mean the player maintained 12-13 stacks of might for the entire encounter.)
  - **FuryUptime**: The percentage of time the player had fury.
  - **ScholarUptime**: The percentage of time the player had more than 90% health.
+ - **QuicknessUptime**: The percentage of time the player had quickness.
+ - **AlacritySeconds**: The number of seconds the player had alacrity.
+ - **GotLStacks**: The number of times the player gained a stack of Grace of the Land. This is not a whole number because it easily caps out at 5 stacks.
  - **DodgeCount**: The number of times a player dodged.
  - **SuperspeedCount**: The number of times a player had superspeed.
  - **HeavyHitsTaken**: The number of times a player took a **heavy** hit. A heavy hit is any single instance of damage above a specific boss-dependent threshold. Usually, (at the time of this writing) damage values above this threshold can be avoided. Values lower than this are generally unavoidable periodic damage.
