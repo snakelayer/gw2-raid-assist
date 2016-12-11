@@ -102,9 +102,9 @@ void Squad::drawAssistInfo() {
 void Squad::outputPlayerStats(ostream &stream) {
     double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
 
-    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\tQuicknessUptime\tAlacritySeconds\n";
+    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\tQuicknessUptime\tAlacritySeconds\tGotLStacks\n";
     for (auto &member : members) {
-        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\t%1.2f\t%d\n") %
+        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\t%1.2f\t%d\t%.1f\n") %
             member.second.getName() %
             member.second.getProfession() %
             member.second.getDirectDamageOutput() %
@@ -112,7 +112,8 @@ void Squad::outputPlayerStats(ostream &stream) {
             (member.second.getFuryUptime()) %
             (member.second.getScholarUptime()) %
             (member.second.getQuicknessUptime()) %
-            int(member.second.getAlacrityDuration().count() / 1e3);
+            int(member.second.getAlacrityDuration().count() / 1e3) %
+            (member.second.getGotLStackSamples() / SquadMember::GOTL_SAMPLES_PER_STACK);
     }
 
     stream << endl;

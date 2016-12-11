@@ -16,6 +16,8 @@ const float SquadMember::SUPERSPEED = 12.5f;
 
 const float SquadMember::SCHOLAR_HEALTH_PERCENT_THRESHOLD = 0.9f;
 
+const double SquadMember::GOTL_SAMPLES_PER_STACK = 8.0f * 4; // 8 sec duration, 250ms sampling rate
+
 const double SquadMember::HEALTH_METER_FADE_DELAY_MILLISECONDS = 3000;
 
 map<GW2::Race, float> SquadMember::raceHeightOffset = map_list_of
@@ -51,7 +53,8 @@ SquadMember::SquadMember(Player &player) :
     sumScholarly(0),
     scholarlySamples(0),
     sumQuickness(0),
-    quicknessSamples(0) {
+    quicknessSamples(0),
+    sumGotl(0) {
     healthMeterTimer.stop();
     uptimeTimer.stop();
     alacrityTimer.stop();
@@ -67,6 +70,7 @@ void SquadMember::updateStats(Character &character) {
     addScholarly(character);
     addQuickness(character.GetBuffStackCount(GW2::EffectType::EFFECT_QUICKNESS));
     updateAlacrity(character.GetBuffStackCount(GW2::EffectType::EFFECT_ALACRITY) != 0);
+    addGotl(character.GetBuffStackCount(GW2::EffectType::EFFECT_GRACE_OF_THE_LAND));
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
@@ -162,6 +166,10 @@ void SquadMember::addScholarly(GW2LIB::Character &character) {
 void SquadMember::addQuickness(int stacks) {
     sumQuickness += (stacks != 0);
     quicknessSamples += 1;
+}
+
+void SquadMember::addGotl(int stacks) {
+    sumGotl += stacks;
 }
 
 bool SquadMember::isBelowHalfHealth(Character &character) {

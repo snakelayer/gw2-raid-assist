@@ -69,6 +69,9 @@ class SquadMember {
         int quicknessSamples;
         void addQuickness(int stacks);
 
+        int sumGotl;
+        void addGotl(int stacks);
+
         void updateAlacrity(bool isActive);
 
         bool isBelowHalfHealth(GW2LIB::Character &character);
@@ -81,6 +84,8 @@ class SquadMember {
         SquadMember() = delete;
 
     public:
+        static const double GOTL_SAMPLES_PER_STACK;
+
         SquadMember(GW2LIB::Player &player);
         void updateStats(GW2LIB::Character &character);
 
@@ -107,6 +112,7 @@ class SquadMember {
         double getFuryUptime() { return (furySamples == 0) ? 0.0f : (sumFury / double(furySamples)); }
         double getScholarUptime() { return (scholarlySamples == 0) ? 0.0f : (sumScholarly / double(scholarlySamples)); }
         double getQuicknessUptime() { return (quicknessSamples == 0) ? 0.0f : (sumQuickness / double(quicknessSamples)); }
+        int getGotLStackSamples() { return sumGotl; }
 
         void tryDrawHealthMeter(GW2LIB::Character &character);
 
