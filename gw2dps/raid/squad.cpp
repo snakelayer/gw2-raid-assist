@@ -26,7 +26,7 @@ Squad::Squad()
 
 Squad::~Squad() {
     for (auto &member : members) {
-        member.second.updateUptime();
+        member.second.stopTimers();
     }
     writeToFile();
 }
@@ -102,16 +102,17 @@ void Squad::drawAssistInfo() {
 void Squad::outputPlayerStats(ostream &stream) {
     double totalMillisecondDuration = (raidBoss != nullptr) ? raidBoss->getEncounterDuration().count() : 0;
 
-    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\tQuicknessUptime\n";
+    stream << "Player\t\tProfession\tDirectDamageOutput\tAverageMight\tFuryUptime\tScholarUptime\tQuicknessUptime\tAlacritySeconds\n";
     for (auto &member : members) {
-        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\t%1.2f\n") %
+        stream << format("%-19s\t\t%-12s\t%d\t%2.1f\t%1.2f\t%1.2f\t%1.2f\t%d\n") %
             member.second.getName() %
             member.second.getProfession() %
             member.second.getDirectDamageOutput() %
             (member.second.getAverageMight()) %
             (member.second.getFuryUptime()) %
             (member.second.getScholarUptime()) %
-            (member.second.getQuicknessUptime());
+            (member.second.getQuicknessUptime()) %
+            int(member.second.getAlacrityDuration().count() / 1e3);
     }
 
     stream << endl;

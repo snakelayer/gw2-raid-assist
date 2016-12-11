@@ -50,6 +50,9 @@ class SquadMember {
         boost::timer::cpu_timer uptimeTimer;
         boost::chrono::milliseconds totalUptime;
 
+        boost::timer::auto_cpu_timer alacrityTimer;
+        boost::chrono::milliseconds alacrityDuration;
+
         int sumMight;
         int mightSamples;
         void addMight(int stacks);
@@ -65,6 +68,8 @@ class SquadMember {
         int sumQuickness;
         int quicknessSamples;
         void addQuickness(int stacks);
+
+        void updateAlacrity(bool isActive);
 
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
@@ -82,7 +87,10 @@ class SquadMember {
         void upped();
         void downed();
         void updateUptime();
-        boost::chrono::milliseconds getTotalUptime();
+        boost::chrono::milliseconds getTotalUptime() { return totalUptime; }
+        boost::chrono::milliseconds getAlacrityDuration() { return alacrityDuration; }
+
+        void stopTimers();
 
         std::string getName() { return name; }
         std::string getProfession();

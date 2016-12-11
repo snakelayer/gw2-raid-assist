@@ -43,6 +43,7 @@ SquadMember::SquadMember(Player &player) :
     shouldDrawHealthMeter(false),
     meter(60.0f, 6.0f),
     totalUptime(milliseconds(0)),
+    alacrityDuration(milliseconds(0)),
     sumMight(0),
     mightSamples(0),
     sumFury(0),
@@ -53,6 +54,7 @@ SquadMember::SquadMember(Player &player) :
     quicknessSamples(0) {
     healthMeterTimer.stop();
     uptimeTimer.stop();
+    alacrityTimer.stop();
 }
 
 void SquadMember::updateStats(Character &character) {
@@ -64,6 +66,7 @@ void SquadMember::updateStats(Character &character) {
     addFury(character.GetBuffStackCount(GW2::EffectType::EFFECT_FURY));
     addScholarly(character);
     addQuickness(character.GetBuffStackCount(GW2::EffectType::EFFECT_QUICKNESS));
+    updateAlacrity(character.GetBuffStackCount(GW2::EffectType::EFFECT_ALACRITY) != 0);
 
     if (isAlive && character.IsDowned()) {
         ++downedCount;
@@ -77,6 +80,11 @@ void SquadMember::updateStats(Character &character) {
     }
 
     isAlive = character.IsAlive();
+}
+
+void SquadMember::stopTimers() {
+    updateUptime();
+    updateAlacrity(false);
 }
 
 string SquadMember::getProfession() {
@@ -237,6 +245,12 @@ void SquadMember::updateUptime() {
     uptimeTimer.start();
 }
 
-milliseconds SquadMember::getTotalUptime() {
-    return totalUptime;
+void SquadMember::updateAlacrity(bool isActive) {
+    if (alacrityTimer.is_stopped() && isActive) {
+        alacrityTimer.start();
+    }
+    else if (!alacrityTimer.is_stopped() && !isActive) {
+        alacrityDuration += milliseconds(alacrityTimer.elapsed().wall / int(1e6));
+        alacrityTimer.stop();
+    }
 }
