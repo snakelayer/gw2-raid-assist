@@ -10,7 +10,6 @@
 class UnknownBoss : public RaidBoss
 {
     private:
-        std::string debugStr;
 
     public:
         UnknownBoss(GW2LIB::Agent agent);

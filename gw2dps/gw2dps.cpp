@@ -1187,7 +1187,6 @@ void displayDebug() {
 
     if (squad != nullptr) {
         ss << format("raid state: %d\n") % squad->getRaidState();
-        ss << format("squad debugStr %s\n") % squad->getDebugStr();
     }
 
     if (boss != nullptr) {

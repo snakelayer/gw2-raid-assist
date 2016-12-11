@@ -7,7 +7,6 @@ using namespace std;
 
 Squad::Squad()
     : disable(false), raidState(RAID::ACTIVE) {
-    debugStr = "";
 
     addPlayer(GetOwnAgent().GetPlayer());
 

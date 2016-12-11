@@ -45,10 +45,7 @@ class Squad : public RecordableStats
 
         void writeToFile();
 
-        std::string debugStr;
-
     public:
-        std::string getDebugStr() { return debugStr; }
         Squad();
         ~Squad();
         
