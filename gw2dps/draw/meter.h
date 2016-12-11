@@ -6,7 +6,7 @@
 
 #include "gw2lib.h"
 
-#include "../../../assist_drawer.h"
+#include "../assist_drawer.h"
 
 class Meter
 {

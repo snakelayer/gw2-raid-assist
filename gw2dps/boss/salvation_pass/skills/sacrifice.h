@@ -4,7 +4,7 @@
 
 #include "gw2lib.h"
 
-#include "../../../boss/skills/draw/meter.h"
+#include "../../../draw/meter.h"
 #include "../../../assist_drawer.h"
 
 class Sacrifice

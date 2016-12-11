@@ -9,7 +9,7 @@
 
 #include "gw2lib.h"
 
-#include "../../assist_drawer.h"
+#include "../../../assist_drawer.h"
 
 namespace UP {
     enum State

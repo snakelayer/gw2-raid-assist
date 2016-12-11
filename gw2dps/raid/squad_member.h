@@ -9,7 +9,7 @@
 
 #include "GameData.h"
 
-#include "../boss/skills/draw/meter.h"
+#include "../draw/meter.h"
 
 class SquadMember {
     private:

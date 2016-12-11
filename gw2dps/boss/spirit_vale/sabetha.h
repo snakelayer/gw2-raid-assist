@@ -4,11 +4,11 @@
 
 #include "gw2lib.h"
 
-#include "raid_boss.h"
+#include "../raid_boss.h"
 #include "skills/cannon.h"
 #include "skills/flamewall.h"
 
-#include "../assist_drawer.h"
+#include "../../assist_drawer.h"
 
 namespace SABETHA {
     enum Phase {

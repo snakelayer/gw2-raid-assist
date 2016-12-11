@@ -8,8 +8,8 @@
 
 #include "gw2lib.h"
 
-#include "draw/meter.h"
-#include "../../assist_drawer.h"
+#include "../../../draw/meter.h"
+#include "../../../assist_drawer.h"
 
 namespace GR {
     enum State

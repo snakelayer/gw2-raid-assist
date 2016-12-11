@@ -8,7 +8,7 @@
 
 #include "gw2lib.h"
 
-#include "raid_boss.h"
+#include "../raid_boss.h"
 #include "skills/magic_storm.h"
 #include "skills/seeker.h"
 #include "skills/unstable_pylon.h"

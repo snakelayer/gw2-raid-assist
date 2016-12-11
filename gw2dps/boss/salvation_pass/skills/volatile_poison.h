@@ -4,7 +4,7 @@
 
 #include "gw2lib.h"
 
-#include "../../skills/draw/meter.h"
+#include "../../../draw/meter.h"
 #include "../../../assist_drawer.h"
 
 class VolatilePoison

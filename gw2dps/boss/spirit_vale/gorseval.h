@@ -4,7 +4,7 @@
 
 #include "gw2lib.h"
 
-#include "raid_boss.h"
+#include "../raid_boss.h"
 #include "skills/ghastly_rampage.h"
 
 class Gorseval : public RaidBoss
