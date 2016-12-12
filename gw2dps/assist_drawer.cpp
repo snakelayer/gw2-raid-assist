@@ -23,6 +23,16 @@ void AssistDrawer::drawFont(float x, float y, DWORD color, string format, ...) {
     va_end(vl);
 }
 
+void AssistDrawer::drawFont(Agent &agent, DWORD color, string format, ...) {
+    float x, y;
+    if (WorldToScreen(agent.GetPos(), &x, &y)) {
+        va_list vl;
+        va_start(vl, format);
+        font.Draw(x, y, color, format, vl);
+        va_end(vl);
+    }
+}
+
 void AssistDrawer::drawStreamToWindow(stringstream &ss, float x, float y) {
     Vector2 strInfo = font.TextInfo(ss.str());
     float adjusted_x = round(x - strInfo.x / 2);

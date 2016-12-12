@@ -40,6 +40,8 @@ class Squad : public RecordableStats
 
         void addPlayer(GW2LIB::Player &player);
 
+        void drawSetup();
+
         void updateHeavyHits(float heavyHitDamageThreshold);
         void updateRaidState(CharacterMap &characterMap);
 

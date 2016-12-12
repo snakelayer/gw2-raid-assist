@@ -18,9 +18,54 @@ const float SquadMember::SCHOLAR_HEALTH_PERCENT_THRESHOLD = 0.9f;
 
 const double SquadMember::GOTL_SAMPLES_PER_STACK = 8.0f * 4; // 8 sec duration, 250ms sampling rate
 
+unordered_set<GW2::EffectType> SquadMember::FOOD_BUFFS = list_of
+(GW2::EffectType::EFFECT_FOOD_100_POWER_70_CONDI_DMG)
+(GW2::EffectType::EFFECT_FOOD_80_POWER_60_PRECISION)
+(GW2::EffectType::EFFECT_FOOD_100_POWER_70_PRECISION)
+(GW2::EffectType::EFFECT_FOOD_80_PRECISION_60_FEROCITY)
+(GW2::EffectType::EFFECT_FOOD_100_PRECISION_70_FEROCITY)
+(GW2::EffectType::EFFECT_FOOD_40_MF_WITH_BOON_20_BOON_DURATION)
+(GW2::EffectType::EFFECT_FOOD_20_CONDI_DURATION_70_CONDI_DMG)
+(GW2::EffectType::EFFECT_FOOD_50_SWIFTNESS_ON_KILL_8_MOVING_DMG)
+(GW2::EffectType::EFFECT_FOOD_60_SWIFTNESS_ON_KILL_10_MOVING_DMG)
+(GW2::EffectType::EFFECT_FOOD_100_POWER_70_FEROCITY)
+(GW2::EffectType::EFFECT_FOOD_70_TOUGHNESS_20_BOON_DURATION)
+(GW2::EffectType::EFFECT_FOOD_20_CONDI_DURATION_33_LIFESTEAL_ON_CRIT)
+(GW2::EffectType::EFFECT_FOOD_20_BOON_DURATION_25_MF_DURING_LNY_33_MIGHT_ON_CRIT)
+(GW2::EffectType::EFFECT_FOOD_20_BOON_DURATION_25_MF_DURING_LNY_100_SWIFTNESS_ON_KILL);
+
+unordered_set<GW2::EffectType> SquadMember::UTILITY_BUFFS = list_of
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_ROUGH)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_SIMPLE)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_STANDARD)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_QUALITY)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_HARDENED)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_SUPERIOR)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_BOUNTIFUL)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_FURIOUS)
+(GW2::EffectType::EFFECT_UTILITY_SHARPENING_STONE_TOXIC)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_APPRENTICE)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_JOURNEYMAN)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_STANDARD)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_ARTISAN)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_QUALITY)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_MASTER)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_BOUNTIFUL)
+(GW2::EffectType::EFFECT_UTILITY_TUNING_CRYSTAL_FURIOUS)
+(GW2::EffectType::EFFECT_UTILITY_FOCUSING_CRYSTAL_TOXIC)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_APPRENTICE)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_JOURNEYMAN)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_STANDARD)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_ARTISAN)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_QUALITY)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_MASTER)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_BOUNTIFUL)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_FURIOUS)
+(GW2::EffectType::EFFECT_UTILITY_MAINTENANCE_OIL_TOXIC);
+
 const double SquadMember::HEALTH_METER_FADE_DELAY_MILLISECONDS = 3000;
 
-map<GW2::Race, float> SquadMember::raceHeightOffset = map_list_of
+map<GW2::Race, float> SquadMember::RACE_HEIGHT_OFFSET = map_list_of
 (GW2::Race::RACE_ASURA, 70.0f)
 (GW2::Race::RACE_CHARR, 140.0f)
 (GW2::Race::RACE_HUMAN, 90.0f)
@@ -116,6 +161,25 @@ string SquadMember::getProfession() {
     return "Unknown";
 }
 
+void SquadMember::drawNourishmentCheck(Character &character) {
+    string reminder;
+
+    if (!hasFood(character)) {
+        reminder += "food?";
+    }
+
+    if (!hasUtility(character)) {
+        if (!reminder.empty()) {
+            reminder += "/";
+        }
+        reminder += "utility?";
+    }
+
+    if (!reminder.empty()) {
+        AssistDrawer::get().drawFont(character.GetAgent(), AssistDrawer::WHITE, reminder);
+    }
+}
+
 void SquadMember::tryDrawHealthMeter(Character &character) {
     if (isBelowHalfHealth(character)) {
         shouldDrawHealthMeter = true;
@@ -136,7 +200,7 @@ void SquadMember::tryDrawHealthMeter(Character &character) {
     if (shouldDrawHealthMeter) {
         float healthPercent = lastHealth / character.GetMaxHealth();
         DWORD healthColor = interpolateHealthColor(healthPercent);
-        meter.drawAtAgentPositionWithZOffset(character.GetAgent(), raceHeightOffset[character.GetRace()], healthColor, healthPercent);
+        meter.drawAtAgentPositionWithZOffset(character.GetAgent(), RACE_HEIGHT_OFFSET[character.GetRace()], healthColor, healthPercent);
     }
 }
 
@@ -182,6 +246,26 @@ DWORD SquadMember::interpolateHealthColor(float percent) {
     DWORD green = static_cast<int>(0xff * percent);
 
     return 0xff000000 | (red << 16) | (green << 8);
+}
+
+bool SquadMember::hasFood(Character &character) {
+    Buff buffs = character.GetBuffs();
+    while (buffs.BeNext()) {
+        if (FOOD_BUFFS.find(buffs.GetEffectType()) != FOOD_BUFFS.end()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool SquadMember::hasUtility(Character &character) {
+    Buff buffs = character.GetBuffs();
+    while (buffs.BeNext()) {
+        if (UTILITY_BUFFS.find(buffs.GetEffectType()) != UTILITY_BUFFS.end()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void SquadMember::updateLastHealthDelta(Character &character) {

@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <unordered_set>
 
 #include <boost/assign.hpp>
 #include <boost/timer/timer.hpp>
@@ -24,8 +25,11 @@ class SquadMember {
 
         static const float SCHOLAR_HEALTH_PERCENT_THRESHOLD;
 
+        static std::unordered_set<GW2LIB::GW2::EffectType> FOOD_BUFFS;
+        static std::unordered_set<GW2LIB::GW2::EffectType> UTILITY_BUFFS;
+
         static const double HEALTH_METER_FADE_DELAY_MILLISECONDS;
-        static std::map<GW2LIB::GW2::Race, float> raceHeightOffset;
+        static std::map<GW2LIB::GW2::Race, float> RACE_HEIGHT_OFFSET;
 
         std::string name;
         GW2LIB::GW2::Profession profession;
@@ -77,6 +81,9 @@ class SquadMember {
         bool isBelowHalfHealth(GW2LIB::Character &character);
         DWORD interpolateHealthColor(float percent);
 
+        bool hasFood(GW2LIB::Character &character);
+        bool hasUtility(GW2LIB::Character &character);
+
         void updateLastHealthDelta(GW2LIB::Character &character);
         void updateDamageTaken();
         void updateMovementStats(GW2LIB::Character &character);
@@ -114,6 +121,7 @@ class SquadMember {
         double getQuicknessUptime() { return (quicknessSamples == 0) ? 0.0f : (sumQuickness / double(quicknessSamples)); }
         int getGotLStackSamples() { return sumGotl; }
 
+        void drawNourishmentCheck(GW2LIB::Character &character);
         void tryDrawHealthMeter(GW2LIB::Character &character);
 
         void takeHeavyHit();

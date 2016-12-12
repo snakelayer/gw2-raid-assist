@@ -55,5 +55,6 @@ class AssistDrawer
 
         void drawBackground(float x, float y, GW2LIB::Vector2 strInfo);
         void drawFont(float x, float y, DWORD color, std::string format, ...);
+        void drawFont(GW2LIB::Agent &agent, DWORD color, std::string format, ...);
         void drawStreamToWindow(std::stringstream &ss, float x, float y);
 };

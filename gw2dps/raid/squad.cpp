@@ -88,6 +88,10 @@ void Squad::updateDamage(Agent &src, int damage) {
 }
 
 void Squad::drawAssistInfo() {
+    if (raidBoss != nullptr && !raidBoss->isStarted()) {
+        drawSetup();
+    }
+
     if (isHealerRole(GetOwnAgent())) {
         CharacterMap characterMap = getCharacterMap();
         for (auto &characterEntry : characterMap) {
@@ -140,6 +144,13 @@ void Squad::addPlayer(Player &player) {
     }
 
     members.emplace(player.GetAgent().GetAgentId(), SquadMember(player));
+}
+
+void Squad::drawSetup() {
+    CharacterMap characterMap = getCharacterMap();
+    for (auto &characterEntry : characterMap) {
+        members.at(characterEntry.first).drawNourishmentCheck(characterEntry.second);
+    }
 }
 
 bool Squad::isHealerRole(Agent &agent) {
