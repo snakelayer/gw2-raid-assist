@@ -1290,10 +1290,8 @@ bool mouse_wheel(int delta, int modkeys) {
     return true;
 }
 
-void dmg_log(Agent src, Agent tgt, int hit) {
-    HL_LOG_DBG("srcId: %d, tgtId: %d, hit: %i\n", src.GetAgentId(), tgt.GetAgentId(), hit);
-    // tgt isn't actually a valid Agent
-    // if at some point it is, we can filter damage for the raid boss
+void dmg_log(Agent &src, Agent &tgt, int hit, GW2::EffectType ef) {
+    //HL_LOG_DBG("srcId: %d, tgtId: %d, hit: %i, effect: %d\n", src.GetAgentId(), tgt.GetAgentId(), hit, ef);
     /*if ((squad != nullptr) && (boss != nullptr) && tgt.GetAgentId() == (boss->getAgentId())) {
         squad->updateDamage(src, hit);
     }*/
@@ -1302,7 +1300,7 @@ void dmg_log(Agent src, Agent tgt, int hit) {
     }
 }
 
-void combat_log(CombatLogType type, int hit, Agent agent) {
+void combat_log(Agent &src, Agent &tgt, int hit, GW2::CombatLogType type, GW2::EffectType ef) {
     switch (type) {
     case CL_CONDI_DMG_OUT:
     case CL_CRIT_DMG_OUT:
@@ -1312,7 +1310,7 @@ void combat_log(CombatLogType type, int hit, Agent agent) {
     }
 
     pc.record(type, hit);
-    HL_LOG_DBG("type: %i - hit: %i, agentId: %d\n", type, hit, agent.GetAgentId());
+    //HL_LOG_DBG("srcId: %d, tgtId: %d, hit: %i, type: %i, effect: %d\n", src.GetAgentId(), tgt.GetAgentId(), hit, type, ef);
 }
 
 void GW2LIB::gw2lib_main()
@@ -1326,10 +1324,10 @@ void GW2LIB::gw2lib_main()
     compOverlay = new CompassOverlay();
 
     EnableEsp(ESP);
-    SetGameHook(HOOK_CHAT, chat_log);
-    SetGameHook(HOOK_MOUSE_MOVE, mouse_move);
-    SetGameHook(HOOK_MOUSE_BUTTON, mouse_click);
-    SetGameHook(HOOK_MOUSE_WHEEL, mouse_wheel);
+    //SetGameHook(HOOK_CHAT, chat_log);
+    //SetGameHook(HOOK_MOUSE_MOVE, mouse_move);
+    //SetGameHook(HOOK_MOUSE_BUTTON, mouse_click);
+    //SetGameHook(HOOK_MOUSE_WHEEL, mouse_wheel);
     SetGameHook(HOOK_DAMAGE_LOG, dmg_log);
     SetGameHook(HOOK_COMBAT_LOG, combat_log);
     // TODO: new stuff to explore HOOK_ALLOCATOR and HOOK_LOGGER
